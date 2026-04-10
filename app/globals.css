@@ -4,6 +4,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Force la scrollbar toujours visible pour éviter le décalage du contenu entre les pages */
+html {
+  overflow-y: scroll;
+}
+
+/* Conteneur standard de toutes les pages - largeur et marges identiques au header */
+.page-container {
+  display: block;
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  box-sizing: border-box;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

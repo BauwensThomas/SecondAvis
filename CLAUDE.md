@@ -1,11 +1,11 @@
 @AGENTS.md
-# CLAUDE.md — SecondAvis
+# CLAUDE.md - SecondAvis
 # Fichier de memoire permanente pour Claude Code
 # Place ce fichier a la racine de ton projet Next.js
 # Claude le lit automatiquement a chaque session
 
 # ============================================================
-# SECTION 1 — INSTRUCTIONS PERMANENTES POUR CLAUDE
+# SECTION 1 - INSTRUCTIONS PERMANENTES POUR CLAUDE
 # ============================================================
 
 Tu es le developpeur principal du projet SecondAvis.
@@ -20,7 +20,7 @@ Regles absolues :
 - Toujours signaler si une dependance externe est necessaire avant de l ecrire
 - Toujours expliquer ce que tu vas faire avant de l ecrire
 - Si tu n es pas sur de quelque chose, dis-le clairement
-- Privilege la simplicite a la complexite — ce projet est fait par un developpeur solo junior
+- Privilege la simplicite a la complexite - ce projet est fait par un developpeur solo junior
 - Toujours guider l utilisateur etape par etape : dire exactement quoi faire, dans quel fichier,
   dans quel ordre, et ou aller dans l interface (Supabase, Vercel, Stripe, etc.)
   Exemple : "1. Ouvre Supabase → va dans Table Editor → clique sur New Table
@@ -29,11 +29,11 @@ Regles absolues :
 
 
 # ============================================================
-# SECTION 2 — PRESENTATION DU PROJET
+# SECTION 2 - PRESENTATION DU PROJET
 # ============================================================
 
 Nom du projet : SecondAvis
-Type : Application web — marketplace de second avis professionnels
+Type : Application web - marketplace de second avis professionnels
 Tagline : "Obtenez un avis professionnel verifie sur votre situation en moins de 24h pour 9 euros"
 
 Concept :
@@ -63,23 +63,23 @@ Pourquoi l expert accepte 2 euros :
 
 
 # ============================================================
-# SECTION 3 — CATEGORIES DE LA PLATEFORME
+# SECTION 3 - CATEGORIES DE LA PLATEFORME
 # ============================================================
 
 # 6 categories au total, lancees progressivement.
 # Ne jamais ouvrir une nouvelle categorie avant que la precedente soit stable.
 # Chaque categorie a sa propre valeur dans la colonne "category" en base de donnees.
 
-Phase 1 — Mecanique automobile (ACTIVE — lancer en premier)
+Phase 1 - Mecanique automobile (ACTIVE - lancer en premier)
   Valeur BDD : 'mecanique'
   Prix : 9 euros
   Exemples : devis trop cher, panne incomprise, diagnostic douteux, kilometrage douteux
   Pourquoi en premier : presque tout le monde a eu une voiture et un doute sur un devis de garage.
-                        Pas besoin d expliquer le besoin — les gens comprennent immediatement.
+                        Pas besoin d expliquer le besoin - les gens comprennent immediatement.
                         Montants en jeu clairs (200 a 2000 euros de reparation).
                         Experts retraites faciles a recruter en Belgique.
 
-Phase 2 — Agences immobilieres (lancer au mois 3)
+Phase 2 - Agences immobilieres (lancer au mois 3)
   Valeur BDD : 'immo'
   Prix : 9 euros
   Exemples : honoraires d agence excessifs, mandat de vente abusif, estimation biaisee,
@@ -87,27 +87,27 @@ Phase 2 — Agences immobilieres (lancer au mois 3)
   Pourquoi : transactions a 150 000 - 500 000 euros, payer 9 euros pour verifier = evidence absolue,
              aucun concurrent serieux sur ce segment en Belgique
 
-Phase 3 — Devis travaux (lancer au mois 5)
+Phase 3 - Devis travaux (lancer au mois 5)
   Valeur BDD : 'travaux'
   Prix : 9 euros
   Exemples : plombier, electricien, maconnerie, renovation, devis gonfle, arnaque artisan
   Pourquoi : marche enorme post-COVID, tres forte demande, arnaques frequentes et documentees
 
-Phase 4 — Assurances (lancer au mois 7)
+Phase 4 - Assurances (lancer au mois 7)
   Valeur BDD : 'assurance'
   Prix : 9 euros
   Exemples : refus de remboursement injustifie, clause cachee dans contrat, sinistre mal evalue,
              resiliation abusive, garantie non appliquee
   Pourquoi : millions de litiges chaque annee, les gens ne savent pas si le refus est legal
 
-Phase 5 — Droit du travail (lancer au mois 9)
+Phase 5 - Droit du travail (lancer au mois 9)
   Valeur BDD : 'travail'
   Prix : 9 euros
   Exemples : licenciement abusif, rupture conventionnelle, heures sup non payees,
              clause de non-concurrence, preavis conteste
   Pourquoi : anxiete tres elevee, avocats a 300 euros de l heure, marche non adresse
 
-Phase 6 — Comptabilite independants (lancer au mois 12)
+Phase 6 - Comptabilite independants (lancer au mois 12)
   Valeur BDD : 'comptabilite'
   Prix : 9 euros
   Exemples : declaration INASTI incorrecte, TVA independant, cotisations sociales ONSS,
@@ -125,10 +125,10 @@ Phase 6 — Comptabilite independants (lancer au mois 12)
 
 
 # ============================================================
-# SECTION 4 — REGLES METIER IMPORTANTES
+# SECTION 4 - REGLES METIER IMPORTANTES
 # ============================================================
 
-Regle 1 — Delai de reponse :
+Regle 1 - Delai de reponse :
   En semaine (lundi au jeudi) : expiration = created_at + 24 heures exactement.
   Le vendredi : expiration = lundi suivant a la meme heure que l heure de creation + 24h.
   Logique : on calcule d abord created_at + 24h pour obtenir l heure cible.
@@ -143,16 +143,16 @@ Regle 1 — Delai de reponse :
     Poste lundi a 08h00    → expire mardi a 08h00 (regle normale)
 
   Cette logique est calculee a la creation de la demande et stockee dans expires_at.
-  Le cron job ne fait que comparer expires_at avec NOW() — il n a pas besoin
+  Le cron job ne fait que comparer expires_at avec NOW() - il n a pas besoin
   de connaitre cette logique, elle est deja appliquee a la creation.
 
-  Le marketing affiche "reponse garantie sous 24h" — le cas vendredi est
+  Le marketing affiche "reponse garantie sous 24h" - le cas vendredi est
   un detail technique invisible pour l utilisateur.
 
   Un cron job tourne toutes les heures pour verifier les demandes expirees.
   Si une demande est expiree sans reponse → remboursement Stripe automatique.
 
-Regle 2 — Protection contre les mauvaises reponses (4 mecanismes combines)
+Regle 2 - Protection contre les mauvaises reponses (4 mecanismes combines)
 
   Flux complet apres qu un expert repond :
 
@@ -209,7 +209,7 @@ Regle 2 — Protection contre les mauvaises reponses (4 mecanismes combines)
 
   L admin prend sa decision depuis /admin/signalements/[id] :
 
-    Decision A — Reponse validee (expert avait raison) :
+    Decision A - Reponse validee (expert avait raison) :
       → Statut de la demande repasse a 'answered'
       → is_paid = false, payment_eligible_at = NOW() + 5 jours
       → Email au CLIENT : "Apres analyse, votre signalement n a pas ete retenu.
@@ -217,7 +217,7 @@ Regle 2 — Protection contre les mauvaises reponses (4 mecanismes combines)
       → Email a l EXPERT : "Votre reponse a ete validee par notre equipe.
          Votre paiement de 2 euros sera effectue dans un delai de 5 jours."
 
-    Decision B — Signalement valide (client avait raison) :
+    Decision B - Signalement valide (client avait raison) :
       → Remboursement Stripe de 9 euros au client dans un delai de 5 jours
       → is_paid reste false, l expert ne recoit rien
       → Score de fiabilite de l expert baisse
@@ -303,13 +303,13 @@ Regle 2 — Protection contre les mauvaises reponses (4 mecanismes combines)
 
 
 
-Regle 3 — Notation :
+Regle 3 - Notation :
   Voir Regle 2 Solution 4 pour le detail complet.
   Resume : l utilisateur note l expert de 1 a 5 apres avoir recu sa reponse.
   Sous 4.2 de moyenne apres 10 avis → suspension automatique + alerte admin.
   3 notes de 1 etoile consecutives → meme consequence.
 
-Regle 4 — Verification des experts :
+Regle 4 - Verification des experts :
   Chaque expert doit soumettre un justificatif de son expertise lors de la candidature.
   Documents acceptes (un seul suffit) :
     - Diplome ou certificat professionnel
@@ -321,7 +321,7 @@ Regle 4 — Verification des experts :
   Un test sur un cas fictif est envoye a l expert avant validation definitive.
   Duree indicative du processus : 24 a 48 heures apres reception du dossier.
 
-Regle 5 — Protection legale et non-responsabilite :
+Regle 5 - Protection legale et non-responsabilite :
   Les reponses sont des avis professionnels, pas des consultations formelles.
   SecondAvis est une plateforme d entraide entre particuliers et professionnels.
   Nous ne sommes pas responsables des decisions prises sur la base des avis recus.
@@ -341,21 +341,21 @@ Regle 5 — Protection legale et non-responsabilite :
   Modele juridique valide par JustAnswer (USA) depuis 2003.
   Ce positionnement "avis d entraide" est la cle de ta protection legale.
 
-Regle 6 — Protection contre la double soumission (concurrence) :
+Regle 6 - Protection contre la double soumission (concurrence) :
   Un seul expert peut repondre a une demande donnee.
   Si deux experts consultent la meme demande en meme temps et que l un repond,
   l autre doit recevoir un message d erreur clair : "Cette demande vient d etre
   prise en charge par un autre expert."
   Implementation technique : transaction PostgreSQL avec SELECT ... FOR UPDATE
   sur la table requests au moment de soumettre la reponse (voir section BDD).
-  Cette protection est critique — sans elle, on pourrait devoir payer deux experts
+  Cette protection est critique - sans elle, on pourrait devoir payer deux experts
   pour une seule demande de 9 euros.
 
 
 
 
 # ============================================================
-# SECTION 5 — STACK TECHNIQUE
+# SECTION 5 - STACK TECHNIQUE
 # ============================================================
 
 --- FRONTEND ---
@@ -397,7 +397,7 @@ Stockage des fichiers : Supabase Storage (inclus dans Supabase)
   Bucket a creer : "documents"
 
 API Routes : Next.js API Routes (dans /app/api/)
-  Aucun serveur Express separe — tout est dans le meme projet Next.js
+  Aucun serveur Express separe - tout est dans le meme projet Next.js
 
 Fichier de configuration centrale : /lib/config.ts
   Principe : toutes les variables d environnement sont lues une seule fois ici.
@@ -455,7 +455,7 @@ Total fixe mensuel au lancement : 0 euro
 
 
 # ============================================================
-# SECTION 6 — STRUCTURE DES FICHIERS DU PROJET
+# SECTION 6 - STRUCTURE DES FICHIERS DU PROJET
 # ============================================================
 
 secondavis/
@@ -515,15 +515,22 @@ secondavis/
 │   │   ├── candidatures/
 │   │   │   └── page.tsx               <- /admin/candidatures
 │   │   ├── demandes/
-│   │   │   └── page.tsx               <- /admin/demandes
+│   │   │   ├── page.tsx               <- /admin/demandes (liste + recherche + filtre statut)
+│   │   │   └── [id]/page.tsx          <- /admin/demandes/[id] (detail + reponse + rating + remboursement)
+│   │   ├── avis/
+│   │   │   └── page.tsx               <- /admin/avis (liste avis clients + filtres rated/unrated)
 │   │   ├── utilisateurs/
 │   │   │   └── page.tsx               <- /admin/utilisateurs (liste + recherche)
 │   │   ├── finances/
 │   │   │   └── page.tsx               <- /admin/finances
+│   │   ├── paiements/
+│   │   │   └── page.tsx               <- /admin/paiements (historique paiements + remboursements + virements)
 │   │   ├── rgpd/
 │   │   │   └── page.tsx               <- /admin/rgpd
-│   │   └── audit/
-│   │       └── page.tsx               <- /admin/audit (journal)
+│   │   ├── audit/
+│   │   │   └── page.tsx               <- /admin/audit (journal, recherche par email)
+│   │   └── marketing/
+│   │       └── page.tsx               <- /admin/marketing (abonnes emails + export JSON)
 │   │
 │   └── api/                           <- toutes les routes API (backend)
 │       ├── auth/
@@ -532,7 +539,8 @@ secondavis/
 │       │   ├── logout/route.ts
 │       │   ├── me/route.ts
 │       │   ├── forgot-password/route.ts
-│       │   └── reset-password/route.ts
+│       │   ├── reset-password/route.ts
+│       │   └── resend-confirmation/route.ts <- POST renvoi email de confirmation
 │       ├── user/
 │       │   ├── profile/route.ts       <- PATCH infos client
 │       │   └── change-password/route.ts
@@ -577,9 +585,17 @@ secondavis/
 │       │   ├── utilisateurs/[id]/route.ts
 │       │   ├── utilisateurs/[id]/refund/route.ts
 │       │   ├── utilisateurs/[id]/block/route.ts
+│       │   ├── demandes/route.ts
+│       │   ├── demandes/[id]/route.ts
+│       │   ├── demandes/[id]/refund/route.ts  <- POST remboursement manuel + stocke refund_reason
+│       │   ├── avis/route.ts          <- GET liste avis avec filtres (rated, unrated, email)
 │       │   ├── finances/route.ts
+│       │   ├── paiements/route.ts     <- GET historique mouvements financiers (paiements + remboursements + virements)
 │       │   ├── gdpr/route.ts
-│       │   └── audit/route.ts
+│       │   ├── gdpr/[id]/route.ts     <- PATCH statut RGPD + trace audit
+│       │   ├── gdpr/[id]/execute/route.ts <- POST anonymisation compte (droit a l oubli)
+│       │   ├── audit/route.ts
+│       │   └── marketing/route.ts     <- GET liste abonnes marketing + export JSON
 │       └── cron/
 │           └── check-expired/route.ts <- toutes les heures : remboursements + paiements
 │
@@ -634,7 +650,7 @@ secondavis/
 ├── types/
 │   └── index.ts
 │
-├── middleware.ts                      <- protection des routes + verification role admin
+├── proxy.ts                           <- protection des routes + verification role admin (middleware Next.js renomme)
 │
 ├── .env.local                         <- variables d environnement (NE PAS COMMITER)
 │
@@ -643,12 +659,12 @@ secondavis/
 
 
 # ============================================================
-# SECTION 7 — VARIABLES D ENVIRONNEMENT (.env.local)
+# SECTION 7 - VARIABLES D ENVIRONNEMENT (.env.local)
 # ============================================================
 
 # PRINCIPE FONDAMENTAL :
 # Chaque valeur qui peut changer (domaine, emails, noms, cles) est ici.
-# Le code ne contient jamais de valeur en dur — il lit toujours le .env.
+# Le code ne contient jamais de valeur en dur - il lit toujours le .env.
 # Pour passer du local au production : changer uniquement le .env sur Vercel.
 # Pour changer le domaine ou l email de contact : changer 1 ligne ici, tout suit.
 
@@ -670,7 +686,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 # En production : NEXT_PUBLIC_APP_URL=https://www.secondavis.be
 
 NEXT_PUBLIC_APP_NAME=SecondAvis
-# Utilise dans les titres, emails, footer — changer ici change partout
+# Utilise dans les titres, emails, footer - changer ici change partout
 
 NEXT_PUBLIC_APP_TAGLINE=Obtenez un avis professionnel en moins de 24h pour 9 euros
 # Utilise dans les balises meta et og:description
@@ -691,16 +707,16 @@ EMAIL_ADMIN=ton.email@gmail.com
 # --- INFORMATIONS LEGALES (mentions legales obligatoires) ---
 NEXT_PUBLIC_COMPANY_NAME=SecondAvis
 NEXT_PUBLIC_COMPANY_STATUS=Projet etudiant en phase de test
-# Statut legal — a mettre a jour quand tu auras cree ta societe
+# Statut legal - a mettre a jour quand tu auras cree ta societe
 
 NEXT_PUBLIC_COMPANY_ADDRESS=Belgique
 # Adresse complete quand tu en auras une
 
 NEXT_PUBLIC_COMPANY_BCE=
-# Numero BCE belge — laisser vide pour l instant (etudiant, pas de TVA)
+# Numero BCE belge - laisser vide pour l instant (etudiant, pas de TVA)
 
 NEXT_PUBLIC_COMPANY_TVA=
-# Numero TVA — laisser vide pour l instant (etudiant, exonere)
+# Numero TVA - laisser vide pour l instant (etudiant, exonere)
 
 # --- SECURITE ---
 CRON_SECRET=genere_un_mot_de_passe_aleatoire_ici_minimum_32_caracteres
@@ -708,7 +724,7 @@ CRON_SECRET=genere_un_mot_de_passe_aleatoire_ici_minimum_32_caracteres
 # Generer avec : openssl rand -base64 32
 
 ADMIN_EMAIL=ton.email@gmail.com
-# Email de l admin (toi) — verifie dans le middleware pour proteger /admin
+# Email de l admin (toi) - verifie dans le middleware pour proteger /admin
 
 # --- UPLOADS ---
 NEXT_PUBLIC_MAX_FILE_SIZE_MB=10
@@ -719,7 +735,7 @@ NEXT_PUBLIC_ALLOWED_FILE_TYPES=image/jpeg,image/png,image/webp,application/pdf
 # --- PRIX ---
 NEXT_PUBLIC_REQUEST_PRICE_CENTS=900
 # Prix d une demande en centimes (900 = 9 euros)
-# Si tu changes le prix un jour, changer uniquement ici — tout le code suit
+# Si tu changes le prix un jour, changer uniquement ici - tout le code suit
 NEXT_PUBLIC_EXPERT_PAYMENT_CENTS=200
 # Montant verse a l expert par reponse (200 = 2 euros)
 
@@ -765,7 +781,7 @@ NEXT_PUBLIC_EXPERT_CHARTER_VERSION=1.0
 
 
 # ============================================================
-# SECTION 8 — BASE DE DONNEES (SCHEMA COMPLET)
+# SECTION 8 - BASE DE DONNEES (SCHEMA COMPLET)
 # ============================================================
 
 # A executer dans l editeur SQL de Supabase (dans le dashboard)
@@ -784,13 +800,13 @@ NEXT_PUBLIC_EXPERT_CHARTER_VERSION=1.0
 
 --- TABLE users ---
 # Stocke les informations des clients (acheteurs d avis)
-# Principe RGPD : minimisation des donnees — on ne collecte que le strict necessaire
+# Principe RGPD : minimisation des donnees - on ne collecte que le strict necessaire
 # Age et adresse NON collectes car inutiles pour le service
 
 CREATE TABLE users (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
-  -- Connexion (email unique dans toute la base — Supabase Auth garantit l unicite)
+  -- Connexion (email unique dans toute la base - Supabase Auth garantit l unicite)
   email TEXT UNIQUE NOT NULL,              -- email de connexion (RGPD sensible)
 
   -- Identite
@@ -833,7 +849,7 @@ CREATE TABLE experts (
   -- Modifier les categories met a jour immediatement les notifications
   years_experience INT NOT NULL,
   city TEXT NOT NULL,                    -- ville affichee publiquement (extraite de l adresse)
-  languages TEXT[] DEFAULT '{fr}',      -- langues de reponse : 'fr' | 'nl' | 'de'
+  languages TEXT[] DEFAULT '{fr}',      -- langues de reponse : 'fr' | 'nl' | 'en'
   availabilities TEXT,                   -- ex: "Lun-Ven 18h-22h" (texte libre)
   website_url TEXT,                      -- site web ou LinkedIn (optionnel)
 
@@ -899,8 +915,17 @@ CREATE TABLE requests (
   amount_cents INT DEFAULT 900,         -- montant paye en centimes (900 = 9 euros)
   stripe_payment_intent_id TEXT,        -- identifiant Stripe pour remboursement eventuel
   expires_at TIMESTAMPTZ,               -- expiration calculee selon la regle vendredi
+  payment_confirmed BOOLEAN DEFAULT FALSE, -- true apres confirmation par le webhook Stripe
+  refund_reason TEXT,                   -- raison du remboursement si remboursement manuel admin
+  -- locked_by UUID et locked_at TIMESTAMPTZ : verrou 10 min pour protection double soumission expert
+  locked_by UUID,
+  locked_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+# COLONNES AJOUTEES APRES LA CREATION INITIALE :
+#   payment_confirmed, refund_reason, locked_by, locked_at
+#   → voir Section 16 : colonnes ajoutees a la table requests
 
 # Protection contre la double soumission (race condition) :
 # Deux experts ne peuvent pas repondre a la meme demande en meme temps.
@@ -942,7 +967,7 @@ CREATE TABLE answers (
   is_contested BOOLEAN DEFAULT FALSE,     -- true si l utilisateur a clique "Signaler" dans les 48h
   contest_reason TEXT,                    -- raison choisie par l utilisateur
   contest_resolved BOOLEAN DEFAULT FALSE, -- true quand l admin a tranche le signalement
-  contest_decision TEXT,                  -- 'validate' | 'refund' — decision de l admin (null si pas de signalement)
+  contest_decision TEXT,                  -- 'validate' | 'refund' - decision de l admin (null si pas de signalement)
   admin_decision_at TIMESTAMPTZ,          -- date et heure de la decision admin (pour calculer +5 jours)
   is_paid BOOLEAN DEFAULT FALSE,          -- true quand les 2 euros ont ete vires a l expert
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -975,7 +1000,7 @@ CREATE TABLE ratings (
 
 --- TABLE suspension_logs ---
 # Historique complet de toutes les suspensions, reactivations et litiges d un expert
-# Jamais efface — conserve indefiniment pour le suivi complet
+# Jamais efface - conserve indefiniment pour le suivi complet
 
 CREATE TABLE suspension_logs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -985,7 +1010,7 @@ CREATE TABLE suspension_logs (
   reason TEXT,                          -- raison ecrite par l admin, ou generee automatiquement
   related_answer_id UUID REFERENCES answers(id),   -- reponse qui a declenche le litige (si applicable)
   related_signalement_id UUID REFERENCES answers(id), -- id du signalement associe (si applicable)
-  contest_decision TEXT,                -- 'validate' | 'refund' — issue du litige (si applicable)
+  contest_decision TEXT,                -- 'validate' | 'refund' - issue du litige (si applicable)
   created_by TEXT DEFAULT 'admin',      -- 'admin' ou 'system' (suspension automatique)
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -1048,7 +1073,7 @@ CREATE TABLE expert_applications (
 
 
 # ============================================================
-# SECTION 9 — API ROUTES (DETAIL COMPLET)
+# SECTION 9 - API ROUTES (DETAIL COMPLET)
 # ============================================================
 
 --- AUTHENTIFICATION ---
@@ -1084,7 +1109,7 @@ GET    /api/auth/me
 POST   /api/auth/forgot-password
   Corps : { email }
   Action : appelle supabase.auth.resetPasswordForEmail(email)
-  Retourne : { success: true } (meme si l email n existe pas — securite)
+  Retourne : { success: true } (meme si l email n existe pas - securite)
 
 POST   /api/auth/reset-password
   Corps : { password }
@@ -1178,7 +1203,7 @@ POST   /api/expert/requests/[id]/answer
   Corps : { content, verdict }
   Action :
     1. Transaction PostgreSQL avec SELECT ... FOR UPDATE sur la demande (protection double soumission)
-    2. Verifie que le status est encore 'pending' — sinon retourne une erreur
+    2. Verifie que le status est encore 'pending' - sinon retourne une erreur
     3. Cree la reponse en BDD avec :
          delivered_at = NOW()
          contest_window_ends = NOW() + 48 heures
@@ -1187,7 +1212,7 @@ POST   /api/expert/requests/[id]/answer
     4. Met le status de la demande a 'answered'
     5. Incremente total_answers de l expert
     6. Envoie un email a l utilisateur (reponse recue)
-    7. NE vire PAS d argent — le paiement est automatique apres 5 jours via le cron job
+    7. NE vire PAS d argent - le paiement est automatique apres 5 jours via le cron job
   Retourne : { answer }
 
 GET    /api/expert/answers
@@ -1332,7 +1357,7 @@ POST   /api/admin/signalements/[id]/arbitrate
     3. Planifie le remboursement Stripe dans 5 jours
     4. is_paid reste false, l expert ne recoit rien
     5. Score de fiabilite de l expert baisse
-    6. is_active de l expert reste false — toi (admin) tu decides ensuite
+    6. is_active de l expert reste false - toi (admin) tu decides ensuite
        depuis /admin/experts/[id] si tu le reactives ou le suspends definitivement
     7. Email au client : "Votre signalement a ete retenu. Vous serez rembourse de 9 euros
        dans un delai de 5 jours."
@@ -1474,7 +1499,20 @@ PATCH  /api/admin/utilisateurs/[id]/block
 GET    /api/admin/finances
   Auth admin requise
   Action : revenus, remboursements, virements experts, marge nette sur 6 mois
-  Retourne : { finances, monthly_data: [] }
+  Frais Stripe calcules : Math.ceil(montant * 0.029) + nb_transactions * 25 centimes
+  Retourne : { summary: { ca_total_cents, remboursements_cents, virements_experts_cents, marge_nette_cents }, monthly_data: [] }
+
+GET    /api/admin/paiements
+  Auth admin requise
+  Params : ?type=all|paiement|remboursement|virement, ?status=all|paid|pending|refunded, ?email=...
+  Action : historique complet de tous les mouvements financiers de la plateforme
+    - Paiements clients : requests avec payment_confirmed = true
+    - Remboursements : requests avec status = 'refunded' (inclut refund_reason si disponible)
+    - Virements experts : table payouts
+  Filtre email : cherche simultanement dans users (pour paiements/remboursements) et experts (pour virements)
+  Retourne : { mouvements: [] } (triees par date decroissante)
+  Note importante : la colonne refund_reason doit exister dans la table requests
+    → voir Section 16 : colonnes ajoutees a la table requests
 
 # Note technique importante sur la recherche :
 # Utiliser ILIKE de PostgreSQL pour la recherche partielle insensible a la casse.
@@ -1503,7 +1541,7 @@ GET    /api/admin/finances
 
 
 # ============================================================
-# SECTION 10 — PAGES ET COMPOSANTS UI
+# SECTION 10 - PAGES ET COMPOSANTS UI
 # ============================================================
 
 --- PAGES PUBLIQUES (sans connexion) ---
@@ -1514,7 +1552,7 @@ GET    /api/admin/finances
     - Comment ca marche en 3 etapes (icone + texte)
     - Les categories actives avec prix (uniquement celles dont le statut est ACTIVE)
     - Temoignages d utilisateurs (3 cartes)
-    - CTA principal : bouton "Poser ma question — 9 euros"
+    - CTA principal : bouton "Poser ma question - 9 euros"
     - Bande de reassurance (24h garanti, experts verifies, rembourse si pas de reponse)
     - Mention de non-responsabilite visible : "SecondAvis est une plateforme d entraide..."
 
@@ -1560,7 +1598,7 @@ GET    /api/admin/finances
         'pending'   → "En attente d un expert"
         'answered'  → "Reponse recue" + bouton "Signaler" si dans les 48h
         'contested' → bandeau orange : "Votre signalement est en cours d analyse..."
-        'refunded'  → "Rembourse — vous pouvez poser une nouvelle question"
+        'refunded'  → "Rembourse - vous pouvez poser une nouvelle question"
         'closed'    → "Termine"
 
 /nouvelle-demande
@@ -1569,14 +1607,14 @@ GET    /api/admin/finances
     Etape 2 : Decrire la situation + upload optionnel
     Etape 3 : Paiement Stripe
 
-/mon-compte  (profil client — modifiable par le client lui-meme)
+/mon-compte  (profil client - modifiable par le client lui-meme)
   Le client peut modifier ses propres informations sans passer par l admin.
   Toute modification est tracee dans audit_logs.
 
   Section "Mes informations" :
     - Prenom (modifiable)
     - Nom (modifiable)
-    - Email (modifiable — verifie l unicite avant de sauvegarder)
+    - Email (modifiable - verifie l unicite avant de sauvegarder)
     - Telephone (modifiable, optionnel)
     - Bouton "Sauvegarder"
 
@@ -1620,18 +1658,18 @@ GET    /api/admin/finances
     - Historique des reponses avec statut de paiement
     - Bouton "Telecharger mon recapitulatif fiscal [annee]"
 
-/expert/profil  (profil expert — modifiable par l expert lui-meme)
+/expert/profil  (profil expert - modifiable par l expert lui-meme)
   L expert peut modifier ses propres informations sans passer par l admin.
   Toute modification est tracee dans audit_logs.
 
   Section "Profil public" (ce que les clients voient) :
     - Pseudo / nom affiche (modifiable)
-    - Photo de profil (modifiable — upload image)
+    - Photo de profil (modifiable - upload image)
     - Bio / presentation (modifiable, max 500 caracteres)
     - Ville affichee (modifiable)
     - Site web ou LinkedIn (modifiable, optionnel)
-    - Disponibilites (modifiable — texte libre)
-    - Langues de reponse (modifiable — cases a cocher : FR / NL / DE)
+    - Disponibilites (modifiable - texte libre)
+    - Langues de reponse (modifiable - cases a cocher : FR / NL / EN)
 
   Section "Categories et notifications" :
     Affiche les 6 categories avec une case a cocher pour chacune.
@@ -1647,7 +1685,7 @@ GET    /api/admin/finances
 
   Section "Mes informations privees" (non visibles publiquement) :
     - Prenom, Nom (modifiables)
-    - Email de contact (modifiable — verifie l unicite)
+    - Email de contact (modifiable - verifie l unicite)
     - Telephone (modifiable)
     - Adresse complete : rue, code postal, ville (modifiable)
     - Type de compte : Particulier / Societe (modifiable)
@@ -1699,39 +1737,39 @@ GET    /api/admin/finances
   C est la page la plus importante de l espace admin.
   Composants :
 
-  Bloc 1 — Demande originale du client (lecture seule)
+  Bloc 1 - Demande originale du client (lecture seule)
     - Categorie, titre, description complete
     - Fichiers joints (photos de devis, PDF) avec possibilite de les ouvrir
     - Date de creation de la demande
     - Montant paye par le client (9 euros)
 
-  Bloc 2 — Reponse de l expert (lecture seule)
+  Bloc 2 - Reponse de l expert (lecture seule)
     - Nom de l expert, sa note moyenne, son nombre de reponses
     - Verdict de l expert (resume 1 phrase)
     - Contenu complet de la reponse
     - Date et heure de la reponse
 
-  Bloc 3 — Details du signalement (lecture seule)
+  Bloc 3 - Details du signalement (lecture seule)
     - Raison choisie par le client
     - Date et heure du signalement
     - Note : "Tout paiement est gele jusqu a votre decision. Des que vous decidez,
       le paiement ou remboursement partira 5 jours apres votre decision."
 
-  Bloc 4 — Email au client (action admin)
-    - Objet pre-rempli : "Concernant votre signalement — SecondAvis"
+  Bloc 4 - Email au client (action admin)
+    - Objet pre-rempli : "Concernant votre signalement - SecondAvis"
     - Champ texte libre pour le message personnalise
     - Note : le client ne voit pas ce que tu envoies a l expert
     - Bouton "Envoyer au client"
     - Historique des emails deja envoyes a ce client pour ce dossier
 
-  Bloc 5 — Email a l expert (action admin)
-    - Objet pre-rempli : "Concernant votre reponse — SecondAvis"
+  Bloc 5 - Email a l expert (action admin)
+    - Objet pre-rempli : "Concernant votre reponse - SecondAvis"
     - Champ texte libre pour le message personnalise
     - Note : l expert ne voit pas ce que tu envoies au client
     - Bouton "Envoyer a l expert"
     - Historique des emails deja envoyes a cet expert pour ce dossier
 
-  Bloc 6 — Decision finale (action admin)
+  Bloc 6 - Decision finale (action admin)
     - Bouton vert "Valider la reponse"
         → payment_eligible_at = NOW() + 5 jours
         → le cron job enverra 2 euros a l expert dans 5 jours
@@ -1775,7 +1813,7 @@ GET    /api/admin/finances
         → OFF (rouge) : l expert ne voit plus rien, ne peut plus repondre
         → Un clic ouvre une modale de confirmation avec un champ de texte OBLIGATOIRE :
             "Raison de la suspension (obligatoire) :"
-            [champ texte — ex: "Comportement inapproprie repete"]
+            [champ texte - ex: "Comportement inapproprie repete"]
             Bouton "Confirmer la suspension"
         → La raison est sauvegardee dans suspension_reason sur le compte expert
         → La modification est tracee dans audit_logs et suspension_logs
@@ -1792,7 +1830,7 @@ GET    /api/admin/finances
   Bandeau de litige actif (visible si l expert a un signalement en cours) :
     - Bandeau orange distinct du bandeau rouge
     - Affiche :
-        "Signalement en cours — demande : [titre de la demande]"
+        "Signalement en cours - demande : [titre de la demande]"
         Date du signalement
         Raison du signalement soumise par le client
         Lien direct vers /admin/signalements/[id] pour traiter le dossier
@@ -1814,7 +1852,7 @@ GET    /api/admin/finances
     Liste chronologique de toutes les suspensions et reactivations
     Pour chacune :
       Date, type (manuel/auto), raison complete, qui a fait l action (admin ou systeme)
-    Cet historique n est jamais efface — meme apres reactivation
+    Cet historique n est jamais efface - meme apres reactivation
 
   Onglet "Litiges et signalements" :
     Liste complete de tous les litiges ayant implique cet expert, du plus recent au plus ancien.
@@ -1896,12 +1934,24 @@ GET    /api/admin/finances
     - Graphique des revenus sur les 6 derniers mois
     - Total des remboursements effectues ce mois
     - Total des virements effectues aux experts ce mois
-    - Marge nette (revenus - remboursements - frais Stripe)
-    - Liste de tous les virements Stripe avec statut
-    - Liste de tous les remboursements avec raison
+    - Marge nette (revenus - remboursements - frais Stripe : 2,9% arrondi au centime superieur + 0,25 euro fixe par transaction)
+    - Mois affiches du plus recent au plus ancien
+
+/admin/paiements  (historique complet des mouvements financiers)
+  Composants :
+    - Barre de recherche par email (cherche dans users et experts)
+    - Filtre par type : Tous / Paiements clients / Remboursements / Virements experts
+    - Filtre par statut : Tous / Paye / En attente / Rembourse
+    - 3 cartes de totaux : total paiements clients, total remboursements, total virements experts
+    - Tableau de tous les mouvements : date, type (badge couleur), description + raison + lien dossier,
+      compte (nom + email), montant (+ vert paiement / - bleu remboursement / - indigo virement),
+      statut (badge couleur), reference Stripe (tronquee)
+    - Lien "Voir le dossier" pour les demandes clients
+    - Lien "Voir l expert" pour les virements experts
+  Note : necessite la colonne refund_reason dans la table requests → voir Section 16
 
 
-# Emails admin bilateraux — detail technique
+# Emails admin bilateraux - detail technique
 # Les emails envoyes manuellement depuis l espace admin sont loggues en base de donnees.
 # Ni le client ni l expert ne voient les emails envoyes a l autre partie.
 # Chaque email est envoye via Resend avec l expediteur : contact@secondavis.be
@@ -1969,7 +2019,7 @@ CREATE TABLE consents (
 
 
 # ============================================================
-# SECTION — FONCTIONNALITES OBLIGATOIRES ET RECOMMANDEES
+# SECTION - FONCTIONNALITES OBLIGATOIRES ET RECOMMANDEES
 # ============================================================
 
 # CONTEXTE DU PROJET :
@@ -2057,7 +2107,7 @@ Routes API a ajouter :
 
 Cas a gerer dans POST /api/requests et dans le webhook Stripe :
 
-  Cas 1 — Carte refusee au moment du paiement :
+  Cas 1 - Carte refusee au moment du paiement :
     → Ne pas creer la demande en BDD
     → Afficher un message clair a l utilisateur sur la page de paiement
     → Proposer de reessayer avec une autre carte
@@ -2066,12 +2116,12 @@ Cas a gerer dans POST /api/requests et dans le webhook Stripe :
         insufficient_funds → "Fonds insuffisants sur cette carte."
         expired_card       → "Cette carte est expiree."
 
-  Cas 2 — Paiement reussi mais erreur serveur apres :
+  Cas 2 - Paiement reussi mais erreur serveur apres :
     → Le paiement Stripe a ete debite mais la demande n a pas ete creee en BDD
     → Le webhook payment_intent.succeeded doit creer la demande si elle n existe pas
     → Toujours utiliser le webhook comme source de verite, pas la reponse API directe
 
-  Cas 3 — Timeout ou perte de connexion pendant le paiement :
+  Cas 3 - Timeout ou perte de connexion pendant le paiement :
     → Page de confirmation avec statut "En cours de verification"
     → Verifier l etat du PaymentIntent via GET /api/requests/verify-payment?pi_id=...
     → Si succeeded → creer la demande
@@ -2136,7 +2186,7 @@ Template email : ReceiptClient.tsx
   Contenu du recu :
     - Numero de transaction (genere automatiquement : SA-2026-XXXX)
     - Date et heure du paiement
-    - Description : "Avis professionnel — categorie [mecanique] — demande [titre]"
+    - Description : "Avis professionnel - categorie [mecanique] - demande [titre]"
     - Montant : 9,00 euros TVAC
     - Mention : "TVA non applicable - Article 56bis du Code de la TVA" (etudiant)
     - Nom et coordonnees : process.env.NEXT_PUBLIC_COMPANY_NAME + EMAIL_CONTACT
@@ -2157,7 +2207,7 @@ Installation :
 
 Configuration dans .env :
   SENTRY_DSN=https://xxxx@sentry.io/xxxx
-  Laisser vide en local — Sentry ne capture rien sans DSN
+  Laisser vide en local - Sentry ne capture rien sans DSN
 
 Ce que Sentry fait :
   - Capture automatiquement toutes les erreurs non gerees
@@ -2195,7 +2245,7 @@ Affiche en temps reel (ou cache toutes les heures) :
   "X experts verifies" → COUNT(*) FROM experts WHERE is_verified = true AND is_active = true
 
 Cache le resultat dans une variable globale mise a jour toutes les heures
-(pas besoin de requete SQL a chaque visite — trop lent)
+(pas besoin de requete SQL a chaque visite - trop lent)
 
 Route API : GET /api/stats/public
   Retourne : { total_answers, satisfaction_rate, active_experts }
@@ -2204,7 +2254,7 @@ Route API : GET /api/stats/public
 
 --- RECOMMANDE 11 : SEO DE BASE ---
 
-Fichier app/layout.tsx — metadata globales :
+Fichier app/layout.tsx - metadata globales :
   Utilise les variables .env pour ne rien avoir en dur :
     title: process.env.NEXT_PUBLIC_APP_NAME
     description: process.env.NEXT_PUBLIC_APP_TAGLINE
@@ -2250,13 +2300,13 @@ Ce que ca mesure :
 
 Page /a-propos
   Contenu :
-    - Qui tu es (en restant vague si tu le souhaites — "Developpe par un etudiant belge")
+    - Qui tu es (en restant vague si tu le souhaites - "Developpe par un etudiant belge")
     - Pourquoi tu as cree SecondAvis (histoire courte et authentique)
     - La mission : "Democratiser l acces aux avis professionnels"
     - Valeurs : transparence, entraide, protection du consommateur
     - Comment contacter : process.env.EMAIL_CONTACT
     - Lien vers /devenir-expert pour recruter des experts
-  Ton : personnel et humain — pas corporatif
+  Ton : personnel et humain - pas corporatif
 
 
 --- RECOMMANDE 14 : RECU FISCAL ANNUEL POUR LES EXPERTS ---
@@ -2271,7 +2321,7 @@ Page /expert/gains :
     - Periode : du 01/01/[annee] au 31/12/[annee]
     - Tableau : date de paiement, titre de la demande, montant recu (2 euros)
     - Total annuel
-    - Mention : "Document genere par SecondAvis — conserver pour votre declaration fiscale"
+    - Mention : "Document genere par SecondAvis - conserver pour votre declaration fiscale"
     - Nom de la plateforme et email de contact (depuis .env)
 
 Route API : GET /api/expert/fiscal-summary?year=2026
@@ -2281,7 +2331,7 @@ Route API : GET /api/expert/fiscal-summary?year=2026
 
 
 # ============================================================
-# SECTION RGPD — CONFORMITE COMPLETE
+# SECTION RGPD - CONFORMITE COMPLETE
 # ============================================================
 
 # Loi applicable : Reglement General sur la Protection des Donnees (RGPD)
@@ -2336,8 +2386,8 @@ Droit a la portabilite (article 20 RGPD) :
 Chiffrement en transit : HTTPS obligatoire (Vercel + Supabase le gerent)
 Chiffrement au repos : Supabase chiffre les donnees au repos par defaut
 Acces limite : seul l admin peut acceder aux donnees personnelles depuis /admin
-Mots de passe : jamais stockes en clair — geres par Supabase Auth (bcrypt)
-Tokens Stripe : jamais stockes — Stripe gere les donnees de carte directement
+Mots de passe : jamais stockes en clair - geres par Supabase Auth (bcrypt)
+Tokens Stripe : jamais stockes - Stripe gere les donnees de carte directement
 Duree de conservation : donnees actives = toute la duree du compte
                         apres suppression = anonymisation immediate sauf exceptions legales
 
@@ -2380,8 +2430,13 @@ Contenu :
 
 
 # ============================================================
-# SECTION 11 — CONVENTIONS DE CODE
+# SECTION 11 - CONVENTIONS DE CODE
 # ============================================================
+
+--- ORTHOGRAPHE ---
+Mettre les accents et les apostrophes dans les commentaires et le texte pour que ce soit professionnel.
+Ne jamais utiliser de tiret long IA (- ou --) dans le code, les composants, les textes UI, les emails ou les commentaires.
+Utiliser uniquement des tirets classiques courts (-) quand un tiret est necessaire.
 
 --- NOMMAGE ---
 
@@ -2559,7 +2614,7 @@ Exemple de types principaux a definir :
 
 
 # ============================================================
-# SECTION 12 — CONFIGURATION VERCEL CRON JOB
+# SECTION 12 - CONFIGURATION VERCEL CRON JOB
 # ============================================================
 
 # Contenu du fichier vercel.json a la racine du projet
@@ -2577,7 +2632,7 @@ Exemple de types principaux a definir :
 
 
 # ============================================================
-# SECTION 13 — LOGIQUE DU CRON JOB (DETAIL)
+# SECTION 13 - LOGIQUE DU CRON JOB (DETAIL)
 # ============================================================
 
 # Fichier : /app/api/cron/check-expired/route.ts
@@ -2615,20 +2670,17 @@ Etapes du cron job :
      d. Envoyer un email a l expert (template ExpertPaymentSent.tsx)
      e. Logger le paiement dans la table payouts
 
-  --- Partie C : Remboursements planifies apres decision admin ---
+  --- Partie C : Nettoyage des demandes avec paiement non confirme ---
 
-  6. Chercher dans la table answers :
-     WHERE contest_decision = 'refund'
-     AND contest_resolved = true
-     AND is_paid = false
-     AND admin_decision_at + 5 jours < NOW()
+  6. Chercher dans la table requests :
+     WHERE payment_confirmed = false
+     AND created_at < NOW() - 5 minutes
 
-  7. Pour chaque remboursement planifie :
-     a. Appeler stripe.refunds.create({ payment_intent: request.stripe_payment_intent_id })
-     b. Mettre le status de la demande a 'refunded'
-     c. Envoyer un email a l utilisateur (template ContestResolvedRefundClient.tsx)
+  7. Supprimer toutes ces demandes abandonnees
+     L utilisateur avait 5 minutes pour finaliser son paiement Stripe.
+     Passé ce delai, la demande est supprimee. Aucun email envoye (paiement jamais effectue).
 
-  Retourne : { refunded_count, paid_count, planned_refunds_count }
+  Retourne : { refunded_count, paid_count, cleaned_count }
 
   Calcul de expires_at a la creation d une demande (dans POST /api/requests) :
 
@@ -2661,107 +2713,123 @@ Etapes du cron job :
 
 
 # ============================================================
-# SECTION 14 — ORDRE DE DEVELOPPEMENT RECOMMANDE
+# SECTION 14 - ORDRE DE DEVELOPPEMENT RECOMMANDE
 # ============================================================
 
 Semaine 1-2 : FONDATIONS
-  [ ] npx create-next-app@latest secondavis (TypeScript, Tailwind, App Router)
-  [ ] Installer shadcn/ui
-  [ ] Creer le compte Supabase et le projet
-  [ ] Executer le schema SQL complet dans Supabase
-  [ ] Configurer le fichier .env.local avec TOUTES les variables de la Section 7
-  [ ] Creer /lib/supabase/client.ts et /lib/supabase/server.ts
-  [ ] Creer /lib/config.ts → exporte toutes les constantes depuis process.env
-  [ ] Creer tous les types dans /types/index.ts
-  [ ] Faire la page d accueil / avec le compteur public et les mentions legales
+  [x] Projet Next.js cree (TypeScript, Tailwind, App Router)
+  [x] shadcn/ui installe
+  [x] Compte Supabase cree + schema SQL complet execute (13 tables)
+  [x] Colonnes SQL additionnelles ajoutees dans requests (voir Section 16)
+  [x] Fichier .env.local configure (voir Section 7)
+  [x] /lib/supabase/, /lib/config.ts, /types/index.ts crees
+  [x] Page d accueil / avec compteur public
+  [x] Header avec navigation selon role (user/expert/admin)
+  [x] Bucket Supabase Storage "documents" cree
 
-Semaine 3 : AUTHENTIFICATION COMPLETE
-  [ ] Page /register avec formulaire (prenom, nom, email, password, confirmation majorite)
-  [ ] Activer "Email confirmations" dans Supabase → Authentication → Settings
-  [ ] Page /auth/confirm (message d attente apres inscription)
-  [ ] Page /login
-  [ ] Page /auth/forgot-password (formulaire email)
-  [ ] Page /auth/reset-password (nouveau mot de passe)
-  [ ] Routes API : /register, /login, /forgot-password, /reset-password, /me
-  [ ] Middleware de protection des routes (middleware.ts)
-  [ ] Composant CookieBanner.tsx (bandeau cookies RGPD)
-  [ ] Test : s inscrire, confirmer email, se connecter, mot de passe oublie
+Semaine 3 : AUTHENTIFICATION
+  [x] Pages /register, /login, /auth/confirm, /auth/forgot-password, /auth/reset-password
+  [x] Routes API /register, /login, /logout, /forgot-password, /reset-password, /me
+  [x] proxy.ts : protection des routes + redirect apres login
+  [x] Composants Header.tsx et CookieBanner.tsx
+  [x] Test : inscription, connexion, mot de passe oublie, deconnexion
 
 Semaine 4 : DEMANDES UTILISATEUR
-  [ ] Page /nouvelle-demande avec les 3 etapes + guide "comment bien poser ma question"
-  [ ] Validation upload : taille max + types autorises (depuis .env)
-  [ ] Route API /api/requests (POST) avec gestion echecs Stripe
-  [ ] Route API /api/requests/verify-payment (verif paiement apres timeout)
-  [ ] Page /mes-demandes (liste avec tous les statuts inclus 'contested')
-  [ ] Page /mes-demandes/[id] avec bandeau selon statut + bouton recu
-  [ ] Route API /api/requests/[id]/receipt (genere PDF recu)
-  [ ] Test : payer, voir le recu, tester carte refusee
+  [x] Page /nouvelle-demande en 3 etapes (categorie, description + upload, paiement Stripe)
+  [x] Pages /mes-demandes, /mes-demandes/[id], /mes-demandes/[id]/signaler, /mon-compte
+  [x] Routes API /api/requests (GET, POST), /api/requests/[id] (GET, DELETE, upload, receipt, verify-payment)
+  [x] Routes API /api/user/profile, /api/user/change-password
+  [x] Paiement Stripe avec gestion des erreurs (carte refusee, solde insuffisant, expiree)
+  [x] Upload fichiers avec validation serveur (taille + type MIME)
+  [x] Nettoyage auto des demandes non payees apres 5 min
+  [x] Test : payer, voir le recu PDF, tester cartes refusees
 
-Semaine 5 : UPLOAD ET DASHBOARD EXPERT
-  [ ] Upload fichiers avec validation serveur (taille + type MIME)
-  [ ] Page /expert/dashboard
-  [ ] Page /expert/demandes/[id] avec timer expiration
-  [ ] Route POST reponse expert avec protection double soumission (FOR UPDATE)
-  [ ] Test : l expert voit la demande, repond, protection concurrence
+Semaine 5 : ESPACE EXPERT
+  [x] Pages /expert/dashboard, /expert/demandes/[id], /expert/mes-reponses, /expert/gains, /expert/profil
+  [x] Pages publiques /experts, /experts/[id]
+  [x] Routes API expert (requests, answer, lock, answers, balance, profile, photo, change-password)
+  [x] Routes API publiques /api/experts, /api/experts/[id]
+  [x] Route /api/answers/[id]/contest (signalement client)
+  [x] Route /api/ratings (notation + suspension automatique)
+  [x] Route /api/cron/check-expired (remboursements + paiements + nettoyage)
+  [x] Composants ExpertGuard.tsx, StarRating.tsx
+  [x] Protection double soumission : verrou 10 min en DB
+  [x] Upload photo de profil expert
+  [ ] Test : flux complet client → expert → reponse → signalement → reactivation admin
 
-Semaine 6 : EMAILS COMPLETS
-  [ ] Installer Resend et react-email
-  [ ] Creer les 17 templates email (voir liste complete dans Section 6)
-  [ ] Tous les emails utilisent les variables .env pour l expediteur et les URLs
-  [ ] Notification immediate aux experts quand nouvelle demande (NewRequest.tsx)
-  [ ] Email recu client apres paiement (ReceiptClient.tsx)
-  [ ] Test : verifier chaque email dans Resend dashboard
+Semaine 6 : EMAILS
+  [x] Resend et react-email installes
+  [x] 17 templates email crees (voir liste Section 6)
+  [x] Emails branches sur les bonnes routes API (reponse, signalement, remboursement, paiement)
+  [x] Test : verifier chaque email dans Resend dashboard
 
 Semaine 7 : PAIEMENTS STRIPE
-  [ ] Creer le compte Stripe, recuperer les cles dans .env
-  [ ] Integrer Stripe Checkout avec gestion des erreurs (carte refusee, fonds insuffisants)
-  [ ] Route /api/stripe/webhook (source de verite pour confirmer les paiements)
-  [ ] Stripe Connect Express pour les virements experts
-  [ ] Page /expert/gains avec historique + telechargement recu fiscal annuel
-  [ ] Test complet : payer, voir recu, expert voit son paiement en attente
+  [x] Stripe Checkout integre avec gestion des erreurs
+  [x] Route /api/stripe/webhook
+  [x] Stripe Connect Express pour virements experts
+  [x] Page /expert/gains avec recu fiscal annuel PDF
+  [x] Test complet : payer, voir recu, expert voit son paiement en attente
 
-Semaine 8 : CRON JOB, NOTATIONS ET SIGNALEMENTS
-  [ ] Route /api/cron/check-expired (3 parties : expiration + paiement + remboursement planifie)
-  [ ] Vercel cron job configure dans vercel.json
-  [ ] Route /api/ratings avec suspension automatique experte
-  [ ] Route /api/answers/[id]/contest avec blocage expert + emails bilateraux
-  [ ] Composant StarRating.tsx
-  [ ] Test : simuler un signalement, verifier que l expert est bloque
+Semaine 8 : CRON JOB ET SIGNALEMENTS
+  [x] Route /api/cron/check-expired (3 parties : expiration, paiement expert, nettoyage)
+  [x] Cron job configure dans vercel.json (toutes les heures)
+  [x] Route /api/ratings avec suspension automatique (3x1 etoile ou moyenne < 4.2)
+  [x] Route /api/answers/[id]/contest avec blocage expert + emails bilateraux
+  [x] Test : simuler un signalement, verifier que l expert est bloque
 
 Semaine 9 : PAGES LEGALES ET SEO
-  [ ] Pages /cgu, /politique-confidentialite, /mentions-legales
-  [ ] Page /a-propos
-  [ ] Page /comment-poser-ma-question
-  [ ] app/sitemap.ts (sitemap automatique)
-  [ ] app/robots.txt
-  [ ] Metadata SEO dans chaque page (title, description, og depuis .env)
+  [x] Pages /cgu, /politique-confidentialite, /mentions-legales, /a-propos
+  [x] Pages /comment-poser-ma-question, /devenir-expert
+  [x] app/sitemap.ts et app/robots.ts
+  [x] Metadata SEO dans chaque page (title, description, og)
+  [x] Footer avec liens legaux
+  [x] Charte expert : page /expert/charte + route API + signature avec IP
+  [x] Suppression de compte client et expert (anonymisation RGPD)
+  [x] Widget d assistance IA pour les visiteurs
   [ ] Image Open Graph 1200x630px
-  [ ] Installer Plausible si domaine disponible (sinon laisser vide dans .env)
+  [ ] Plausible Analytics (quand domaine disponible)
 
-Semaine 10 : ADMIN COMPLET
-  [ ] Dashboard admin /admin avec stats en temps reel
-  [ ] Pages /admin/experts avec filtre desactives + raisons
-  [ ] Pages /admin/utilisateurs avec recherche universelle
-  [ ] Pages /admin/signalements avec arbitrage complet
-  [ ] Pages /admin/candidatures, /admin/demandes, /admin/finances
-  [ ] Pages /admin/rgpd et /admin/audit
-  [ ] Routes API admin completes
+Semaine 10 : ADMIN
+  [x] Toutes les pages admin : /admin, /admin/experts, /admin/utilisateurs, /admin/signalements
+  [x] Pages /admin/candidatures, /admin/demandes, /admin/demandes/[id], /admin/finances
+  [x] Pages /admin/rgpd, /admin/audit, /admin/avis, /admin/paiements, /admin/marketing
+  [x] Toutes les routes API admin correspondantes
+  [x] Verification email obligatoire dans proxy.ts pour /admin, /expert et pages client
+  [x] Protection brute force : blocage 15 min apres 3 echecs (voir Section 16 : login_attempts)
+  [x] Corrections UX : affichage heures, statuts apres arbitrage, badges notifications sidebar
+  [x] Corrections admin : filtres avis, calcul frais Stripe, recherche RGPD et audit
+  [x] Corrections emails : salutation personnalisee, liens vers pages client/expert
+  [x] Corrections financieres : page paiements, raison remboursement, arrondi frais Stripe
   [ ] Test : simuler tout le cycle complet (inscription → demande → reponse → signalement → arbitrage)
 
-Semaine 11 : MONITORING ET DEPLOIEMENT
-  [ ] Creer compte Sentry sur sentry.io (gratuit)
-  [ ] npm install @sentry/nextjs, configurer avec SENTRY_DSN dans .env
-  [ ] Creer compte Vercel et connecter le repo GitHub
-  [ ] Configurer TOUTES les variables .env sur Vercel (copier depuis .env.local)
-  [ ] Passer STRIPE_SECRET_KEY de sk_test_ a sk_live_ pour la production
+Semaine 11 : SECURITE
+  [x] Protection brute force login (table login_attempts, blocage 15 min apres 3 echecs)
+  [x] Rate limiting : /login (3/15 min), /forgot-password (3/15 min), /register (5/heure par IP)
+  [x] Verification email obligatoire avant acces aux pages protegees (proxy.ts)
+  [x] Protection CRON_SECRET sur le cron job
+  [x] Validation fichiers uploades cote serveur (taille + type MIME)
+  [x] Stripe webhook verifie avec STRIPE_WEBHOOK_SECRET
+  [x] Protection double soumission expert (verrou DB locked_by / locked_at)
+  [x] Headers HTTP de securite dans next.config.ts (X-Frame-Options, HSTS, CSP partiel...)
+  [x] Row Level Security (RLS) active sur toutes les tables (voir Section 16 : RLS)
+  [x] Audit log sur toutes les modifications de donnees personnelles
+  [x] Audit dependances npm (0 vulnerabilite apres npm audit fix)
+  [ ] Content Security Policy (CSP) strict - a faire apres mise en production
+  [ ] Logs d erreur Sentry en production (voir Semaine 12)
+
+Semaine 12 : DEPLOIEMENT ET MONITORING
+  [ ] Creer compte Sentry, configurer SENTRY_DSN dans .env
+  [ ] Creer compte Vercel, connecter le repo GitHub
+  [ ] Configurer toutes les variables .env sur Vercel
+  [ ] Passer STRIPE_SECRET_KEY en sk_live_ pour la production
   [ ] Tester le deploiement complet en production
   [ ] Verifier que le cron job fonctionne sur Vercel
-  [ ] Configurer le domaine quand disponible (1 ligne a changer dans .env)
+  [ ] Configurer le domaine (1 ligne dans .env)
 
 
 
 # ============================================================
-# SECTION 15 — CE QUE CLAUDE DOIT TOUJOURS FAIRE
+# SECTION 15 - CE QUE CLAUDE DOIT TOUJOURS FAIRE
 # ============================================================
 
 Quand tu generes du code pour ce projet :
@@ -2783,6 +2851,154 @@ Quand l utilisateur (moi) te decrit un probleme ou un bug :
 2. Expliquer d abord pourquoi le probleme se produit
 3. Proposer la solution la plus simple possible
 4. Appliquer la correction avec commentaire
+
+--- SECURITE : PROTECTIONS AUTOMATIQUES DES TECHNOLOGIES ---
+
+  SQL Injection : Supabase client JS utilise des requetes parametrees automatiquement.
+    Ne jamais concatener de chaines dans les requetes → toujours .eq('email', email).
+  XSS : React echappe automatiquement. Ne jamais utiliser dangerouslySetInnerHTML avec du contenu utilisateur.
+  CSRF : Next.js App Router + cookies httpOnly Supabase → protection automatique.
+  Donnees carte : jamais stockees, Stripe gere tout (certifie PCI DSS Level 1).
+  Mots de passe : jamais vus en clair, Supabase Auth gere le hachage (bcrypt).
+  Chiffrement : HTTPS force par Vercel, donnees au repos chiffrees par Supabase (AES-256).
+  DDoS : Vercel integre une protection basique. Ajouter Cloudflare en production si besoin.
+
+--- SECURITE : REGLES DE CODE PERMANENTES ---
+
+  1. Toujours revalider avec zod cote serveur dans chaque route API.
+  2. Chaque route API commence par : const { data: { user } } = await supabase.auth.getUser()
+  3. Toujours verifier que request.user_id === user.id avant de retourner une ressource.
+  4. Les cles service_role et STRIPE_SECRET_KEY n ont jamais le prefixe NEXT_PUBLIC_.
+  5. Les messages d erreur ne revelent jamais les noms de tables, colonnes, ou IDs internes.
+  6. Toujours verifier taille ET type MIME des fichiers uploades cote serveur (pas seulement l extension).
+
+
+# ============================================================
+# SECTION 16 - COMMANDES SQL A EXECUTER DANS SUPABASE
+# ============================================================
+
+# Ces commandes sont a executer une seule fois dans Supabase → SQL Editor.
+# Elles completent le schema de base defini en Section 8.
+# Les colonnes et tables creees ici ne font pas partie du schema initial.
+
+
+--- 1. COLONNES AJOUTEES A LA TABLE requests ---
+
+# A executer apres avoir cree la table requests avec le schema de la Section 8.
+# Ces colonnes ne sont pas dans le CREATE TABLE initial car elles ont ete ajoutees en cours de developpement.
+
+  ALTER TABLE requests ADD COLUMN IF NOT EXISTS payment_confirmed BOOLEAN DEFAULT FALSE;
+  ALTER TABLE requests ADD COLUMN IF NOT EXISTS refund_reason TEXT;
+  ALTER TABLE requests ADD COLUMN IF NOT EXISTS locked_by UUID;
+  ALTER TABLE requests ADD COLUMN IF NOT EXISTS locked_at TIMESTAMPTZ;
+
+
+--- 2. TABLE login_attempts (protection brute force et rate limiting) ---
+
+# Stocke les tentatives de connexion echouees pour bloquer les attaques par force brute.
+# Reutilisee avec des cles prefixees pour le rate limiting des routes /forgot-password et /register.
+
+  CREATE TABLE login_attempts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    email TEXT NOT NULL,
+    ip_address TEXT,
+    success BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+  );
+
+  CREATE INDEX idx_login_attempts ON login_attempts (email, created_at);
+
+
+--- 3. ROW LEVEL SECURITY (RLS) - protection des donnees par utilisateur ---
+
+# Principe : meme si quelqu un obtient la cle anon, il ne peut pas lire les donnees des autres.
+# createAdminClient() utilise service_role → bypass le RLS automatiquement (voulu pour l admin).
+# createClient() utilise la session de l utilisateur connecte → soumis au RLS.
+
+# Active le RLS sur toutes les tables sensibles
+  ALTER TABLE users               ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE experts             ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE requests            ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE answers             ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE ratings             ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE payouts             ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE gdpr_requests       ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE expert_applications ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE expert_charters     ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE consents            ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE suspension_logs     ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE audit_logs          ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE admin_emails        ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE login_attempts      ENABLE ROW LEVEL SECURITY;
+
+  -- TABLE users : chaque client voit et modifie uniquement son propre profil
+  CREATE POLICY "users_select_own" ON users FOR SELECT USING (auth.uid() = id);
+  CREATE POLICY "users_update_own" ON users FOR UPDATE USING (auth.uid() = id);
+  CREATE POLICY "users_insert_own" ON users FOR INSERT WITH CHECK (auth.uid() = id);
+
+  -- TABLE experts : profil public visible par tous, modification reservee au proprietaire
+  CREATE POLICY "experts_select_public" ON experts FOR SELECT USING (is_verified = true AND is_active = true);
+  CREATE POLICY "experts_select_own"    ON experts FOR SELECT USING (auth.uid() = user_id);
+  CREATE POLICY "experts_update_own"    ON experts FOR UPDATE USING (auth.uid() = user_id);
+
+  -- TABLE requests : visible uniquement par le client proprietaire
+  CREATE POLICY "requests_select_own" ON requests FOR SELECT USING (auth.uid() = user_id);
+  CREATE POLICY "requests_insert_own" ON requests FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+  -- TABLE answers : visible par le client de la demande ou l expert qui a repondu
+  CREATE POLICY "answers_select_client" ON answers FOR SELECT USING (
+    EXISTS (SELECT 1 FROM requests WHERE requests.id = answers.request_id AND requests.user_id = auth.uid())
+  );
+  CREATE POLICY "answers_select_expert" ON answers FOR SELECT USING (
+    EXISTS (SELECT 1 FROM experts WHERE experts.id = answers.expert_id AND experts.user_id = auth.uid())
+  );
+  CREATE POLICY "answers_insert_expert" ON answers FOR INSERT WITH CHECK (
+    EXISTS (SELECT 1 FROM experts WHERE experts.id = answers.expert_id AND experts.user_id = auth.uid())
+  );
+
+  -- TABLE ratings : lecture publique, ecriture reservee au client proprietaire de la demande
+  CREATE POLICY "ratings_select_all"    ON ratings FOR SELECT USING (true);
+  CREATE POLICY "ratings_insert_own"    ON ratings FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+  -- TABLE payouts : visible uniquement par l expert concerne
+  CREATE POLICY "payouts_select_own" ON payouts FOR SELECT USING (
+    EXISTS (SELECT 1 FROM experts WHERE experts.id = payouts.expert_id AND experts.user_id = auth.uid())
+  );
+
+  -- TABLE gdpr_requests : visible uniquement par le demandeur
+  CREATE POLICY "gdpr_select_own" ON gdpr_requests FOR SELECT USING (
+    (requester_type = 'user'   AND auth.uid() = requester_id) OR
+    (requester_type = 'expert' AND EXISTS (SELECT 1 FROM experts WHERE experts.id = requester_id AND experts.user_id = auth.uid()))
+  );
+  CREATE POLICY "gdpr_insert_own" ON gdpr_requests FOR INSERT WITH CHECK (
+    (requester_type = 'user'   AND auth.uid() = requester_id) OR
+    (requester_type = 'expert' AND EXISTS (SELECT 1 FROM experts WHERE experts.id = requester_id AND experts.user_id = auth.uid()))
+  );
+
+  -- TABLE expert_applications : visible uniquement par le candidat
+  CREATE POLICY "applications_select_own" ON expert_applications FOR SELECT USING (
+    email = (SELECT email FROM users WHERE id = auth.uid())
+  );
+  CREATE POLICY "applications_insert_own" ON expert_applications FOR INSERT WITH CHECK (true);
+
+  -- TABLE expert_charters : visible uniquement par l expert signataire
+  CREATE POLICY "charters_select_own" ON expert_charters FOR SELECT USING (
+    EXISTS (SELECT 1 FROM experts WHERE experts.id = expert_charters.expert_id AND experts.user_id = auth.uid())
+  );
+
+  -- TABLE consents : visible uniquement par le proprietaire
+  CREATE POLICY "consents_select_own" ON consents FOR SELECT USING (
+    auth.uid() = user_id OR
+    EXISTS (SELECT 1 FROM experts WHERE experts.id = consents.expert_id AND experts.user_id = auth.uid())
+  );
+
+  -- Tables admin : aucun acces direct via cle anon (service_role uniquement)
+  -- Pas de policy = aucun acces possible sans service_role
+  -- suspension_logs, audit_logs, admin_emails, login_attempts : acces service_role uniquement
+
+# IMPORTANT : apres avoir active le RLS, tester les routes API pour verifier qu aucune n est cassee.
+# Si une route retourne une erreur inattendue, verifier qu elle utilise bien createAdminClient()
+# pour les operations admin et createClient() pour les operations utilisateur.
 
 
 # ============================================================
