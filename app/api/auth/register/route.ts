@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (authError || !authData.user) {
+      console.error('Supabase signUp error:', authError)
       // Traduit les messages d'erreur Supabase en français
       let message = 'Erreur lors de la création du compte.'
       if (authError?.message?.includes('rate limit')) {
