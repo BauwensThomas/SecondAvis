@@ -7,26 +7,28 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 
 // Page de confirmation email
-// Supabase redirige ici apres verification du token avec les tokens de session dans le hash URL
+// Gere deux cas : attente de confirmation ET retour apres clic sur le lien email
 export default function ConfirmPage() {
   const router = useRouter()
   const [envoiEnCours, setEnvoiEnCours] = useState(false)
   const [renvoyé, setRenvoyé]           = useState(false)
   const [erreur, setErreur]             = useState('')
   const [confirmation, setConfirmation] = useState(false)
+  const [chargement, setChargement]     = useState(true)
 
-  // Ecoute le changement de session Supabase apres redirection depuis le lien email
+  // Au chargement, verifie si la session est deja active (retour apres clic lien email)
   useEffect(() => {
     const supabase = createClient()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        // Session active = email confirme, redirection vers l accueil
         setConfirmation(true)
         setTimeout(() => router.push('/'), 1500)
+      } else {
+        setChargement(false)
       }
     })
-
-    return () => subscription.unsubscribe()
   }, [router])
 
   // Demande a Supabase de renvoyer l email de confirmation
@@ -45,7 +47,16 @@ export default function ConfirmPage() {
     }
   }
 
-  // Compte confirme avec succes
+  // Pendant la verification de session
+  if (chargement) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  // Email confirme avec succes
   if (confirmation) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
