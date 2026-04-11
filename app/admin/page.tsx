@@ -51,7 +51,7 @@ export default function AdminPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Tableau de bord</h1>
-          <p className="text-slate-500 text-sm mt-1">Vue d'ensemble de SecondAvis en temps réel</p>
+          <p className="text-slate-500 text-sm mt-1">Vue d'ensemble de Avisbox en temps réel</p>
         </div>
         <button onClick={() => { setLoading(true); fetch('/api/admin/stats').then(r => r.json()).then(d => { setStats(d); setLoading(false) }) }}
           className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors">

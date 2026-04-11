@@ -11,12 +11,12 @@ interface AnswerReceivedProps {
 
 // Email envoyé au client quand un expert a répondu à sa demande
 export default function AnswerReceived({ prenomClient, titreQuestion, nomExpert, demandeId }: AnswerReceivedProps) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.secondavis.be'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Un expert a répondu à votre question - SecondAvis</Preview>
+      <Preview>Un expert a répondu à votre question - Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>
@@ -39,7 +39,7 @@ export default function AnswerReceived({ prenomClient, titreQuestion, nomExpert,
           </Link>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>
-            SecondAvis est une plateforme d'entraide. Cet avis ne constitue pas une consultation professionnelle formelle et n'engage pas la responsabilité de SecondAvis.
+            Avisbox est une plateforme d'entraide. Cet avis ne constitue pas une consultation professionnelle formelle et n'engage pas la responsabilité de Avisbox.
           </Text>
         </Container>
       </Body>

@@ -58,8 +58,8 @@ export async function GET(
     })
 
     const montant = (request.amount_cents / 100).toFixed(2).replace('.', ',') + ' €'
-    const appName = process.env.NEXT_PUBLIC_APP_NAME || 'SecondAvis'
-    const emailContact = process.env.EMAIL_CONTACT || 'contact@secondavis.be'
+    const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Avisbox'
+    const emailContact = process.env.EMAIL_CONTACT || 'contact@avisbox.be'
     const categorie = CATEGORY_LABELS[request.category] || request.category
     const nomClient = userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : ''
 

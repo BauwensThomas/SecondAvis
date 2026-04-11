@@ -9,19 +9,19 @@ interface ExpertSuspendedProps {
 
 // Email envoyé à l'expert quand son compte est suspendu par l'admin
 export default function ExpertSuspended({ prenomExpert, raison }: ExpertSuspendedProps) {
-  const contactEmail = process.env.EMAIL_CONTACT ?? 'contact@secondavis.be'
+  const contactEmail = process.env.EMAIL_CONTACT ?? 'contact@avisbox.be'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Votre compte expert a été suspendu - SecondAvis</Preview>
+      <Preview>Votre compte expert a été suspendu - Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>
             Compte suspendu
           </Heading>
           <Text style={{ color: '#475569', lineHeight: 1.6 }}>
-            Bonjour {prenomExpert}, votre compte expert SecondAvis a été suspendu.
+            Bonjour {prenomExpert}, votre compte expert Avisbox a été suspendu.
           </Text>
           <Text style={{ color: '#0f172a', backgroundColor: '#fef2f2', border: '1px solid #fecaca', padding: '12px 16px', borderRadius: 8 }}>
             Raison : {raison}
@@ -32,7 +32,7 @@ export default function ExpertSuspended({ prenomExpert, raison }: ExpertSuspende
           </Text>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>
-            SecondAvis - Belgique
+            Avisbox - Belgique
           </Text>
         </Container>
       </Body>

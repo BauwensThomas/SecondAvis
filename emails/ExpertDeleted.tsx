@@ -19,7 +19,7 @@ export default function ExpertDeleted({ prenomExpert, raison }: Props) {
             Bonjour {prenomExpert},
           </Text>
           <Text style={{ color: '#475569', fontSize: 15, lineHeight: '1.6' }}>
-            Nous vous informons que votre compte expert sur SecondAvis a été définitivement supprimé par notre équipe.
+            Nous vous informons que votre compte expert sur Avisbox a été définitivement supprimé par notre équipe.
           </Text>
           <Hr style={{ borderColor: '#e2e8f0', margin: '20px 0' }} />
           <Text style={{ color: '#475569', fontSize: 14, lineHeight: '1.6' }}>
@@ -35,7 +35,7 @@ export default function ExpertDeleted({ prenomExpert, raison }: Props) {
               {process.env.EMAIL_CONTACT}
             </a>.
           </Text>
-          <Text style={{ color: '#cbd5e1', fontSize: 11 }}>SecondAvis</Text>
+          <Text style={{ color: '#cbd5e1', fontSize: 11 }}>Avisbox</Text>
         </Container>
       </Body>
     </Html>

@@ -35,7 +35,7 @@ export async function POST() {
 
     // Anonymise le compte client
     await supabaseAdmin.from('users').update({
-      email:              `effaced_${userRow.id}@deleted.secondavis.be`,
+      email:              `effaced_${userRow.id}@deleted.Avisbox.be`,
       first_name:         'Compte',
       last_name:          'supprimé',
       phone:              null,
@@ -50,7 +50,7 @@ export async function POST() {
         bio:            null,
         first_name:     'Compte',
         last_name:      'supprimé',
-        email:          `effaced_${userRow.id}@deleted.secondavis.be`,
+        email:          `effaced_${userRow.id}@deleted.Avisbox.be`,
         phone:          null,
         address_street: '',
         address_zip:    '',

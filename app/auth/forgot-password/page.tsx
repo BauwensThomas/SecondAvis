@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
 
         <div className="text-center mb-8">
           <Link href="/" className="text-2xl font-bold text-slate-900">
-            SecondAvis
+            Avisbox
           </Link>
           <h1 className="mt-4 text-xl font-semibold text-slate-800">
             Mot de passe oublié

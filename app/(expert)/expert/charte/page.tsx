@@ -100,7 +100,7 @@ function ChartePage() {
         <section>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Préambule</p>
           <p className="text-slate-600 leading-relaxed">
-            La présente charte constitue un accord contraignant entre l'expert (ci-après "vous") et SecondAvis
+            La présente charte constitue un accord contraignant entre l'expert (ci-après "vous") et Avisbox
             (ci-après "la plateforme"). En apposant votre signature numérique, vous reconnaissez avoir lu,
             compris et accepté l'intégralité des conditions ci-dessous. Cette signature est enregistrée avec
             horodatage, adresse IP et génération d'un document PDF probatoire, conformément aux dispositions
@@ -161,7 +161,7 @@ function ChartePage() {
         <section>
           <p className="font-semibold text-slate-900 mb-2">Article 4 - Propriété intellectuelle des réponses</p>
           <p className="text-slate-600 leading-relaxed">
-            En soumettant une réponse sur la plateforme, je cède à SecondAvis une licence non exclusive,
+            En soumettant une réponse sur la plateforme, je cède à Avisbox une licence non exclusive,
             mondiale et gratuite d'utilisation de cette réponse à des fins d'amélioration du service,
             de modération et de traitement des litiges. Je reste l'auteur de ma réponse et conserve mes
             droits moraux sur celle-ci.
@@ -172,9 +172,9 @@ function ChartePage() {
         <section>
           <p className="font-semibold text-slate-900 mb-2">Article 5 - Nature des avis et limitation de responsabilité</p>
           <p className="text-slate-600 leading-relaxed">
-            Je reconnais et accepte que les avis fournis via SecondAvis constituent des opinions professionnelles
+            Je reconnais et accepte que les avis fournis via Avisbox constituent des opinions professionnelles
             d'entraide et non des consultations formelles engageant ma responsabilité civile professionnelle.
-            SecondAvis décline toute responsabilité quant aux décisions prises par les utilisateurs sur la base
+            Avisbox décline toute responsabilité quant aux décisions prises par les utilisateurs sur la base
             de mes avis. En cas de faute grave, de tromperie délibérée ou de violation de la présente charte,
             ma responsabilité personnelle pourra être engagée conformément au droit belge.
           </p>
@@ -184,7 +184,7 @@ function ChartePage() {
         <section className="bg-red-50 border border-red-100 rounded-lg p-4">
           <p className="font-semibold text-red-800 mb-2">Article 6 - Sanctions en cas de violation</p>
           <p className="text-red-700 text-xs mb-3 leading-relaxed">
-            Toute violation de la présente charte, constatée par SecondAvis à la suite d'un signalement ou
+            Toute violation de la présente charte, constatée par Avisbox à la suite d'un signalement ou
             d'une vérification interne, entraîne les sanctions suivantes, applicables immédiatement et sans
             préavis :
           </p>
@@ -202,7 +202,7 @@ function ChartePage() {
           <p className="text-slate-600 leading-relaxed">
             La présente charte est régie par le droit belge. Tout litige relatif à son interprétation ou
             à son exécution sera soumis à la compétence exclusive des tribunaux de l'arrondissement judiciaire
-            du siège de SecondAvis, sans préjudice du droit de SecondAvis de saisir toute autre juridiction
+            du siège de Avisbox, sans préjudice du droit de Avisbox de saisir toute autre juridiction
             compétente.
           </p>
         </section>
@@ -210,10 +210,10 @@ function ChartePage() {
         {/* Bas de page */}
         <section className="text-xs text-slate-400 border-t border-slate-100 pt-4 leading-relaxed">
           <p>
-            <span className="font-medium">Charte de bonne conduite SecondAvis</span> - Version {process.env.NEXT_PUBLIC_EXPERT_CHARTER_VERSION ?? '1.0'}.
+            <span className="font-medium">Charte de bonne conduite Avisbox</span> - Version {process.env.NEXT_PUBLIC_EXPERT_CHARTER_VERSION ?? '1.0'}.
             La signature numérique apposée ci-dessous a la même valeur juridique qu'une signature manuscrite
             conformément au Règlement eIDAS (UE) n°910/2014. Une copie PDF horodatée est générée et conservée
-            par SecondAvis. Vous pouvez en télécharger un exemplaire depuis votre espace expert.
+            par Avisbox. Vous pouvez en télécharger un exemplaire depuis votre espace expert.
           </p>
         </section>
 
@@ -237,7 +237,7 @@ function ChartePage() {
               className="mt-0.5 w-4 h-4 accent-indigo-600 cursor-pointer"
             />
             <span className="text-sm text-slate-700">
-              J'ai lu et j'accepte intégralement la charte de bonne conduite SecondAvis.
+              J'ai lu et j'accepte intégralement la charte de bonne conduite Avisbox.
               Je comprends que ma signature est enregistrée avec la date, l'heure et mon adresse IP.
             </span>
           </label>

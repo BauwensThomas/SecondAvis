@@ -78,7 +78,7 @@ async function genererPdfCharte(options: {
   let y = height - MARGE
 
   // ---- En-tête ----
-  page.drawText('SecondAvis', { x: MARGE, y, font: fontBold, size: 20, color: INDIGO })
+  page.drawText('Avisbox', { x: MARGE, y, font: fontBold, size: 20, color: INDIGO })
   y -= 18
   page.drawText('Charte de bonne conduite - Accord numérique', {
     x: MARGE, y, font: fontNormal, size: 11, color: GRIS,
@@ -149,7 +149,7 @@ async function genererPdfCharte(options: {
     {
       titre: 'Article 4 - Propriété intellectuelle des réponses',
       items: [
-        'En soumettant une réponse, je cède à SecondAvis une licence non exclusive d\'utilisation à des fins de modération et de traitement des litiges.',
+        'En soumettant une réponse, je cède à Avisbox une licence non exclusive d\'utilisation à des fins de modération et de traitement des litiges.',
       ],
     },
     {
@@ -173,7 +173,7 @@ async function genererPdfCharte(options: {
       titre: 'Article 7 - Droit applicable et juridiction',
       items: [
         'La présente charte est régie par le droit belge.',
-        'Tout litige sera soumis à la compétence exclusive des tribunaux de l\'arrondissement judiciaire du siège de SecondAvis.',
+        'Tout litige sera soumis à la compétence exclusive des tribunaux de l\'arrondissement judiciaire du siège de Avisbox.',
       ],
     },
   ]
@@ -182,7 +182,7 @@ async function genererPdfCharte(options: {
     // Nouvelle page si on manque de place
     if (y < 120) {
       const nouvellePage = doc.addPage([595, 842])
-      nouvellePage.drawText('SecondAvis - Charte de bonne conduite (suite)', {
+      nouvellePage.drawText('Avisbox - Charte de bonne conduite (suite)', {
         x: MARGE, y: 842 - MARGE, font: fontNormal, size: 9, color: GRIS,
       })
       y = 842 - MARGE - 30
@@ -224,7 +224,7 @@ async function genererPdfCharte(options: {
   page.drawLine({ start: { x: MARGE, y }, end: { x: width - MARGE, y }, thickness: 0.5, color: rgb(0.85, 0.85, 0.85) })
   y -= 12
   page.drawText(
-    'SecondAvis est une plateforme d\'entraide. Les avis fournis sont des opinions professionnelles',
+    'Avisbox est une plateforme d\'entraide. Les avis fournis sont des opinions professionnelles',
     { x: MARGE, y, font: fontNormal, size: 8, color: GRIS }
   )
   y -= 11

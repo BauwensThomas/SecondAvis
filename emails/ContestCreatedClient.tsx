@@ -12,7 +12,7 @@ export default function ContestCreatedClient({ prenomClient, titreQuestion }: Co
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Votre signalement a été enregistré - SecondAvis</Preview>
+      <Preview>Votre signalement a été enregistré - Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>
@@ -29,7 +29,7 @@ export default function ContestCreatedClient({ prenomClient, titreQuestion }: Co
           </Text>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>
-            SecondAvis - Belgique
+            Avisbox - Belgique
           </Text>
         </Container>
       </Body>

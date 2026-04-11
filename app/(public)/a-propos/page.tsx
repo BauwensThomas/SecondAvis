@@ -3,17 +3,17 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'À propos',
-  description: 'Découvrez l\'histoire et la mission de SecondAvis, la plateforme qui démocratise l\'accès aux avis professionnels.',
+  description: 'Découvrez l\'histoire et la mission de Avisbox, la plateforme qui démocratise l\'accès aux avis professionnels.',
 }
 
 // Page à propos - présentation du projet et de sa mission
 export default function AProposPage() {
-  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@secondavis.be'
+  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@avisbox.be'
 
   return (
     <main className="page-container">
 
-      <h1 className="text-3xl font-bold text-slate-900 mb-4">À propos de SecondAvis</h1>
+      <h1 className="text-3xl font-bold text-slate-900 mb-4">À propos de Avisbox</h1>
       <p className="text-slate-500 text-base mb-12">
         La plateforme qui rend les avis professionnels accessibles à tous.
       </p>
@@ -28,9 +28,9 @@ export default function AProposPage() {
             d'euros sans vraiment avoir les moyens de vérifier.
           </p>
           <p className="mt-3">
-            SecondAvis est né de cette frustration. L'idée : créer un endroit où n'importe qui peut
+            Avisbox est né de cette frustration. L'idée : créer un endroit où n'importe qui peut
             soumettre sa situation à un vrai professionnel, obtenir un avis indépendant en moins de 24h,
-            pour un prix accessible - 9 euros.
+            pour un prix décent. Pas de jargon, pas de frais cachés, juste des conseils clairs et honnêtes.
           </p>
         </section>
 
@@ -75,7 +75,7 @@ export default function AProposPage() {
         <section>
           <h2 className="text-xl font-semibold text-slate-900 mb-3">Qui sommes-nous ?</h2>
           <p>
-            SecondAvis est développé par un étudiant belge passionné par les problèmes concrets
+            Avisbox est développé par un étudiant belge passionné par les problèmes concrets
             que rencontrent les gens au quotidien. Ce projet est né de l'envie de construire quelque
             chose d'utile - pas juste techniquement intéressant, mais vraiment utile pour de vraies
             personnes.
@@ -86,7 +86,7 @@ export default function AProposPage() {
           </p>
         </section>
 
-        <section className="bg-indigo-50 rounded-xl p-6">
+        <section className="bg-indigo-50 dark:bg-[#162333] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-2">Vous voulez devenir expert ?</h2>
           <p className="text-slate-600 text-sm mb-4">
             Vous êtes professionnel et souhaitez partager votre expertise ? Rejoignez nos experts vérifiés

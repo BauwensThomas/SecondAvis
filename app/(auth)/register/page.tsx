@@ -75,7 +75,7 @@ export default function RegisterPage() {
         {/* En-tete */}
         <div className="text-center mb-8">
           <Link href="/" className="text-2xl font-bold text-slate-900">
-            SecondAvis
+            Avisbox
           </Link>
           <h1 className="mt-4 text-xl font-semibold text-slate-800">
             Créer mon compte
@@ -199,7 +199,7 @@ export default function RegisterPage() {
               className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600"
             />
             <label htmlFor="marketing" className="text-sm text-slate-600">
-              J'accepte de recevoir les offres et nouveautés de SecondAvis
+              J'accepte de recevoir les offres et nouveautés de Avisbox
             </label>
           </div>
 

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-// Page d'accueil publique de SecondAvis
+// Page d'accueil publique de Avisbox
 export default function HomePage() {
   return (
     <main className="flex flex-col min-h-screen">
@@ -169,11 +169,11 @@ export default function HomePage() {
       {/* ---- Mention legale obligatoire ---- */}
       <section className="py-6 px-6 bg-slate-100">
         <p className="text-center text-slate-400 text-xs max-w-2xl mx-auto">
-          SecondAvis est une plateforme d'entraide. Les avis donnés par nos professionnels 
+          Avisbox est une plateforme d'entraide. Les avis donnés par nos professionnels 
           représentent leur opinion basée sur les informations que vous avez fournies. 
           Ils ne constituent pas une consultation professionnelle formelle et n'engagent 
-          pas la responsabilité de SecondAvis ni celle du professionnel. 
-          SecondAvis décline toute responsabilité concernant les décisions prises 
+          pas la responsabilité de Avisbox ni celle du professionnel. 
+          Avisbox décline toute responsabilité concernant les décisions prises 
           sur la base de ces avis.
         </p>
       </section>

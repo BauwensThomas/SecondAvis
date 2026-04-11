@@ -7,8 +7,8 @@ export const metadata: Metadata = {
 
 // Page politique de confidentialité - obligatoire RGPD
 export default function PolitiqueConfidentialitePage() {
-  const appName      = process.env.NEXT_PUBLIC_APP_NAME ?? 'SecondAvis'
-  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@secondavis.be'
+  const appName      = process.env.NEXT_PUBLIC_APP_NAME ?? 'Avisbox'
+  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@avisbox.be'
   return (
     <main className="page-container">
       <h1 className="text-3xl font-bold text-slate-900 mb-2">Politique de confidentialité</h1>

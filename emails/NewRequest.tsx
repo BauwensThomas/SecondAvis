@@ -12,12 +12,12 @@ interface NewRequestProps {
 
 // Email envoyé à l'expert dès qu'une nouvelle demande arrive dans ses catégories
 export default function NewRequest({ prenomExpert, categorie, titreQuestion, demandeId, expiresAt }: NewRequestProps) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.secondavis.be'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Nouvelle demande dans votre catégorie - SecondAvis</Preview>
+      <Preview>Nouvelle demande dans votre catégorie - Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>

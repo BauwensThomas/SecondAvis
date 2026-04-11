@@ -63,7 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="w-56 shrink-0 bg-slate-900 text-white flex flex-col">
         <div className="px-5 py-4 border-b border-slate-700">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Admin</p>
-          <p className="text-lg font-bold text-white mt-0.5">SecondAvis</p>
+          <p className="text-lg font-bold text-white mt-0.5">Avisbox</p>
         </div>
 
         <nav className="flex-1 px-3 py-4 space-y-0.5">

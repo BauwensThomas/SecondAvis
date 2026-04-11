@@ -16,14 +16,14 @@ interface ReceiptClientProps {
 export default function ReceiptClient({
   prenomClient, receiptNumber, titreQuestion, categorie, montant, datePaiement, stripePaymentId,
 }: ReceiptClientProps) {
-  const contactEmail = process.env.EMAIL_CONTACT ?? 'contact@secondavis.be'
-  const companyName  = process.env.NEXT_PUBLIC_COMPANY_NAME ?? 'SecondAvis'
+  const contactEmail = process.env.EMAIL_CONTACT ?? 'contact@avisbox.be'
+  const companyName  = process.env.NEXT_PUBLIC_COMPANY_NAME ?? 'Avisbox'
   const address      = process.env.NEXT_PUBLIC_COMPANY_ADDRESS ?? 'Belgique'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Votre reçu SecondAvis - {receiptNumber}</Preview>
+      <Preview>Votre reçu Avisbox - {receiptNumber}</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 4 }}>

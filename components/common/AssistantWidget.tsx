@@ -137,10 +137,10 @@ export default function AssistantWidget() {
             <p className="text-xs text-slate-400">
               Autre question ? Ecrivez-nous à{' '}
               <a
-                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_CONTACT ?? 'contact@secondavis.be'}`}
+                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_CONTACT ?? 'contact@avisbox.be'}`}
                 className="text-indigo-600 hover:underline"
               >
-                contact@secondavis.be
+                contact@avisbox.be
               </a>
             </p>
           </div>

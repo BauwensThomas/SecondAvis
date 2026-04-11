@@ -31,7 +31,7 @@ export async function POST() {
         display_name:    'Expert supprimé',
         first_name:      'Compte',
         last_name:       'supprimé',
-        email:           `effaced_${user.id}@deleted.secondavis.be`,
+        email:           `effaced_${user.id}@deleted.Avisbox.be`,
         phone:           '',
         bio:             null,
         photo_url:       null,
@@ -52,7 +52,7 @@ export async function POST() {
     await supabaseAdmin
       .from('users')
       .update({
-        email:      `effaced_${user.id}@deleted.secondavis.be`,
+        email:      `effaced_${user.id}@deleted.Avisbox.be`,
         first_name: 'Compte',
         last_name:  'supprimé',
         phone:      null,

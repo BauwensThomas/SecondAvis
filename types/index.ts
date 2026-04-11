@@ -1,4 +1,4 @@
-// Types TypeScript centraux du projet SecondAvis.
+// Types TypeScript centraux du projet Avisbox.
 // Tous les composants et routes API importent leurs types depuis ce fichier.
 
 // ---- Utilisateur client ----

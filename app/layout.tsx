@@ -5,6 +5,7 @@ import CookieBanner from "@/components/common/CookieBanner"
 import AssistantWidget from "@/components/common/AssistantWidget"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
+import ThemeProvider from "@/components/common/ThemeProvider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,15 +20,15 @@ const geistMono = Geist_Mono({
 // Metadata globale du site - utilise les variables d'environnement pour ne rien mettre en dur
 export const metadata: Metadata = {
   title: {
-    default: process.env.NEXT_PUBLIC_APP_NAME ?? "SecondAvis",
-    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME ?? "SecondAvis"}`,
+    default: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
+    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox"}`,
   },
   description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 9 euros",
   openGraph: {
-    title: process.env.NEXT_PUBLIC_APP_NAME ?? "SecondAvis",
+    title: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
     description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 9 euros",
     url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-    siteName: process.env.NEXT_PUBLIC_APP_NAME ?? "SecondAvis",
+    siteName: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
     locale: "fr_BE",
     type: "website",
   },
@@ -42,13 +43,16 @@ export default function RootLayout({
     <html
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <Header />
-        {children}
-        <Footer />
-        <CookieBanner />
-        <AssistantWidget />
+        <ThemeProvider>
+          <Header />
+          {children}
+          <Footer />
+          <CookieBanner />
+          <AssistantWidget />
+        </ThemeProvider>
       </body>
     </html>
   )

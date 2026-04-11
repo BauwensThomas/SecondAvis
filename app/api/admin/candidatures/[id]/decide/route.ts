@@ -96,7 +96,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       await resend.emails.send({
         from:    process.env.EMAIL_FROM!,
         to:      candidature.email,
-        subject: 'Bienvenue chez SecondAvis ! Votre compte expert est activé',
+        subject: 'Bienvenue chez Avisbox ! Votre compte expert est activé',
         react:   React.createElement(WelcomeExpert, {
           prenom:  candidature.first_name,
           message: message
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       await resend.emails.send({
         from:    process.env.EMAIL_FROM!,
         to:      candidature.email,
-        subject: 'Votre candidature SecondAvis - Réponse',
+        subject: 'Votre candidature Avisbox - Réponse',
         react:   React.createElement(WelcomeExpert, {
           prenom:  candidature.first_name,
           message: message || 'Nous ne pouvons pas donner suite à votre candidature pour le moment. N\'hésitez pas à repostuler ultérieurement.',

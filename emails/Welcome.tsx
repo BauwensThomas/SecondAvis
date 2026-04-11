@@ -8,16 +8,16 @@ interface WelcomeProps {
 
 // Email de bienvenue envoyé au client après confirmation de son adresse email
 export default function Welcome({ prenom }: WelcomeProps) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.secondavis.be'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Bienvenue sur SecondAvis</Preview>
+      <Preview>Bienvenue sur Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>
-            Bienvenue sur SecondAvis, {prenom} !
+            Bienvenue sur Avisbox, {prenom} !
           </Heading>
           <Text style={{ color: '#475569', lineHeight: 1.6 }}>
             Votre compte est activé. Vous pouvez maintenant poser votre première question à un expert vérifié et recevoir une réponse en moins de 24h.
@@ -30,7 +30,7 @@ export default function Welcome({ prenom }: WelcomeProps) {
           </Link>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>
-            SecondAvis est une plateforme d'entraide. Les avis fournis ne constituent pas une consultation professionnelle formelle.
+            Avisbox est une plateforme d'entraide. Les avis fournis ne constituent pas une consultation professionnelle formelle.
           </Text>
         </Container>
       </Body>

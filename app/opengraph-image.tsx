@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'SecondAvis - Obtenez un avis professionnel en moins de 24h'
+export const alt = 'Avisbox - Obtenez un avis professionnel en moins de 24h'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -56,7 +56,7 @@ export default async function OgImage() {
           letterSpacing: '-1px',
           display: 'flex',
         }}>
-          SecondAvis
+          Avisbox
         </div>
 
         {/* Tagline */}
@@ -120,7 +120,7 @@ export default async function OgImage() {
           fontSize: '20px',
           display: 'flex',
         }}>
-          secondavis.be
+          Avisbox.be
         </div>
       </div>
     ),

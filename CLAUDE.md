@@ -1,5 +1,5 @@
 @AGENTS.md
-# CLAUDE.md - SecondAvis
+# CLAUDE.md - Avisbox
 # Fichier de memoire permanente pour Claude Code
 # Place ce fichier a la racine de ton projet Next.js
 # Claude le lit automatiquement a chaque session
@@ -8,7 +8,7 @@
 # SECTION 1 - INSTRUCTIONS PERMANENTES POUR CLAUDE
 # ============================================================
 
-Tu es le developpeur principal du projet SecondAvis.
+Tu es le developpeur principal du projet Avisbox.
 Tu te souviens de tout ce fichier a chaque nouvelle session.
 Tu ne demandes jamais ce qui a deja ete explique ici.
 
@@ -32,7 +32,7 @@ Regles absolues :
 # SECTION 2 - PRESENTATION DU PROJET
 # ============================================================
 
-Nom du projet : SecondAvis
+Nom du projet : Avisbox
 Type : Application web - marketplace de second avis professionnels
 Tagline : "Obtenez un avis professionnel verifie sur votre situation en moins de 24h pour 9 euros"
 
@@ -323,7 +323,7 @@ Regle 4 - Verification des experts :
 
 Regle 5 - Protection legale et non-responsabilite :
   Les reponses sont des avis professionnels, pas des consultations formelles.
-  SecondAvis est une plateforme d entraide entre particuliers et professionnels.
+  Avisbox est une plateforme d entraide entre particuliers et professionnels.
   Nous ne sommes pas responsables des decisions prises sur la base des avis recus.
   Cela doit etre clairement indique :
     - Dans les CGU (Conditions Generales d Utilisation)
@@ -332,10 +332,10 @@ Regle 5 - Protection legale et non-responsabilite :
     - Dans l email de livraison de la reponse
 
   Formulation exacte a utiliser sur le site et dans les emails :
-    "SecondAvis est une plateforme d entraide. Les avis fournis par nos professionnels
+    "Avisbox est une plateforme d entraide. Les avis fournis par nos professionnels
      sont des opinions basees sur les informations communiquees. Ils ne constituent
      pas une consultation professionnelle formelle engageant la responsabilite de
-     SecondAvis ou du professionnel. SecondAvis decline toute responsabilite quant
+     Avisbox ou du professionnel. Avisbox decline toute responsabilite quant
      aux decisions prises sur la base de ces avis."
 
   Modele juridique valide par JustAnswer (USA) depuis 2003.
@@ -442,7 +442,7 @@ Templates email : react-email
 
 Hebergement : Vercel
   Lien avec GitHub : chaque push sur main deploie automatiquement
-  URL gratuite incluse (format : secondavis.vercel.app)
+  URL gratuite incluse (format : Avisbox.vercel.app)
   Variables d environnement a configurer dans le dashboard Vercel
 
 --- RESUME DES COUTS AU DEMARRAGE ---
@@ -458,7 +458,7 @@ Total fixe mensuel au lancement : 0 euro
 # SECTION 6 - STRUCTURE DES FICHIERS DU PROJET
 # ============================================================
 
-secondavis/
+Avisbox/
 │
 ├── CLAUDE.md                          <- ce fichier (memoire de Claude)
 │
@@ -683,20 +683,20 @@ RESEND_API_KEY=re_...
 
 # --- APPLICATION (a remplir maintenant, a mettre a jour quand tu as un domaine) ---
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-# En production : NEXT_PUBLIC_APP_URL=https://www.secondavis.be
+# En production : NEXT_PUBLIC_APP_URL=https://www.Avisbox.be
 
-NEXT_PUBLIC_APP_NAME=SecondAvis
+NEXT_PUBLIC_APP_NAME=Avisbox
 # Utilise dans les titres, emails, footer - changer ici change partout
 
 NEXT_PUBLIC_APP_TAGLINE=Obtenez un avis professionnel en moins de 24h pour 9 euros
 # Utilise dans les balises meta et og:description
 
 # --- EMAILS (expediteurs et destinataires) ---
-EMAIL_FROM=SecondAvis <noreply@secondavis.be>
+EMAIL_FROM=Avisbox <noreply@Avisbox.be>
 # L expediteur visible dans la boite mail des clients et experts
 # En local pour les tests : utilise ton email personnel
 
-EMAIL_CONTACT=contact@secondavis.be
+EMAIL_CONTACT=contact@Avisbox.be
 # Email de contact affiche dans les pages legales et emails
 # En local pour les tests : utilise ton email personnel
 
@@ -705,7 +705,7 @@ EMAIL_ADMIN=ton.email@gmail.com
 # C est TON email personnel au lancement
 
 # --- INFORMATIONS LEGALES (mentions legales obligatoires) ---
-NEXT_PUBLIC_COMPANY_NAME=SecondAvis
+NEXT_PUBLIC_COMPANY_NAME=Avisbox
 NEXT_PUBLIC_COMPANY_STATUS=Projet etudiant en phase de test
 # Statut legal - a mettre a jour quand tu auras cree ta societe
 
@@ -761,7 +761,7 @@ NEXT_PUBLIC_EXPERT_CHARTER_VERSION=1.0
 # ============================================================
 
 # Dans un composant React :
-#   process.env.NEXT_PUBLIC_APP_NAME      → "SecondAvis"
+#   process.env.NEXT_PUBLIC_APP_NAME      → "Avisbox"
 #   process.env.NEXT_PUBLIC_APP_URL       → "http://localhost:3000"
 
 # Dans une route API (server-side) :
@@ -774,7 +774,7 @@ NEXT_PUBLIC_EXPERT_CHARTER_VERSION=1.0
 # EXEMPLE D UTILISATION dans un email :
 #   `Bonjour, visitez ${process.env.NEXT_PUBLIC_APP_URL}/mon-compte`
 #   → En local : http://localhost:3000/mon-compte
-#   → En production : https://www.secondavis.be/mon-compte
+#   → En production : https://www.Avisbox.be/mon-compte
 #   Un seul .env a modifier pour passer du local au production.
 
 
@@ -1555,7 +1555,7 @@ GET    /api/admin/paiements
     - Temoignages d utilisateurs (3 cartes)
     - CTA principal : bouton "Poser ma question - 9 euros"
     - Bande de reassurance (24h garanti, experts verifies, rembourse si pas de reponse)
-    - Mention de non-responsabilite visible : "SecondAvis est une plateforme d entraide..."
+    - Mention de non-responsabilite visible : "Avisbox est une plateforme d entraide..."
 
 /comment-ca-marche
   Contenu :
@@ -1757,14 +1757,14 @@ GET    /api/admin/paiements
       le paiement ou remboursement partira 5 jours apres votre decision."
 
   Bloc 4 - Email au client (action admin)
-    - Objet pre-rempli : "Concernant votre signalement - SecondAvis"
+    - Objet pre-rempli : "Concernant votre signalement - Avisbox"
     - Champ texte libre pour le message personnalise
     - Note : le client ne voit pas ce que tu envoies a l expert
     - Bouton "Envoyer au client"
     - Historique des emails deja envoyes a ce client pour ce dossier
 
   Bloc 5 - Email a l expert (action admin)
-    - Objet pre-rempli : "Concernant votre reponse - SecondAvis"
+    - Objet pre-rempli : "Concernant votre reponse - Avisbox"
     - Champ texte libre pour le message personnalise
     - Note : l expert ne voit pas ce que tu envoies au client
     - Bouton "Envoyer a l expert"
@@ -1955,7 +1955,7 @@ GET    /api/admin/paiements
 # Emails admin bilateraux - detail technique
 # Les emails envoyes manuellement depuis l espace admin sont loggues en base de donnees.
 # Ni le client ni l expert ne voient les emails envoyes a l autre partie.
-# Chaque email est envoye via Resend avec l expediteur : contact@secondavis.be
+# Chaque email est envoye via Resend avec l expediteur : contact@Avisbox.be
 
 --- TABLE admin_emails ---
 # Historique de tous les emails envoyes manuellement par l admin
@@ -2303,7 +2303,7 @@ Service recommande : Plausible Analytics
 Installation :
   npm install next-plausible
 
-Dans .env : NEXT_PUBLIC_PLAUSIBLE_DOMAIN=secondavis.be
+Dans .env : NEXT_PUBLIC_PLAUSIBLE_DOMAIN=Avisbox.be
   Si vide ou en local → analytics desactives automatiquement
 
 Ce que ca mesure :
@@ -2318,7 +2318,7 @@ Ce que ca mesure :
 Page /a-propos
   Contenu :
     - Qui tu es (en restant vague si tu le souhaites - "Developpe par un etudiant belge")
-    - Pourquoi tu as cree SecondAvis (histoire courte et authentique)
+    - Pourquoi tu as cree Avisbox (histoire courte et authentique)
     - La mission : "Democratiser l acces aux avis professionnels"
     - Valeurs : transparence, entraide, protection du consommateur
     - Comment contacter : process.env.EMAIL_CONTACT
@@ -2338,7 +2338,7 @@ Page /expert/gains :
     - Periode : du 01/01/[annee] au 31/12/[annee]
     - Tableau : date de paiement, titre de la demande, montant recu (2 euros)
     - Total annuel
-    - Mention : "Document genere par SecondAvis - conserver pour votre declaration fiscale"
+    - Mention : "Document genere par Avisbox - conserver pour votre declaration fiscale"
     - Nom de la plateforme et email de contact (depuis .env)
 
 Route API : GET /api/expert/fiscal-summary?year=2026
@@ -2416,7 +2416,7 @@ Quand l admin modifie une donnee personnelle depuis /admin :
   3. Un log est cree avec : qui (admin), quoi (champ modifie), quand, pourquoi
 
 Quand l admin efface un compte (droit a l oubli) :
-  1. L email est remplace par : effaced_[uuid]@deleted.secondavis.be
+  1. L email est remplace par : effaced_[uuid]@deleted.Avisbox.be
   2. Le nom est remplace par : "Compte supprime"
   3. La bio et les infos de contact sont effacees
   4. Les transactions et signalements restent avec l ID anonymise

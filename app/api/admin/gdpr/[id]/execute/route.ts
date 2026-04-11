@@ -34,7 +34,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
 
     // Anonymise le compte client dans la table users
     await supabaseAdmin.from('users').update({
-      email:               `effaced_${userId}@deleted.secondavis.be`,
+      email:               `effaced_${userId}@deleted.Avisbox.be`,
       first_name:          'Compte',
       last_name:           'supprimé',
       phone:               null,
@@ -55,7 +55,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         bio:              null,
         first_name:       'Compte',
         last_name:        'supprimé',
-        email:            `effaced_${userId}@deleted.secondavis.be`,
+        email:            `effaced_${userId}@deleted.Avisbox.be`,
         phone:            null,
         address_street:   '',
         address_zip:      '',
@@ -89,7 +89,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
       action:      'gdpr_erasure',
       target_type: expertRow ? 'expert' : 'user',
       target_id:   userId,
-      new_value:   { email_anonymise: `effaced_${userId}@deleted.secondavis.be`, expert_anonymise: !!expertRow },
+      new_value:   { email_anonymise: `effaced_${userId}@deleted.Avisbox.be`, expert_anonymise: !!expertRow },
     })
 
     // Email de confirmation au demandeur (envoyé à l'email original avant suppression)

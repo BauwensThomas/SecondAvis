@@ -169,7 +169,7 @@ export default function DevenirExpertPage() {
   return (
     <main className="page-container max-w-2xl mx-auto">
 
-      <h1 className="text-3xl font-bold text-slate-900 mb-2">Devenir expert SecondAvis</h1>
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">Devenir expert Avisbox</h1>
       <p className="text-slate-500 text-sm mb-8">
         Partagez votre expertise, aidez des particuliers, développez votre visibilité.
       </p>
@@ -217,7 +217,7 @@ export default function DevenirExpertPage() {
                 <label className="text-xs font-medium text-slate-600 block mb-1">Email</label>
                 <input type="email" value={session?.user?.email ?? ''} disabled
                   className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-slate-50 text-slate-400 cursor-not-allowed" />
-                <p className="text-xs text-slate-400 mt-0.5">L'email de votre compte SecondAvis</p>
+                <p className="text-xs text-slate-400 mt-0.5">L'email de votre compte Avisbox</p>
               </div>
               <div>
                 <label className="text-xs font-medium text-slate-600 block mb-1">Téléphone *</label>
@@ -340,7 +340,7 @@ export default function DevenirExpertPage() {
             )}
 
             <div>
-              <label className="text-xs font-medium text-slate-600 block mb-1">Pourquoi voulez-vous rejoindre SecondAvis ?</label>
+              <label className="text-xs font-medium text-slate-600 block mb-1">Pourquoi voulez-vous rejoindre Avisbox ?</label>
               <textarea value={form.motivation} onChange={(e) => setChamp('motivation', e.target.value)}
                 rows={3} placeholder="Décrivez votre motivation..."
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none" />

@@ -4,4 +4,4 @@ import { Resend } from 'resend'
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Expediteur par défaut lu depuis le .env
-export const EMAIL_FROM = process.env.EMAIL_FROM ?? 'SecondAvis <noreply@secondavis.be>'
+export const EMAIL_FROM = process.env.EMAIL_FROM ?? 'Avisbox <noreply@avisbox.be>'

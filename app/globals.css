@@ -103,37 +103,41 @@ html {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* Fond principal : bleu fonce #1a2540 - moins agressif que le noir pur */
+  --background: oklch(0.19 0.05 255);
+  --foreground: oklch(0.94 0.01 255);
+  /* Cartes : bleu fonce #1e293b */
+  --card: oklch(0.24 0.04 255);
+  --card-foreground: oklch(0.94 0.01 255);
+  --popover: oklch(0.21 0.04 255);
+  --popover-foreground: oklch(0.94 0.01 255);
+  /* Primaire : bleu #3b82f6 */
+  --primary: oklch(0.6 0.2 255);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.25 0.05 255);
+  --secondary-foreground: oklch(0.94 0.01 255);
+  --muted: oklch(0.25 0.05 255);
+  --muted-foreground: oklch(0.65 0.05 255);
+  --accent: oklch(0.25 0.05 255);
+  --accent-foreground: oklch(0.94 0.01 255);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.6 0.2 255);
+  --chart-1: oklch(0.6 0.2 255);
+  --chart-2: oklch(0.5 0.15 255);
+  --chart-3: oklch(0.4 0.1 255);
+  --chart-4: oklch(0.3 0.07 255);
+  --chart-5: oklch(0.25 0.05 255);
+  /* Sidebar : bleu fonce */
+  --sidebar: oklch(0.18 0.04 255);
+  --sidebar-foreground: oklch(0.94 0.01 255);
+  --sidebar-primary: oklch(0.6 0.2 255);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.25 0.05 255);
+  --sidebar-accent-foreground: oklch(0.94 0.01 255);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.6 0.2 255);
 }
 
 @layer base {
@@ -146,4 +150,118 @@ html {
   html {
     @apply font-sans;
   }
+}
+
+/* ---- Mode nuit : remplace les fonds codés en dur dans les pages ---- */
+/* Ces regles evitent de devoir modifier chaque page individuellement   */
+
+/* Fonds blancs et gris */
+.dark .bg-white {
+  background-color: oklch(0.24 0.04 255) !important;
+  color: oklch(0.94 0.01 255);
+}
+.dark .bg-slate-50,
+.dark .bg-gray-50 {
+  background-color: oklch(0.21 0.04 255) !important;
+}
+.dark .bg-slate-100,
+.dark .bg-gray-100 {
+  background-color: oklch(0.27 0.05 255) !important;
+}
+.dark .bg-slate-200,
+.dark .bg-gray-200 {
+  background-color: oklch(0.30 0.05 255) !important;
+}
+.dark .bg-slate-800 {
+  background-color: oklch(0.22 0.05 255) !important;
+}
+.dark .bg-slate-900 {
+  background-color: oklch(0.19 0.05 255) !important;
+}
+
+/* Fonds bleus */
+.dark .bg-blue-50 {
+  background-color: oklch(0.22 0.06 255) !important;
+}
+.dark .bg-blue-100 {
+  background-color: oklch(0.26 0.07 255) !important;
+}
+/* CTA bleu vif - on le rend moins agressif en mode nuit */
+.dark .bg-blue-600 {
+  background-color: oklch(0.35 0.1 255) !important;
+}
+.dark .hover\:bg-blue-700:hover {
+  background-color: oklch(0.32 0.1 255) !important;
+}
+
+/* Fonds verts (page comment-ca-marche) */
+.dark .bg-green-50 {
+  background-color: oklch(0.22 0.04 160) !important;
+}
+.dark .border-green-100 {
+  border-color: oklch(1 0 0 / 8%) !important;
+}
+.dark .text-green-800 {
+  color: oklch(0.72 0.1 160) !important;
+}
+.dark .text-green-700 {
+  color: oklch(0.65 0.1 160) !important;
+}
+
+/* Fonds indigo */
+.dark .bg-indigo-50 {
+  background-color: oklch(0.22 0.06 270) !important;
+}
+
+/* Bordures */
+.dark .border-blue-100 {
+  border-color: oklch(1 0 0 / 8%) !important;
+}
+.dark .border-blue-200 {
+  border-color: oklch(1 0 0 / 12%) !important;
+}
+
+/* Textes bleus */
+.dark .text-blue-800 {
+  color: oklch(0.75 0.12 255) !important;
+}
+.dark .text-blue-700 {
+  color: oklch(0.68 0.14 255) !important;
+}
+.dark .text-blue-600 {
+  color: oklch(0.62 0.16 255) !important;
+}
+.dark .text-blue-300 {
+  color: oklch(0.55 0.1 255) !important;
+}
+.dark .text-blue-100 {
+  color: oklch(0.85 0.06 255) !important;
+}
+.dark .text-slate-900,
+.dark .text-gray-900 {
+  color: oklch(0.94 0.01 255) !important;
+}
+.dark .text-slate-800,
+.dark .text-gray-800 {
+  color: oklch(0.88 0.02 255) !important;
+}
+.dark .text-slate-700,
+.dark .text-gray-700 {
+  color: oklch(0.80 0.03 255) !important;
+}
+.dark .text-slate-600,
+.dark .text-gray-600 {
+  color: oklch(0.72 0.04 255) !important;
+}
+.dark .text-slate-500,
+.dark .text-gray-500 {
+  color: oklch(0.65 0.05 255) !important;
+}
+.dark .border-slate-200,
+.dark .border-gray-200 {
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+.dark .border-slate-100,
+.dark .border-gray-100 {
+  border-color: oklch(1 0 0 / 8%) !important;
 }

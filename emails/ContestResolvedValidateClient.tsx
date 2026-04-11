@@ -9,12 +9,12 @@ interface ContestResolvedValidateClientProps {
 
 // Email envoyé au client quand l'admin valide la réponse de l'expert (signalement non retenu)
 export default function ContestResolvedValidateClient({ prenomClient, titreQuestion }: ContestResolvedValidateClientProps) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.secondavis.be'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 
   return (
     <Html lang="fr">
       <Head />
-      <Preview>Décision suite à votre signalement - SecondAvis</Preview>
+      <Preview>Décision suite à votre signalement - Avisbox</Preview>
       <Body style={{ backgroundColor: '#f8fafc', fontFamily: 'sans-serif' }}>
         <Container style={{ maxWidth: 560, margin: '40px auto', backgroundColor: '#ffffff', borderRadius: 12, padding: '40px 32px' }}>
           <Heading style={{ fontSize: 22, color: '#0f172a', marginBottom: 8 }}>
@@ -40,7 +40,7 @@ export default function ContestResolvedValidateClient({ prenomClient, titreQuest
           </Link>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>
-            SecondAvis - Belgique
+            Avisbox - Belgique
           </Text>
         </Container>
       </Body>

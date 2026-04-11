@@ -261,7 +261,7 @@ function ExpertDemandePage() {
 
         {/* Rappel charte */}
         <p className="text-xs text-slate-400 bg-slate-50 rounded-lg p-3">
-          En soumettant cette réponse, vous confirmez respecter la charte SecondAvis :
+          En soumettant cette réponse, vous confirmez respecter la charte Avisbox :
           pas de sollicitation commerciale, pas de conseil illégal, informations honnêtes et vérifiables.
         </p>
 

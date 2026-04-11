@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from:    process.env.EMAIL_FROM!,
       to:      email,
-      subject: `Votre avis sur le dossier "${titre}" - SecondAvis`,
+      subject: `Votre avis sur le dossier "${titre}" - Avisbox`,
       html: `
         <p>Bonjour ${prenom},</p>
         <p>Vous avez reçu une réponse professionnelle le <strong>${dateReponse}</strong> pour votre dossier :</p>

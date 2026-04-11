@@ -4,7 +4,7 @@ const FORBIDDEN_TERMS = [
   'admin', 'administrateur', 'administration',
   'support', 'service client', 'helpdesk',
   'moderateur', 'modérateur', 'modo',
-  'secondavis', 'second avis',
+  'Avisbox', 'second avis',
   'officiel', 'official',
   'staff', 'equipe', 'équipe', 'team',
   'webmaster', 'contact',

@@ -117,7 +117,7 @@ export async function POST(
         await resend.emails.send({
           from:    EMAIL_FROM,
           to:      clientUser.email,
-          subject: 'Un expert a répondu à votre question - SecondAvis',
+          subject: 'Un expert a répondu à votre question - Avisbox',
           html,
         })
       }

@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche',
-  description: 'Découvrez comment obtenir un avis professionnel en moins de 24h pour 9 euros sur SecondAvis.',
+  description: 'Découvrez comment obtenir un avis professionnel en moins de 24h pour 9 euros sur Avisbox.',
 }
 
 // Page d'explication du service - processus en étapes et FAQ
@@ -93,7 +93,7 @@ export default function CommentCaMarchePage() {
             },
             {
               q: 'Est-ce une vraie consultation professionnelle ?',
-              r: 'Non. SecondAvis est une plateforme d\'entraide. Les avis fournis sont des opinions professionnelles basées sur les informations communiquées. Ils ne constituent pas des consultations formelles engageant la responsabilité du professionnel.',
+              r: 'Non. Avisbox est une plateforme d\'entraide. Les avis fournis sont des opinions professionnelles basées sur les informations communiquées. Ils ne constituent pas des consultations formelles engageant la responsabilité du professionnel.',
             },
             {
               q: 'Comment sont vérifiés les experts ?',

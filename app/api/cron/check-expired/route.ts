@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       if (client?.email) {
         const montant = ((req.amount_cents ?? 900) / 100).toFixed(2).replace('.', ',') + ' €'
         const html = await render(Refunded({ prenomClient: client.first_name, titreQuestion: req.title, montant }))
-        await resend.emails.send({ from: EMAIL_FROM, to: client.email, subject: 'Votre remboursement est en cours - SecondAvis', html })
+        await resend.emails.send({ from: EMAIL_FROM, to: client.email, subject: 'Votre remboursement est en cours - Avisbox', html })
       }
 
       refunded_count++
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       // Notifie l'expert que son paiement a été effectué
       const montant = (expertPaymentCents / 100).toFixed(2).replace('.', ',') + ' €'
       const html = await render(ExpertPaymentSent({ prenomExpert: expert.first_name, titreQuestion: req?.title ?? 'Votre réponse', montant }))
-      await resend.emails.send({ from: EMAIL_FROM, to: expert.email, subject: 'Votre paiement a été effectué - SecondAvis', html })
+      await resend.emails.send({ from: EMAIL_FROM, to: expert.email, subject: 'Votre paiement a été effectué - Avisbox', html })
 
       paid_count++
     } catch (err) {

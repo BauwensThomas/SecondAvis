@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import ThemeToggle from '@/components/common/ThemeToggle'
 
 interface UserSession {
   role: 'user' | 'expert' | 'admin'
@@ -36,12 +37,25 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <header className="bg-white dark:bg-[#162333] border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-slate-900 shrink-0">
-          SecondAvis
+        {/* Logo - image claire pour le jour, foncée pour la nuit */}
+        <Link href="/" className="shrink-0 flex items-center h-10">
+          {/* Image claire (jour) */}
+          <img
+            src="/avisbox-clair.png"
+            alt="Avisbox logo clair"
+            className="h-12 w-auto block dark:hidden"
+            draggable={false}
+          />
+          {/* Image foncée (nuit) */}
+          <img
+            src="/avisbox-fonce.png"
+            alt="Avisbox logo foncé"
+            className="h-12 w-auto hidden dark:block"
+            draggable={false}
+          />
         </Link>
 
         {/* Navigation droite */}
@@ -111,6 +125,9 @@ export default function Header() {
               </Button>
             </>
           )}
+
+          {/* Bouton selection theme - toujours visible, tout a droite */}
+          <ThemeToggle />
 
         </nav>
       </div>

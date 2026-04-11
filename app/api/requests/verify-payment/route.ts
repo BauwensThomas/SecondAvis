@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
           await resend.emails.send({
             from:    EMAIL_FROM,
             to:      clientUser.email,
-            subject: `Votre reçu SecondAvis - ${receiptNb}`,
+            subject: `Votre reçu Avisbox - ${receiptNb}`,
             html,
           })
         }
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
               return resend.emails.send({
                 from:    EMAIL_FROM,
                 to:      expert.email,
-                subject: `Nouvelle demande - ${categorieLabel} - SecondAvis`,
+                subject: `Nouvelle demande - ${categorieLabel} - Avisbox`,
                 html,
               })
             })

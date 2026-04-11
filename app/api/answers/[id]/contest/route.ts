@@ -135,7 +135,7 @@ export async function POST(
     const titre = reqData?.title ?? 'Votre demande'
     const clientUser = reqData?.users as unknown as { email: string; first_name: string } | null
     const adminEmail = process.env.EMAIL_ADMIN ?? ''
-    const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.secondavis.be'
+    const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 
     // Envoie les emails en parallèle (client + expert + admin)
     await Promise.allSettled([
@@ -143,7 +143,7 @@ export async function POST(
         ? resend.emails.send({
             from:    EMAIL_FROM,
             to:      clientUser.email,
-            subject: 'Votre signalement a été enregistré - SecondAvis',
+            subject: 'Votre signalement a été enregistré - Avisbox',
             html:    await render(ContestCreatedClient({ prenomClient: clientUser.first_name, titreQuestion: titre })),
           })
         : Promise.resolve(),
@@ -152,7 +152,7 @@ export async function POST(
         ? resend.emails.send({
             from:    EMAIL_FROM,
             to:      expertData.email,
-            subject: 'Un signalement a été déposé sur votre réponse - SecondAvis',
+            subject: 'Un signalement a été déposé sur votre réponse - Avisbox',
             html:    await render(ContestCreatedExpert({ prenomExpert: expertData.first_name, titreQuestion: titre })),
           })
         : Promise.resolve(),

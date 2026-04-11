@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 // Pied de page global - liens légaux et navigation secondaire
 export default function Footer() {
-  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? 'SecondAvis'
+  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? 'Avisbox'
   const annee   = new Date().getFullYear()
 
   return (

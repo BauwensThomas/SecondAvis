@@ -77,14 +77,14 @@ export default function AdminSignalementDetailPage() {
         recipient_id: data.user.id,
         related_type: 'signalement',
         related_id: id,
-        subject: 'Concernant votre signalement - SecondAvis',
+        subject: 'Concernant votre signalement - Avisbox',
         body: message,
       }),
     })
     setEmailHistory((prev) => [{
       recipient_type: 'client',
       body: message,
-      subject: 'Concernant votre signalement - SecondAvis',
+      subject: 'Concernant votre signalement - Avisbox',
       sent_at: new Date().toISOString(),
     }, ...prev])
     setEmailClient('')
@@ -104,14 +104,14 @@ export default function AdminSignalementDetailPage() {
         recipient_id: data.expert.id,
         related_type: 'signalement',
         related_id: id,
-        subject: 'Concernant votre réponse - SecondAvis',
+        subject: 'Concernant votre réponse - Avisbox',
         body: message,
       }),
     })
     setEmailHistory((prev) => [{
       recipient_type: 'expert',
       body: message,
-      subject: 'Concernant votre réponse - SecondAvis',
+      subject: 'Concernant votre réponse - Avisbox',
       sent_at: new Date().toISOString(),
     }, ...prev])
     setEmailExpert('')

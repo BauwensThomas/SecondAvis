@@ -107,7 +107,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       await resend.emails.send({
         from:    process.env.EMAIL_FROM!,
         to:      expert.email,
-        subject: 'Votre compte expert a été suspendu - SecondAvis',
+        subject: 'Votre compte expert a été suspendu - Avisbox',
         react:   React.createElement(ExpertSuspended, { prenomExpert: expert.first_name, raison: body.suspension_reason }),
       })
     }
@@ -131,7 +131,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       await resend.emails.send({
         from:    process.env.EMAIL_FROM!,
         to:      expert.email,
-        subject: 'Votre compte expert est à nouveau actif - SecondAvis',
+        subject: 'Votre compte expert est à nouveau actif - Avisbox',
         react:   React.createElement(ExpertReactivated, { prenomExpert: expert.first_name }),
       })
     }
@@ -194,7 +194,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await resend.emails.send({
       from:    process.env.EMAIL_FROM!,
       to:      expert.email,
-      subject: 'Votre compte expert a été supprimé - SecondAvis',
+      subject: 'Votre compte expert a été supprimé - Avisbox',
       react:   React.createElement(ExpertDeleted, { prenomExpert: expert.first_name, raison }),
     })
 

@@ -275,8 +275,8 @@ export default function DemandeDetailPage() {
 
           {/* Mention légale obligatoire */}
           <p className="text-xs text-slate-400 mt-4 pt-4 border-t border-slate-100">
-            SecondAvis est une plateforme d'entraide. Cet avis ne constitue pas une consultation
-            professionnelle formelle et n'engage pas la responsabilité de SecondAvis.
+            Avisbox est une plateforme d'entraide. Cet avis ne constitue pas une consultation
+            professionnelle formelle et n'engage pas la responsabilité de Avisbox.
           </p>
 
           {/* ---- Zone action client ---- */}

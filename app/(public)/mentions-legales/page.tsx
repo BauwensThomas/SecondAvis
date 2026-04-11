@@ -6,13 +6,13 @@ export const metadata: Metadata = {
 
 // Page mentions légales - obligatoire légalement en Belgique
 export default function MentionsLegalesPage() {
-  const appName     = process.env.NEXT_PUBLIC_APP_NAME ?? 'SecondAvis'
-  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME ?? 'SecondAvis'
+  const appName     = process.env.NEXT_PUBLIC_APP_NAME ?? 'Avisbox'
+  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME ?? 'Avisbox'
   const companyStatus = process.env.NEXT_PUBLIC_COMPANY_STATUS ?? 'Projet en cours de création'
   const companyAddress = process.env.NEXT_PUBLIC_COMPANY_ADDRESS ?? 'Belgique'
   const companyCBE  = process.env.NEXT_PUBLIC_COMPANY_BCE
   const companyTVA  = process.env.NEXT_PUBLIC_COMPANY_TVA
-  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@secondavis.be'
+  const emailContact = process.env.EMAIL_CONTACT ?? 'contact@avisbox.be'
 
   return (
     <main className="page-container">

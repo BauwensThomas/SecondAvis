@@ -62,13 +62,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       if (clientEmail) await resend.emails.send({
         from: process.env.EMAIL_FROM!, to: clientEmail,
-        subject: 'Résultat de votre signalement - SecondAvis',
+        subject: 'Résultat de votre signalement - Avisbox',
         react: React.createElement(ContestResolvedValidateClient, { prenomClient: clientPrenom, titreQuestion }),
       })
 
       if (expertEmail) await resend.emails.send({
         from: process.env.EMAIL_FROM!, to: expertEmail,
-        subject: 'Votre réponse a été validée - SecondAvis',
+        subject: 'Votre réponse a été validée - Avisbox',
         react: React.createElement(ContestResolvedValidateExpert, { prenomExpert: expertPrenom, titreQuestion, montant: '2,00 €' }),
       })
 
@@ -113,13 +113,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       if (clientEmail) await resend.emails.send({
         from: process.env.EMAIL_FROM!, to: clientEmail,
-        subject: 'Votre signalement a été retenu - SecondAvis',
+        subject: 'Votre signalement a été retenu - Avisbox',
         react: React.createElement(ContestResolvedRefundClient, { prenomClient: clientPrenom, titreQuestion, montant: '9,00 €' }),
       })
 
       if (expertEmail) await resend.emails.send({
         from: process.env.EMAIL_FROM!, to: expertEmail,
-        subject: 'Résultat de votre signalement - SecondAvis',
+        subject: 'Résultat de votre signalement - Avisbox',
         react: React.createElement(ContestResolvedRefundExpert, { prenomExpert: expertPrenom, titreQuestion }),
       })
     }
