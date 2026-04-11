@@ -1336,9 +1336,10 @@ POST   /api/admin/signalements/[id]/arbitrate
   Auth admin requise
   Corps : { decision: 'validate' | 'refund' }
 
-  Regle cle : le paiement ou remboursement n est JAMAIS immediat apres la decision admin.
-  Il se fait toujours 5 jours apres la decision, peu importe quand l admin decide.
-  Si l admin decide 10 jours apres le signalement → paiement/remboursement dans 5 jours supplementaires.
+  Regle cle pour les deux decisions :
+  - Remboursement client (decision 'refund') : IMMEDIAT via Stripe au moment de la decision admin.
+  - Paiement expert (decision 'validate') : 5 jours apres la decision admin, via le cron job.
+    payment_eligible_at = NOW() + 5 jours, le cron vire les 2 euros automatiquement.
 
   Action si 'validate' (reponse correcte, expert avait raison) :
     1. contest_resolved = true, contest_decision = 'validate'
@@ -1354,9 +1355,9 @@ POST   /api/admin/signalements/[id]/arbitrate
   Action si 'refund' (client avait raison, reponse mauvaise) :
     1. contest_resolved = true, contest_decision = 'refund'
     2. Statut de la demande passe a 'refunded'
-    3. Planifie le remboursement Stripe dans 5 jours
+    3. Remboursement Stripe IMMEDIAT via stripe.refunds.create()
     4. is_paid reste false, l expert ne recoit rien
-    5. Score de fiabilite de l expert baisse
+    5. Score de fiabilite de l expert baisse, -1 etoile (minimum 0), -1 sur total_answers (minimum 0)
     6. is_active de l expert reste false - toi (admin) tu decides ensuite
        depuis /admin/experts/[id] si tu le reactives ou le suspends definitivement
     7. Email au client : "Votre signalement a ete retenu. Vous serez rembourse de 9 euros
@@ -2201,22 +2202,38 @@ Page /mes-demandes/[id] :
 
 --- RECOMMANDE 8 : MONITORING DES ERREURS (SENTRY) ---
 
-Installation :
-  npm install @sentry/nextjs
-  npx @sentry/wizard@latest -i nextjs
+STATUT : INSTALLE ET CONFIGURE (avril 2026)
 
-Configuration dans .env :
-  SENTRY_DSN=https://xxxx@sentry.io/xxxx
-  Laisser vide en local - Sentry ne capture rien sans DSN
+Installation effectuee :
+  npm install @sentry/nextjs
+  npx @sentry/wizard@latest -i nextjs --saas --org second-avis --project javascript-nextjs
+
+Fichiers crees par le wizard (a commiter) :
+  sentry.server.config.ts  → configuration Sentry cote serveur
+  sentry.edge.config.ts    → configuration Sentry pour l edge runtime
+  instrumentation.ts       → point d entree Sentry dans Next.js
+  next.config.ts           → modifie pour wrapper withSentryConfig
+
+Fichier SENSIBLE a ne jamais commiter (deja dans .gitignore) :
+  .env.sentry-build-plugin → contient SENTRY_AUTH_TOKEN (token prive)
+
+Options choisies lors de la configuration :
+  - Routing via serveur Next.js : Non (evite de surcharger le serveur)
+  - Tracing performance : Oui
+  - Session Replay : Non (alourdit le bundle, inutile au lancement)
+  - Logs envoyes a Sentry : Oui
 
 Ce que Sentry fait :
   - Capture automatiquement toutes les erreurs non gerees
-  - T envoie un email immediat a EMAIL_ADMIN quand une erreur se produit
+  - Envoie un email immediat a EMAIL_ADMIN quand une erreur se produit
   - Affiche la trace complete (quel fichier, quelle ligne, quel utilisateur)
-  - Gratuit jusqu a 5000 erreurs par mois (largement suffisant au lancement)
+  - Plan gratuit : 5000 erreurs par mois (largement suffisant au lancement)
 
-A ajouter dans toutes les routes API :
-  Sentry.captureException(error) dans les blocs catch importants
+DSN Sentry (dans sentry.server.config.ts et sentry.edge.config.ts) :
+  https://95af3d5a0a5bbef1f88dcb677f42e19d@o4511196715548672.ingest.de.sentry.io/4511196741238864
+
+Note : le DSN est semi-public et peut etre dans le code source sans risque.
+  Seul le SENTRY_AUTH_TOKEN (dans .env.sentry-build-plugin) est prive.
 
 
 --- RECOMMANDE 9 : VALIDATION DES FICHIERS UPLOADES ---
@@ -2775,6 +2792,10 @@ Semaine 8 : CRON JOB ET SIGNALEMENTS
   [x] Cron job configure dans vercel.json (toutes les heures)
   [x] Route /api/ratings avec suspension automatique (3x1 etoile ou moyenne < 4.2)
   [x] Route /api/answers/[id]/contest avec blocage expert + emails bilateraux
+  [x] Route /api/answers/[id]/contest trace suspension dans suspension_logs ET audit_logs
+  [x] Cron job : protection race condition via fonction PostgreSQL atomique refund_expired_request()
+      → SELECT FOR UPDATE garantit qu'un expert ne peut pas repondre pendant le remboursement
+      → Fonction SQL a creer dans Supabase (voir Section 16)
   [x] Test : simuler un signalement, verifier que l expert est bloque
 
 Semaine 9 : PAGES LEGALES ET SEO
@@ -2800,6 +2821,15 @@ Semaine 10 : ADMIN
   [x] Corrections admin : filtres avis, calcul frais Stripe, recherche RGPD et audit
   [x] Corrections emails : salutation personnalisee, liens vers pages client/expert
   [x] Corrections financieres : page paiements, raison remboursement, arrondi frais Stripe
+  [x] Badges sidebar admin : orange (experts suspendus) + rouge (experts non verifies) sur lien Experts
+  [x] Signalement accepte (client rembourse) : expert perd 1 etoile (minimum 0)
+  [x] Categories actives dynamiquement : minimum 2 experts actifs et verifies requis par categorie
+  [x] Route GET /api/stats/categories : compteur experts par categorie (cache 5 min)
+  [x] POST /api/requests : validation serveur - refuse si moins de 2 experts dans la categorie
+  [x] Page /nouvelle-demande : affiche "Pas assez d'experts" si categorie non disponible
+  [x] Suppression compte expert depuis /admin/experts/[id] : bouton + raison obligatoire + email ExpertDeleted
+  [x] Route DELETE /api/admin/experts/[id] : email avant suppression + cascade FK + audit_log
+  [x] Email ExpertDeleted.tsx cree (emails/ExpertDeleted.tsx)
   [ ] Test : simuler tout le cycle complet (inscription → demande → reponse → signalement → arbitrage)
 
 Semaine 11 : SECURITE
@@ -2814,17 +2844,24 @@ Semaine 11 : SECURITE
   [x] Row Level Security (RLS) active sur toutes les tables (voir Section 16 : RLS)
   [x] Audit log sur toutes les modifications de donnees personnelles
   [x] Audit dependances npm (0 vulnerabilite apres npm audit fix)
+  [x] Sentry installe et configure (npm install @sentry/nextjs + wizard)
   [ ] Content Security Policy (CSP) strict - a faire apres mise en production
-  [ ] Logs d erreur Sentry en production (voir Semaine 12)
 
 Semaine 12 : DEPLOIEMENT ET MONITORING
-  [ ] Creer compte Sentry, configurer SENTRY_DSN dans .env
   [ ] Creer compte Vercel, connecter le repo GitHub
-  [ ] Configurer toutes les variables .env sur Vercel
+  [ ] Configurer toutes les variables .env sur Vercel (dont SENTRY_AUTH_TOKEN)
   [ ] Passer STRIPE_SECRET_KEY en sk_live_ pour la production
   [ ] Tester le deploiement complet en production
   [ ] Verifier que le cron job fonctionne sur Vercel
   [ ] Configurer le domaine (1 ligne dans .env)
+
+En cours / Prevu :
+  [ ] Mode nuit (dark mode) : theme bleu fonce inspire de l image Open Graph
+      Choix utilisateur : Jour / Nuit / Auto (selon theme OS)
+      Bouton en haut a droite dans le Header
+      Theme jour : bleu et blanc (actuel)
+      Theme nuit : bleu fonce (#0f172a) et bleu (#3b82f6) comme l OG image
+  [ ] Test cycle complet : inscription → demande → reponse → signalement → arbitrage
 
 
 
@@ -2999,6 +3036,34 @@ Quand l utilisateur (moi) te decrit un probleme ou un bug :
 # IMPORTANT : apres avoir active le RLS, tester les routes API pour verifier qu aucune n est cassee.
 # Si une route retourne une erreur inattendue, verifier qu elle utilise bien createAdminClient()
 # pour les operations admin et createClient() pour les operations utilisateur.
+
+
+--- 4. FONCTION PostgreSQL - protection race condition remboursement ---
+
+# Garantit qu'un expert ne peut pas repondre pendant qu'un remboursement est en cours.
+# A executer une seule fois dans Supabase → SQL Editor.
+
+  CREATE OR REPLACE FUNCTION refund_expired_request(p_request_id UUID)
+  RETURNS TEXT AS $$
+  DECLARE
+    v_status TEXT;
+    v_payment_intent TEXT;
+  BEGIN
+    SELECT status, stripe_payment_intent_id
+    INTO v_status, v_payment_intent
+    FROM requests
+    WHERE id = p_request_id
+    FOR UPDATE;
+
+    IF v_status != 'pending' THEN
+      RETURN 'skipped';
+    END IF;
+
+    UPDATE requests SET status = 'refunded' WHERE id = p_request_id;
+
+    RETURN v_payment_intent;
+  END;
+  $$ LANGUAGE plpgsql;
 
 
 # ============================================================

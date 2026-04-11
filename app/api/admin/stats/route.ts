@@ -33,6 +33,8 @@ export async function GET() {
       { count: totalUtilisateurs },
       { count: demandesEnAttente },
       { count: rgpd },
+      { count: expertsSuspendus },
+      { count: expertsNonVerifies },
       { data: reponsesAvecAvis },
     ] = await Promise.all([
       supabaseAdmin.from('requests').select('*', { count: 'exact', head: true }).eq('status', 'answered'),
@@ -50,6 +52,8 @@ export async function GET() {
       // Demandes en attente de réponse (payées et non expirées)
       supabaseAdmin.from('requests').select('*', { count: 'exact', head: true }).eq('status', 'pending').eq('payment_confirmed', true),
       supabaseAdmin.from('gdpr_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabaseAdmin.from('experts').select('*', { count: 'exact', head: true }).eq('is_active', false).eq('is_verified', true),
+      supabaseAdmin.from('experts').select('*', { count: 'exact', head: true }).eq('is_verified', false),
       // Réponses livrées avec leur notation (pour calculer reçus et en attente exactement)
       supabaseAdmin
         .from('answers')
@@ -81,6 +85,8 @@ export async function GET() {
       avis_recus:                avisRecus,
       avis_en_attente:           avisEnAttente,
       demandes_en_attente:       demandesEnAttente ?? 0,
+      experts_suspendus:         expertsSuspendus  ?? 0,
+      experts_non_verifies:      expertsNonVerifies ?? 0,
     })
 
   } catch (error) {

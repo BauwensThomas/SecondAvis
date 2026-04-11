@@ -33,43 +33,15 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 const CATEGORIES = [
-  {
-    value: 'mecanique',
-    label: 'Mécanique automobile',
-    description: 'Devis trop cher, panne incomprise, diagnostic douteux...',
-    disponible: true,
-  },
-  {
-    value: 'immo',
-    label: 'Immobilier',
-    description: 'Honoraires d\'agence, mandat de vente, état des lieux...',
-    disponible: false,
-  },
-  {
-    value: 'travaux',
-    label: 'Travaux',
-    description: 'Plombier, électricien, devis gonflé, arnaque artisan...',
-    disponible: false,
-  },
-  {
-    value: 'assurance',
-    label: 'Assurance',
-    description: 'Refus de remboursement, clause cachée, sinistre mal évalué...',
-    disponible: false,
-  },
-  {
-    value: 'travail',
-    label: 'Droit du travail',
-    description: 'Licenciement, heures sup, clause de non-concurrence...',
-    disponible: false,
-  },
-  {
-    value: 'comptabilite',
-    label: 'Comptabilité',
-    description: 'Déclaration INASTI, TVA indépendant, cotisations sociales...',
-    disponible: false,
-  },
+  { value: 'mecanique',    label: 'Mécanique automobile', description: 'Devis trop cher, panne incomprise, diagnostic douteux...' },
+  { value: 'immo',         label: 'Immobilier',            description: 'Honoraires d\'agence, mandat de vente, état des lieux...' },
+  { value: 'travaux',      label: 'Travaux',               description: 'Plombier, électricien, devis gonflé, arnaque artisan...' },
+  { value: 'assurance',    label: 'Assurance',             description: 'Refus de remboursement, clause cachée, sinistre mal évalué...' },
+  { value: 'travail',      label: 'Droit du travail',      description: 'Licenciement, heures sup, clause de non-concurrence...' },
+  { value: 'comptabilite', label: 'Comptabilité',          description: 'Déclaration INASTI, TVA indépendant, cotisations sociales...' },
 ]
+
+const MIN_EXPERTS_PAR_CATEGORIE = 2
 
 const DESCRIPTION_PLACEHOLDER: Record<string, string> = {
   mecanique: 'Véhicule : [marque, modèle, année, km]\nProblème : [description précise de la panne ou du doute]\nDevis : [montant et détail des réparations demandées]',
@@ -196,6 +168,15 @@ export default function NouvelleDemandePage() {
   const [erreurSoumission, setErreurSoumission] = useState('')
   const [fichiers, setFichiers] = useState<File[]>([])
   const [erreurFichier, setErreurFichier] = useState('')
+  const [expertsParCategorie, setExpertsParCategorie] = useState<Record<string, number>>({})
+
+  // Charge le nombre d'experts actifs par catégorie au chargement
+  useEffect(() => {
+    fetch('/api/stats/categories')
+      .then((r) => r.json())
+      .then((data) => setExpertsParCategorie(data.categories ?? {}))
+      .catch(() => {})
+  }, [])
 
   const {
     register,
@@ -305,41 +286,51 @@ export default function NouvelleDemandePage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Choisissez un domaine</h1>
           <p className="text-slate-500 mb-6 text-sm">
-            Une seule catégorie est disponible pour l'instant. D'autres arrivent prochainement.
+            Sélectionnez la catégorie qui correspond à votre situation.
           </p>
 
           <div className="space-y-3">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.value}
-                type="button"
-                disabled={!cat.disponible}
-                onClick={() => {
-                  if (!cat.disponible) return
-                  setValue('category', cat.value as FormData['category'])
-                  setEtape(2)
-                }}
-                className={`w-full text-left border rounded-xl p-4 transition-all ${
-                  categorieSelectionnee === cat.value
-                    ? 'border-blue-500 bg-blue-50'
-                    : cat.disponible
-                    ? 'border-slate-200 hover:border-slate-400 bg-white'
-                    : 'border-slate-100 bg-slate-50 opacity-50 cursor-not-allowed'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-slate-800">{cat.label}</p>
-                    <p className="text-sm text-slate-500">{cat.description}</p>
+            {CATEGORIES.map((cat) => {
+              const nbExperts = expertsParCategorie[cat.value] ?? 0
+              const accessible = nbExperts >= MIN_EXPERTS_PAR_CATEGORIE
+
+              return (
+                <button
+                  key={cat.value}
+                  type="button"
+                  disabled={!accessible}
+                  onClick={() => {
+                    if (!accessible) return
+                    setValue('category', cat.value as FormData['category'])
+                    setEtape(2)
+                  }}
+                  className={`w-full text-left border rounded-xl p-4 transition-all ${
+                    categorieSelectionnee === cat.value
+                      ? 'border-blue-500 bg-blue-50'
+                      : accessible
+                      ? 'border-slate-200 hover:border-slate-400 bg-white'
+                      : 'border-slate-100 bg-slate-50 opacity-50 cursor-not-allowed'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-800">{cat.label}</p>
+                      <p className="text-sm text-slate-500">{cat.description}</p>
+                      {!accessible && (
+                        <p className="text-xs text-orange-500 mt-1">
+                          Pas encore disponible - pas assez d'experts dans cette catégorie
+                        </p>
+                      )}
+                    </div>
+                    {accessible ? (
+                      <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">9 €</span>
+                    ) : (
+                      <span className="text-slate-400 text-xs shrink-0 ml-4">Bientôt</span>
+                    )}
                   </div>
-                  {cat.disponible ? (
-                    <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">9 €</span>
-                  ) : (
-                    <span className="text-slate-400 text-xs shrink-0 ml-4">Bientôt</span>
-                  )}
-                </div>
-              </button>
-            ))}
+                </button>
+              )
+            })}
           </div>
         </div>
       )}

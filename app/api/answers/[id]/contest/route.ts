@@ -113,6 +113,25 @@ export async function POST(
       .eq('id', answer.expert_id)
       .single()
 
+    // Trace la suspension dans suspension_logs et audit_logs
+    await supabaseAdmin.from('suspension_logs').insert({
+      expert_id:              answer.expert_id,
+      action:                 'suspended',
+      type:                   'auto_contest',
+      reason:                 `Signalement client le ${dateSignalement} sur la demande "${titredemande}"`,
+      related_answer_id:      answer.id,
+      related_signalement_id: answer.id,
+      created_by:             'system',
+    })
+
+    await supabaseAdmin.from('audit_logs').insert({
+      action:      'auto_suspend_expert_contest',
+      target_type: 'expert',
+      target_id:   answer.expert_id,
+      new_value:   { is_active: false, suspension_type: 'auto_contest', answer_id: answer.id },
+      reason:      `Signalement client sur la demande "${titredemande}"`,
+    })
+
     const titre = reqData?.title ?? 'Votre demande'
     const clientUser = reqData?.users as unknown as { email: string; first_name: string } | null
     const adminEmail = process.env.EMAIL_ADMIN ?? ''

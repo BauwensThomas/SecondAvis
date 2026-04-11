@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -31,6 +31,13 @@ export default function AdminExpertDetailPage() {
   const [formEnvoi, setFormEnvoi]     = useState(false)
   const [formErreur, setFormErreur]   = useState('')
   const [formSucces, setFormSucces]   = useState(false)
+
+  // Suppression du compte
+  const router = useRouter()
+  const [showDelete, setShowDelete]   = useState(false)
+  const [deleteRaison, setDeleteRaison] = useState('')
+  const [deleteEnvoi, setDeleteEnvoi] = useState(false)
+  const [deleteErreur, setDeleteErreur] = useState('')
 
   useEffect(() => {
     fetch(`/api/admin/experts/${id}`)
@@ -94,6 +101,21 @@ export default function AdminExpertDetailPage() {
     setData((prev) => prev ? { ...prev, expert: { ...prev.expert, ...json.expert } } : prev)
     setSuspensionRaison('')
     setEnvoi(false)
+  }
+
+  // Supprime définitivement le compte expert après confirmation avec raison
+  async function supprimerCompte() {
+    if (!deleteRaison.trim()) return
+    setDeleteEnvoi(true)
+    setDeleteErreur('')
+    const res = await fetch(`/api/admin/experts/${id}`, {
+      method:  'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ raison: deleteRaison }),
+    })
+    const json = await res.json()
+    if (!res.ok) { setDeleteErreur(json.error ?? 'Erreur.'); setDeleteEnvoi(false); return }
+    router.push('/admin/experts')
   }
 
   if (loading) return <div className="p-8"><div className="h-48 bg-slate-100 rounded-xl animate-pulse" /></div>
@@ -384,7 +406,7 @@ export default function AdminExpertDetailPage() {
                 </div>
               </div>
 
-              {/* Liste détaillée */}
+              {/* Liste détaillée des signalements dans l'onglet litiges */}
               {data.signalements.map((s: any) => (
                 <div key={s.id} className="bg-white border border-slate-200 rounded-xl px-5 py-4 space-y-2">
                   <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -418,6 +440,44 @@ export default function AdminExpertDetailPage() {
           )}
         </div>
       )}
+      {/* Zone de suppression définitive du compte */}
+      <div className="border-t border-red-100 pt-6">
+        {!showDelete ? (
+          <button
+            onClick={() => setShowDelete(true)}
+            className="text-sm text-red-500 hover:text-red-700 underline"
+          >
+            Supprimer définitivement ce compte
+          </button>
+        ) : (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-5 space-y-3">
+            <p className="text-sm font-semibold text-red-800">Suppression définitive du compte</p>
+            <p className="text-xs text-red-600">
+              Un email sera envoyé à <strong>{expert.email}</strong> avec la raison.
+              Cette action est irréversible.
+            </p>
+            <textarea
+              value={deleteRaison}
+              onChange={(e) => setDeleteRaison(e.target.value)}
+              placeholder="Raison de la suppression (obligatoire, sera envoyée à l'expert)..."
+              rows={3}
+              className="w-full border border-red-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+            />
+            {deleteErreur && <p className="text-red-600 text-sm">{deleteErreur}</p>}
+            <div className="flex gap-2">
+              <Button size="sm" variant="destructive"
+                onClick={supprimerCompte}
+                disabled={deleteEnvoi || !deleteRaison.trim()}>
+                {deleteEnvoi ? 'Suppression...' : 'Confirmer la suppression'}
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => { setShowDelete(false); setDeleteRaison('') }}>
+                Annuler
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }

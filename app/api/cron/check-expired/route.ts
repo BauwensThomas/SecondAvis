@@ -31,13 +31,20 @@ export async function POST(request: NextRequest) {
 
   for (const req of expired ?? []) {
     try {
-      if (req.stripe_payment_intent_id) {
-        await stripe.refunds.create({ payment_intent: req.stripe_payment_intent_id })
+      // Fonction PostgreSQL atomique avec SELECT FOR UPDATE - zéro race condition possible
+      // Si un expert répond pendant ce temps, la transaction est bloquée jusqu'à la fin
+      const { data: paymentIntent } = await supabaseAdmin.rpc('refund_expired_request', {
+        p_request_id: req.id,
+      })
+
+      if (paymentIntent === 'skipped') {
+        // Un expert a répondu juste avant - on ne rembourse pas
+        continue
       }
-      await supabaseAdmin
-        .from('requests')
-        .update({ status: 'refunded' })
-        .eq('id', req.id)
+
+      if (paymentIntent) {
+        await stripe.refunds.create({ payment_intent: paymentIntent })
+      }
 
       // Notifie le client du remboursement
       const client = req.users as unknown as { email: string; first_name: string } | null

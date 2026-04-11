@@ -4,6 +4,7 @@ import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { resend } from '@/lib/resend'
 import ExpertSuspended from '@/emails/ExpertSuspended'
 import ExpertReactivated from '@/emails/ExpertReactivated'
+import ExpertDeleted from '@/emails/ExpertDeleted'
 import React from 'react'
 
 // GET /api/admin/experts/[id] - profil complet d'un expert avec tout son historique
@@ -163,6 +164,62 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   } catch (error) {
     console.error('Erreur PATCH /api/admin/experts/[id]:', error)
+    return NextResponse.json({ error: 'Erreur serveur.' }, { status: 500 })
+  }
+}
+
+// DELETE /api/admin/experts/[id] - supprime définitivement un compte expert après envoi d'email
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user || !isAdmin(user.email)) {
+      return NextResponse.json({ error: 'Non autorisé.' }, { status: 403 })
+    }
+
+    const body = await request.json()
+    const raison = body.raison?.trim()
+    if (!raison) {
+      return NextResponse.json({ error: 'La raison de suppression est obligatoire.' }, { status: 400 })
+    }
+
+    const supabaseAdmin = createAdminClient()
+
+    const { data: expert } = await supabaseAdmin.from('experts').select('*').eq('id', id).single()
+    if (!expert) return NextResponse.json({ error: 'Expert introuvable.' }, { status: 404 })
+
+    // Envoie l'email avant la suppression
+    await resend.emails.send({
+      from:    process.env.EMAIL_FROM!,
+      to:      expert.email,
+      subject: 'Votre compte expert a été supprimé - SecondAvis',
+      react:   React.createElement(ExpertDeleted, { prenomExpert: expert.first_name, raison }),
+    })
+
+    // Trace dans audit_logs avant suppression
+    await supabaseAdmin.from('audit_logs').insert({
+      admin_id:    user.id,
+      action:      'delete_expert',
+      target_type: 'expert',
+      target_id:   id,
+      old_value:   { email: expert.email, display_name: expert.display_name },
+      reason:      raison,
+    })
+
+    // Supprime dans le bon ordre (contraintes FK)
+    await supabaseAdmin.from('expert_charters').delete().eq('expert_id', id)
+    await supabaseAdmin.from('suspension_logs').delete().eq('expert_id', id)
+    await supabaseAdmin.from('payouts').delete().eq('expert_id', id)
+    await supabaseAdmin.from('ratings').delete().eq('expert_id', id)
+    await supabaseAdmin.from('answers').delete().eq('expert_id', id)
+    await supabaseAdmin.from('experts').delete().eq('id', id)
+
+    return NextResponse.json({ success: true })
+
+  } catch (error) {
+    console.error('Erreur DELETE /api/admin/experts/[id]:', error)
     return NextResponse.json({ error: 'Erreur serveur.' }, { status: 500 })
   }
 }

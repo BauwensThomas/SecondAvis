@@ -73,18 +73,22 @@ export async function GET(request: NextRequest) {
 
     // Sépare les IDs par type de cible pour les requêtes d'enrichissement
     const requestIds = logs.filter((l) => l.target_type === 'request').map((l) => l.target_id)
-    const otherIds   = logs.filter((l) => l.target_type !== 'request').map((l) => l.target_id)
+    const answerIds  = logs.filter((l) => l.target_type === 'answer').map((l) => l.target_id)
+    const otherIds   = logs.filter((l) => l.target_type !== 'request' && l.target_type !== 'answer').map((l) => l.target_id)
 
-    const [{ data: userEmails }, { data: expertEmails }, { data: requestRows }] = await Promise.all([
+    const [{ data: userEmails }, { data: expertEmails }, { data: requestRows }, { data: answerRows }] = await Promise.all([
       otherIds.length > 0
         ? supabaseAdmin.from('users').select('id, email, first_name, last_name').in('id', otherIds)
         : Promise.resolve({ data: [] }),
       otherIds.length > 0
         ? supabaseAdmin.from('experts').select('id, email, display_name').in('id', otherIds)
         : Promise.resolve({ data: [] }),
-      // Pour les remboursements : remonte jusqu'à l'email du client via requests → users
       requestIds.length > 0
         ? supabaseAdmin.from('requests').select('id, title, users(email, first_name, last_name)').in('id', requestIds)
+        : Promise.resolve({ data: [] }),
+      // Pour les signalements : remonte vers la demande + client + expert
+      answerIds.length > 0
+        ? supabaseAdmin.from('answers').select('id, requests(title, users(email, first_name, last_name)), experts(display_name, email)').in('id', answerIds)
         : Promise.resolve({ data: [] }),
     ])
 
@@ -95,6 +99,15 @@ export async function GET(request: NextRequest) {
       const u = r.users as any
       const label = u ? `${u.first_name} ${u.last_name} (${u.email})` : r.title
       emailMap[r.id] = `Demande "${r.title}" - ${label}`
+    }
+    for (const a of answerRows ?? []) {
+      const req    = a.requests as any
+      const expert = a.experts  as any
+      const client = req?.users as any
+      const titre  = req?.title ?? 'Demande inconnue'
+      const nomClient  = client ? `${client.first_name} ${client.last_name}` : 'client inconnu'
+      const nomExpert  = expert ? expert.display_name : 'expert inconnu'
+      emailMap[a.id] = `"${titre}" - client : ${nomClient} | expert : ${nomExpert}`
     }
 
     const logsEnrichis = logs.map((l) => ({

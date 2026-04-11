@@ -82,8 +82,23 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       await supabaseAdmin.from('requests').update({ status: 'refunded' }).eq('id', answer.request_id)
 
-      // Baisse le score de fiabilité de l'expert
+      // Baisse le score de fiabilité + retire 1 étoile (minimum 0) + décrémente total_answers
       await supabaseAdmin.rpc('increment_expert_signals', { expert_id: answer.expert_id })
+
+      const { data: expertData } = await supabaseAdmin
+        .from('experts')
+        .select('average_rating, total_answers')
+        .eq('id', answer.expert_id)
+        .single()
+
+      if (expertData) {
+        const nouvelleNote = Math.max(0, (expertData.average_rating ?? 0) - 1)
+        const nouveauTotal = Math.max(0, (expertData.total_answers ?? 0) - 1)
+        await supabaseAdmin
+          .from('experts')
+          .update({ average_rating: nouvelleNote, total_answers: nouveauTotal })
+          .eq('id', answer.expert_id)
+      }
 
       // Déclenche le remboursement Stripe
       if (answer.requests?.stripe_payment_intent_id) {
