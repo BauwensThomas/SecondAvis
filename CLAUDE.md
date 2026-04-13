@@ -2924,72 +2924,68 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
       de production avec les bonnes configurations avant lancement public.
       Nouveau compte Supabase : contact@avisbox.be
 
-      ETAPE 1 - Creer le nouveau projet
+      METHODE RECOMMANDEE : Supabase CLI (dump complet, rien a réécrire manuellement)
+      Le CLI exporte TOUT en automatique : tables, colonnes, RLS, index, fonctions, données.
+      C est la methode la plus sure pour ne rien oublier.
+
+      ETAPE 1 - Installer le Supabase CLI
+        npm install -g supabase
+        ou via : https://supabase.com/docs/guides/cli/getting-started
+
+      ETAPE 2 - Recuperer la connection string de l ancien projet
+        Supabase dashboard → ancien projet → Settings → Database → Connection string
+        Format : postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres
+
+      ETAPE 3 - Exporter le schema complet (tables + RLS + fonctions + index)
+        supabase db dump --db-url "postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres" -f schema.sql
+        Ce fichier contient absolument tout : CREATE TABLE, ALTER TABLE, CREATE POLICY,
+        CREATE FUNCTION, CREATE INDEX — rien a réécrire a la main.
+
+      ETAPE 4 - Exporter les données (si besoin de garder les comptes de test)
+        supabase db dump --db-url "..." --data-only -f data.sql
+        ATTENTION : ne pas importer les données auth.users (les UUIDs Auth ne sont pas portables)
+        Importer uniquement les données des tables publiques (requests, experts, etc.) si utile.
+        Si c est juste des données de test, repartir de zero est plus propre.
+
+      ETAPE 5 - Creer le nouveau projet Supabase
         Creer un compte Supabase avec contact@avisbox.be
-        Creer un nouveau projet (choisir region Europe West pour la Belgique)
-        Sauvegarder immediatement : URL du projet, anon key, service_role key
+        Creer un nouveau projet (region : Europe West - Frankfurt ou London pour la Belgique)
+        Sauvegarder immediatement : URL, anon key, service_role key
 
-      ETAPE 2 - Recreer les 13 tables
-        Executer tout le SQL de la Section 8 :
-          users, experts, requests, answers, ratings, suspension_logs, payouts,
-          expert_applications, expert_charters, gdpr_requests, consents,
-          admin_emails, audit_logs
-        Executer tout le SQL de la Section 16 :
-          colonnes additionnelles de requests (payment_confirmed, refund_reason, locked_by, locked_at)
-          table login_attempts + index
-          fonction PostgreSQL refund_expired_request()
+      ETAPE 6 - Importer le schema dans le nouveau projet
+        Recuperer la connection string du nouveau projet (meme endroit)
+        psql "postgresql://postgres:[password]@db.[nouveau-ref].supabase.co:5432/postgres" -f schema.sql
+        Ou coller le contenu de schema.sql dans Supabase → SQL Editor → Run
+        Verifier que toutes les tables, RLS et fonctions sont bien presentes
 
-      ETAPE 3 - Recreer le Row Level Security (RLS) - CRITIQUE
-        Executer tout le bloc RLS de la Section 16 :
-          ALTER TABLE ENABLE ROW LEVEL SECURITY sur chaque table
-          Toutes les policies CREATE POLICY (users, experts, requests, answers,
-          ratings, payouts, gdpr_requests, expert_applications, expert_charters,
-          consents, suspension_logs, audit_logs, admin_emails, login_attempts)
-        Tester apres activation que les routes API fonctionnent toujours
-        IMPORTANT : sans RLS, n importe qui peut lire toutes les donnees avec la cle anon
+      ETAPE 7 - Recreer le bucket Storage manuellement (non exporte par le CLI)
+        Storage → New bucket → nom : documents → acces prive
+        Le CLI n exporte pas les buckets Storage ni leurs fichiers (photos, PDF)
+        Les fichiers uploadés par les utilisateurs de test sont perdus (acceptable)
 
-      ETAPE 4 - Recreer le bucket Storage
-        Storage → New bucket → nom : documents
-        Acces prive (pas public), taille max 10MB
-        Reconfigurer les policies du bucket pour autoriser les uploads des utilisateurs connectes
+      ETAPE 8 - Reconfigurer l authentification
+        Authentication → Settings → activer Email confirmations + Secure email change
+        Site URL : https://avisbox.vercel.app (ou https://avisbox.be)
+        Redirect URLs : https://avisbox.vercel.app/**, https://avisbox.be/**
+        Templates email : mettre a jour avec le nom Avisbox
+        SMTP : smtp.resend.com:465, username=resend, password=cle Resend, sender=contact@avisbox.be
 
-      ETAPE 5 - Configurer l authentification
-        Authentication → Settings → activer Email confirmations
-        Authentication → Settings → activer Secure email change
-        Site URL : https://avisbox.vercel.app (ou https://avisbox.be apres domaine configure)
-        Redirect URLs : ajouter https://avisbox.vercel.app/**, https://avisbox.be/**
-        Mettre a jour les templates email (nom Avisbox, pas SecondAvis)
-
-      ETAPE 6 - Reconfigurer le SMTP via Resend
-        Authentication → Settings → SMTP
-        Host : smtp.resend.com  Port : 465  SSL : oui
-        Username : resend  Password : cle API Resend (re_...)
-        Sender email : contact@avisbox.be  Sender name : Avisbox
-        Tester en envoyant un email de confirmation
-
-      ETAPE 7 - Migrer les donnees existantes si necessaire
-        Exporter depuis l ancien projet : Table Editor → Export CSV par table
-        Reimporter dans le nouveau projet
-        ATTENTION : les UUIDs Auth changent lors d une migration
-          les foreign keys user_id dans toutes les tables doivent correspondre
-          aux nouveaux UUIDs du nouveau projet Auth
-
-      ETAPE 8 - Mettre a jour les cles
+      ETAPE 9 - Mettre a jour les cles dans le code
         Dans .env.local :
-          NEXT_PUBLIC_SUPABASE_URL=https://[nouveau-projet].supabase.co
+          NEXT_PUBLIC_SUPABASE_URL=https://[nouveau-ref].supabase.co
           NEXT_PUBLIC_SUPABASE_ANON_KEY=[nouvelle anon key]
           SUPABASE_SERVICE_ROLE_KEY=[nouvelle service_role key]
         Dans Vercel → Settings → Environment Variables : memes 3 variables
-        Verifier que SUPABASE_SERVICE_ROLE_KEY n a JAMAIS le prefixe NEXT_PUBLIC_
+        SUPABASE_SERVICE_ROLE_KEY ne doit JAMAIS avoir le prefixe NEXT_PUBLIC_
 
-      ETAPE 9 - Tests complets apres migration
-        Inscription + confirmation email
+      ETAPE 10 - Tests complets apres migration
+        Inscription + confirmation email recue
         Connexion + deconnexion
         Upload d un fichier (bucket Storage)
         Creation d une demande (table requests)
         Acces espace admin
-        Emails recus via Resend SMTP
-        RLS : verifier qu un utilisateur non connecte ne peut pas lire les donnees
+        Emails Resend SMTP fonctionnels
+        RLS : tester qu un utilisateur non connecte ne peut pas lire les donnees
   [ ] Migrer Stripe vers le compte de production (contact@avisbox.be)
       Raison : le compte Stripe actuel est peut-etre lie a un email personnel, a transferer
       vers le compte pro de la plateforme avant lancement public.
