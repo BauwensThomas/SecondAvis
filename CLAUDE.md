@@ -2919,7 +2919,7 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
   [x] Supabase SMTP configure via Resend (smtp.resend.com:465) pour les emails transactionnels
   [x] Domaine avisbox.be achete sur LWS et verifie dans Resend
   [ ] Configurer le domaine personnalise sur Vercel (avisbox.be → avisbox.vercel.app)
-  [ ] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
+  [x] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
       Raison : le projet Supabase actuel est un projet de test, a migrer vers un projet
       de production avec les bonnes configurations avant lancement public.
       Nouveau compte Supabase : contact@avisbox.be
