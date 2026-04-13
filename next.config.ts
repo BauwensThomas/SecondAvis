@@ -1,8 +1,30 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from "next";
 
+// Politique de sécurité du contenu (CSP) - liste blanche des ressources autorisées
+// Modifié en un seul string pour éviter les espaces superflus
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' js.stripe.com *.sentry.io;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: blob: *.supabase.co;
+  font-src 'self' data:;
+  connect-src 'self' *.supabase.co wss://*.supabase.co api.stripe.com *.sentry.io *.ingest.de.sentry.io;
+  frame-src js.stripe.com *.stripe.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`.replace(/\s{2,}/g, ' ').trim()
+
 // Headers de sécurité HTTP appliqués à toutes les réponses du site
 const securityHeaders = [
+  {
+    // Content Security Policy : restreint les sources de scripts, styles, images, connexions
+    key: 'Content-Security-Policy',
+    value: ContentSecurityPolicy,
+  },
   {
     // Bloque le chargement de la page dans une iframe (protection clickjacking)
     key: 'X-Frame-Options',
@@ -19,7 +41,7 @@ const securityHeaders = [
     value: 'strict-origin-when-cross-origin',
   },
   {
-    // Force HTTPS pendant 1 an (activer uniquement en production)
+    // Force HTTPS pendant 1 an
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains',
   },
@@ -29,7 +51,7 @@ const securityHeaders = [
     value: 'camera=(), microphone=(), geolocation=()',
   },
   {
-    // Désactive la prélecture DNS pour les pages externes
+    // Active la prélecture DNS pour les domaines autorisés
     key: 'X-DNS-Prefetch-Control',
     value: 'on',
   },

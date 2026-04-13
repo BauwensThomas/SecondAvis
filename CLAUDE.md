@@ -2906,7 +2906,9 @@ Semaine 11 : SECURITE
   [x] Audit log sur toutes les modifications de donnees personnelles
   [x] Audit dependances npm (0 vulnerabilite apres npm audit fix)
   [x] Sentry installe et configure (npm install @sentry/nextjs + wizard)
-  [ ] Content Security Policy (CSP) strict - a faire apres mise en production
+  [x] Content Security Policy (CSP) ajoutee dans next.config.ts
+      Sources autorisees : self, Supabase (*.supabase.co + WSS), Stripe (js.stripe.com, api.stripe.com),
+      Sentry (*.sentry.io, *.ingest.de.sentry.io). object-src none, frame-ancestors none.
 
 Semaine 12 : DEPLOIEMENT ET MONITORING
   [x] Creer compte Vercel, connecter le repo GitHub
@@ -2937,7 +2939,6 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
                3. Reconfigurer le webhook Stripe avec la nouvelle URL Vercel
                4. Mettre a jour STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
   [ ] Verifier que le cron job fonctionne sur Vercel en production
-  [ ] Content Security Policy (CSP) strict - a faire apres mise en production
 
 En cours / Prevu :
   [x] Mode nuit (dark mode) : theme bleu fonce inspire de l image Open Graph
