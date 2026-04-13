@@ -89,7 +89,13 @@ export default function ExpertPublicPage() {
 
   return (
     <main className="page-container space-y-6">
-      <Link href="/experts" className="text-sm text-blue-600 hover:underline">← Retour à la liste</Link>
+      <Link
+        href="/experts"
+        className="inline-block text-sm font-medium bg-white text-slate-600 border border-slate-200 rounded-lg px-4 py-2 shadow-sm hover:bg-slate-50 hover:text-slate-900 transition-colors dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700"
+        style={{ textDecoration: 'none' }}
+      >
+        ← Retour à la liste
+      </Link>
 
       {/* ---- Carte principale ---- */}
       <section className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
@@ -126,7 +132,10 @@ export default function ExpertPublicPage() {
         {/* Catégories */}
         <div className="flex flex-wrap gap-2">
           {expert.categories.map((cat) => (
-            <span key={cat} className="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
+            <span
+              key={cat}
+              className="text-xs px-3 py-1 rounded-full font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 dark:bg-green-900/30 dark:text-green-200 dark:border-green-700"
+            >
               {CATEGORY_LABELS[cat] ?? cat}
             </span>
           ))}
@@ -149,7 +158,7 @@ export default function ExpertPublicPage() {
           {expert.phone_public && expert.phone && (
             <div>
               <span className="font-medium text-slate-700">Téléphone : </span>
-              <a href={`tel:${expert.phone}`} className="text-blue-600 hover:underline">{expert.phone}</a>
+              <a href={`tel:${expert.phone}`} className="text-indigo-600 dark:text-green-400 hover:text-indigo-800 dark:hover:text-green-200 transition-colors">{expert.phone}</a>
             </div>
           )}
           {expert.address_public && expert.address_street && (
@@ -162,9 +171,13 @@ export default function ExpertPublicPage() {
 
         {/* Site web - visible uniquement si l'expert a répondu au moins une fois */}
         {expert.website_url && expert.total_answers > 0 && (
-          <a href={expert.website_url} target="_blank" rel="noopener noreferrer"
-            className="text-sm text-blue-600 hover:underline inline-block">
-            {expert.website_url}
+          <a
+            href={expert.website_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-indigo-600 dark:text-green-400 hover:text-indigo-800 dark:hover:text-green-200 transition-colors inline-block"
+          >
+            {expert.website_url.replace(/^https?:\/\//, '')}
           </a>
         )}
       </section>
@@ -196,8 +209,8 @@ export default function ExpertPublicPage() {
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
         <p className="text-sm text-slate-700 font-medium">Vous avez une question pour un expert ?</p>
         <Link href="/nouvelle-demande"
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors">
-          Poser ma question - 9 €
+          className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors">
+          Poser ma question
         </Link>
       </div>
     </main>

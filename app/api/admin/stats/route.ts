@@ -49,15 +49,17 @@ export async function GET() {
         .eq('payment_confirmed', true).gte('created_at', debutMois).neq('status', 'refunded'),
       supabaseAdmin.from('expert_applications').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
       supabaseAdmin.from('users').select('*', { count: 'exact', head: true }),
-      // Demandes en attente de réponse (payées et non expirées)
+      // Demandes en attente de réponse (payées uniquement)
       supabaseAdmin.from('requests').select('*', { count: 'exact', head: true }).eq('status', 'pending').eq('payment_confirmed', true),
       supabaseAdmin.from('gdpr_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
       supabaseAdmin.from('experts').select('*', { count: 'exact', head: true }).eq('is_active', false).eq('is_verified', true),
-      supabaseAdmin.from('experts').select('*', { count: 'exact', head: true }).eq('is_verified', false),
+      supabaseAdmin.from('experts').select('*', { count: 'exact', head: true })
+        .eq('is_verified', false)
+        .or('suspension_type.is.null,suspension_type.neq.self_delete'),
       // Réponses livrées avec leur notation (pour calculer reçus et en attente exactement)
       supabaseAdmin
         .from('answers')
-        .select('id, ratings(id)')
+        .select('id, ratings(id, closed), requests(id, users(email)), experts(email)')
         .or('is_contested.eq.false,and(is_contested.eq.true,contest_decision.eq.validate)')
         .not('delivered_at', 'is', null),
     ])
@@ -68,8 +70,16 @@ export async function GET() {
 
     // Calcul exact : on regarde chaque réponse si elle a une notation ou non
     const toutesReponses = reponsesAvecAvis ?? []
-    const avisRecus      = toutesReponses.filter((a: any) => (a.ratings?.length ?? 0) > 0).length
-    const avisEnAttente  = toutesReponses.filter((a: any) => (a.ratings?.length ?? 0) === 0).length
+    // On ne garde que les réponses dont le client ET l'expert ne sont pas anonymisés
+    const reponsesValides = toutesReponses.filter((a: any) => {
+      const userEmail = a.requests?.users?.email || ''
+      const expertEmail = a.experts?.email || ''
+      return !userEmail.startsWith('effaced_') && !expertEmail.startsWith('effaced_')
+    })
+    // Avis reçus = réponses valides qui ont au moins un rating non clos
+    const avisRecus = reponsesValides.filter((a: any) => (a.ratings?.filter((r: any) => !r.closed).length ?? 0) > 0).length
+    // Avis en attente = réponses valides qui n'ont aucun rating non clos
+    const avisEnAttente = reponsesValides.filter((a: any) => (a.ratings?.filter((r: any) => !r.closed).length ?? 0) === 0).length
 
     return NextResponse.json({
       total_demandes:            totalDemandes ?? 0,

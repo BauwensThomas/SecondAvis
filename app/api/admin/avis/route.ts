@@ -59,6 +59,13 @@ export async function GET(request: NextRequest) {
     if (filter === 'rated')   resultats = resultats.filter((a) => a.ratings?.length > 0)
     if (filter === 'unrated') resultats = resultats.filter((a) => !a.ratings?.length)
 
+    // Filtre : ne garder que les avis dont le client et l'expert ne sont pas anonymisés
+    resultats = resultats.filter((a) => {
+      const userEmail = a.requests?.users?.email || ''
+      const expertEmail = a.experts?.email || ''
+      return !userEmail.startsWith('effaced_') && !expertEmail.startsWith('effaced_')
+    })
+
     // Stats globales (avant filtre rated/unrated mais après filtre email)
     const tous      = userIds
       ? (answers ?? []).filter((a: any) => userIds!.includes(a.requests?.user_id))

@@ -26,7 +26,7 @@ export default function CGUPage() {
             Les avis fournis par les professionnels de la plateforme sont des opinions basées sur les
             informations communiquées par l'utilisateur. Ils ne constituent pas une consultation
             professionnelle formelle engageant la responsabilité de {appName} ou du professionnel.
-            {appName} décline toute responsabilité quant aux décisions prises sur la base de ces avis.
+            {' '}{appName} décline toute responsabilité quant aux décisions prises sur la base de ces avis.
           </p>
         </section>
 
@@ -42,7 +42,7 @@ export default function CGUPage() {
         <section>
           <h2 className="text-lg font-semibold text-slate-900 mb-3">3. Prix et paiement</h2>
           <p>
-            Chaque demande d'avis est facturée <strong>9,00 euros TTC</strong> au moment de la soumission.
+            Chaque demande d'avis est facturée au moment de la soumission.
             Le paiement est sécurisé par Stripe. {appName} ne stocke aucune donnée de carte bancaire.
           </p>
           <p className="mt-3">
@@ -55,15 +55,14 @@ export default function CGUPage() {
           <h2 className="text-lg font-semibold text-slate-900 mb-3">4. Politique de remboursement</h2>
           <p>
             Si aucun professionnel ne répond à la demande dans le délai imparti (24 heures en semaine,
-            lundi suivant si soumise le vendredi), l'utilisateur est automatiquement remboursé de 9,00 euros.
-            Le remboursement est effectué sur la carte bancaire utilisée lors du paiement, dans un délai de
-            5 à 10 jours ouvrables selon l'établissement bancaire.
+            lundi suivant si soumise le vendredi), l'utilisateur est automatiquement remboursé.
+            Le remboursement est effectué sur la carte bancaire utilisée lors du paiement, dans un délai
+            variable selon l'établissement bancaire.
           </p>
           <p className="mt-3">
             En cas de signalement d'une réponse non satisfaisante, {appName} se réserve le droit de
             rembourser l'utilisateur après analyse du dossier. La décision est prise dans les meilleurs délais
-            par l'équipe de {appName}. Le remboursement, s'il est accordé, est effectué dans un délai de
-            5 jours après la décision.
+            par l'équipe de {appName}. Le remboursement, s'il est accordé, est effectué dans un délai variable selon l'établissement bancaire.
           </p>
         </section>
 
@@ -74,15 +73,15 @@ export default function CGUPage() {
             <li>Fournir des informations exactes et complètes lors de sa demande</li>
             <li>Ne pas utiliser la plateforme à des fins frauduleuses ou illégales</li>
             <li>Ne pas tenter de contacter directement les professionnels en dehors de la plateforme avant d'avoir reçu une réponse</li>
-            <li>Respecter les professionnels et l'équipe de {appName}</li>
+            <li>Respecter les professionnels et l'équipe d' {appName}</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-slate-900 mb-3">6. Obligations des professionnels</h2>
           <p>
-            Chaque professionnel inscrit sur {appName} a signé une charte de bonne conduite avant activation
-            de son compte. Il s'engage notamment à fournir des avis honnêtes, à ne pas solliciter les
+            Chaque professionnel inscrit sur {appName} a signé une charte de bonne conduite avant l'activation de son compte. 
+            Il s'engage notamment à fournir des avis honnêtes, à ne pas solliciter les
             utilisateurs commercialement dans ses réponses, et à ne pas donner de conseils illégaux.
           </p>
         </section>
@@ -103,7 +102,10 @@ export default function CGUPage() {
             {appName} collecte et traite les données personnelles dans le respect du Règlement Général
             sur la Protection des Données (RGPD) et de la loi belge du 30 juillet 2018.
             Pour en savoir plus, consultez notre{' '}
-            <a href="/politique-confidentialite" className="text-indigo-600 hover:underline">
+            <a
+              href="/politique-confidentialite"
+              className="text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-200 transition-colors"
+            >
               politique de confidentialité
             </a>.
           </p>
@@ -121,7 +123,10 @@ export default function CGUPage() {
           <h2 className="text-lg font-semibold text-slate-900 mb-3">10. Contact</h2>
           <p>
             Pour toute question relative aux présentes CGU, contactez-nous à l'adresse :{' '}
-            <a href={`mailto:${emailContact}`} className="text-indigo-600 hover:underline">
+            <a
+              href={`mailto:${emailContact}`}
+              className="text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-200 transition-colors"
+            >
               {emailContact}
             </a>
           </p>

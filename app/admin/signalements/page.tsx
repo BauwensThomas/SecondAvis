@@ -82,7 +82,11 @@ export default function AdminSignalementsPage() {
       ) : (
         <div className="space-y-3">
           {signalements.map((s: any) => (
-            <div key={s.id} className="bg-white border border-slate-200 rounded-xl px-5 py-4 flex items-center justify-between gap-4">
+            <div
+              key={s.id}
+              className={`bg-white rounded-xl px-5 py-4 flex items-center justify-between gap-4 
+                ${!s.contest_resolved ? 'border-2 border-yellow-400 shadow-[0_0_0_2px_rgba(251,191,36,0.15)]' : 'border border-slate-200'}`}
+            >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">

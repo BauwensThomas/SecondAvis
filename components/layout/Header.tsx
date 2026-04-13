@@ -115,7 +115,11 @@ export default function Header() {
 
               {/* Lien admin - visible uniquement pour l'administrateur */}
               {session.role === 'admin' && (
-                <Button asChild size="sm" className="bg-slate-800 hover:bg-slate-900 text-white">
+                <Button
+                  asChild
+                  size="sm"
+                  className="border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-[#162333] text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-[#22304a] font-semibold shadow-none"
+                >
                   <Link href="/admin">Admin</Link>
                 </Button>
               )}

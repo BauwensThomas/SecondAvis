@@ -15,12 +15,18 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 // Page admin - liste de toutes les demandes avec filtres et remboursement manuel
 export default function AdminDemandesPage() {
-  const [demandes, setDemandes] = useState<any[]>([])
-  const [loading, setLoading]   = useState(true)
-  const [q, setQ]               = useState('')
-  const [status, setStatus]     = useState('all')
-  const [category, setCategory] = useState('')
-  const [remb, setRemb]         = useState<string | null>(null)
+  const [demandes, setDemandes]     = useState<any[]>([])
+  const [loading, setLoading]       = useState(true)
+  const [q, setQ]                   = useState('')
+  const [status, setStatus]         = useState('all')
+  const [category, setCategory]     = useState('')
+  const [remb, setRemb]             = useState<string | null>(null)
+  // Etat de la modale de suppression
+  const [deleteId, setDeleteId]         = useState<string | null>(null)
+  const [deleteRaison, setDeleteRaison] = useState('')
+  const [deleteRemb, setDeleteRemb]     = useState(false)
+  const [deleteEnvoi, setDeleteEnvoi]   = useState(false)
+  const [deleteErreur, setDeleteErreur] = useState('')
 
   const charger = useCallback(() => {
     setLoading(true)
@@ -35,6 +41,29 @@ export default function AdminDemandesPage() {
     const t = setTimeout(charger, 300)
     return () => clearTimeout(t)
   }, [charger])
+
+  // Suppression d'une demande avec raison et remboursement optionnel
+  async function supprimerDemande() {
+    if (!deleteId || !deleteRaison.trim()) return
+    setDeleteEnvoi(true)
+    setDeleteErreur('')
+    const res = await fetch(`/api/admin/demandes/${deleteId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ raison: deleteRaison, rembourser: deleteRemb }),
+    })
+    if (res.ok) {
+      const nouveauStatut = deleteRemb ? 'refunded' : 'closed'
+      setDemandes((prev) => prev.map((d) => d.id === deleteId ? { ...d, status: nouveauStatut } : d))
+      setDeleteId(null)
+      setDeleteRaison('')
+      setDeleteRemb(false)
+    } else {
+      const data = await res.json()
+      setDeleteErreur(data.error ?? 'Erreur lors de la suppression.')
+    }
+    setDeleteEnvoi(false)
+  }
 
   // Remboursement manuel d'une demande
   async function rembourser(id: string) {
@@ -86,7 +115,11 @@ export default function AdminDemandesPage() {
       ) : (
         <div className="space-y-3">
           {demandes.map((d: any) => (
-            <div key={d.id} className="bg-white border border-slate-200 rounded-xl px-5 py-3 flex items-center justify-between gap-4">
+            <div
+              key={d.id}
+              className={`bg-white rounded-xl px-5 py-3 flex items-center justify-between gap-4 
+                ${d.status === 'pending' ? 'border-2 border-yellow-400 shadow-[0_0_0_2px_rgba(251,191,36,0.15)]' : 'border border-slate-200'}`}
+            >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                   <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
@@ -113,6 +146,14 @@ export default function AdminDemandesPage() {
                     {remb === d.id ? '...' : 'Rembourser'}
                   </Button>
                 )}
+                {/* Bouton supprimer - visible pour toutes les demandes non deja fermees */}
+                {d.status !== 'closed' && d.status !== 'refunded' && (
+                  <Button size="sm" variant="outline"
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => { setDeleteId(d.id); setDeleteRaison(''); setDeleteRemb(false); setDeleteErreur('') }}>
+                    Supprimer
+                  </Button>
+                )}
                 <Link href={`/admin/demandes/${d.id}`}
                   className="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-2 py-1 rounded border border-indigo-200 hover:bg-indigo-50">
                   Voir →
@@ -120,6 +161,59 @@ export default function AdminDemandesPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {/* Modale de suppression */}
+      {deleteId && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 space-y-4">
+            <h2 className="text-lg font-bold text-slate-900">Supprimer cette demande</h2>
+            <p className="text-sm text-slate-500">
+              Un email sera envoyé au client avec la raison. Cette action est irréversible.
+            </p>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Raison de la suppression <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={deleteRaison}
+                onChange={(e) => setDeleteRaison(e.target.value)}
+                rows={3}
+                placeholder="Ex : Contenu inapproprié, ne respecte pas les conditions d'utilisation..."
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none"
+              />
+            </div>
+
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={deleteRemb}
+                onChange={(e) => setDeleteRemb(e.target.checked)}
+                className="w-4 h-4 accent-blue-600"
+              />
+              <span className="text-sm text-slate-700">
+                Rembourser le client (si de bonne foi)
+              </span>
+            </label>
+
+            {deleteErreur && (
+              <p className="text-sm text-red-600">{deleteErreur}</p>
+            )}
+
+            <div className="flex gap-3 justify-end pt-2">
+              <Button variant="outline" size="sm"
+                onClick={() => setDeleteId(null)} disabled={deleteEnvoi}>
+                Annuler
+              </Button>
+              <Button size="sm"
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={supprimerDemande}
+                disabled={deleteEnvoi || !deleteRaison.trim()}>
+                {deleteEnvoi ? 'Suppression...' : 'Confirmer la suppression'}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -65,7 +65,7 @@ export default function ExpertsPage() {
             onClick={() => setCategorie(opt.value)}
             className={`px-4 py-2 rounded-full text-sm border transition-colors ${
               categorie === opt.value
-                ? 'bg-blue-600 text-white border-blue-600'
+                ? 'bg-indigo-600 text-white border-indigo-600'
                 : 'bg-white text-slate-700 border-slate-300 hover:border-blue-400'
             }`}
           >
@@ -116,7 +116,10 @@ export default function ExpertsPage() {
               {/* Catégories */}
               <div className="flex flex-wrap gap-1">
                 {expert.categories.slice(0, 3).map((cat) => (
-                  <span key={cat} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+                  <span
+                    key={cat}
+                    className="text-xs px-2 py-0.5 rounded-full font-medium bg-indigo-50 text-indigo-700 dark:bg-green-900/30 dark:text-green-200 border border-indigo-100 dark:border-green-700"
+                  >
                     {CATEGORY_LABELS[cat] ?? cat}
                   </span>
                 ))}

@@ -170,29 +170,55 @@ export default function DevenirExpertPage() {
     <main className="page-container max-w-2xl mx-auto">
 
       <h1 className="text-3xl font-bold text-slate-900 mb-2">Devenir expert Avisbox</h1>
-      <p className="text-slate-500 text-sm mb-8">
-        Partagez votre expertise, aidez des particuliers, développez votre visibilité.
+      <p className="text-slate-600 text-sm mb-8">
+        Partagez votre expertise, aidez des particuliers, développez votre visibilité.<br />
+        <span className="block mt-2 font-medium text-indigo-700 dark:text-indigo-200">
+          • Vous êtes rémunéré pour chaque réponse validée, versement automatique sur votre compte Stripe.<br />
+          • Votre profil est mis en avant auprès des clients après chaque réponse.<br />
+          • Aucun abonnement, aucun engagement&nbsp;: vous répondez uniquement aux demandes qui vous intéressent.
+        </span>
       </p>
 
       {/* Connecté en tant que */}
-      <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3 text-sm text-indigo-800 mb-6 flex items-center justify-between">
-        <span>Connecté en tant que <strong>{session?.user?.email}</strong></span>
-        <Link href="/mon-compte" className="text-indigo-600 hover:underline text-xs">Mon compte</Link>
+      <div className="rounded-xl px-4 py-3 text-sm mb-6 flex items-center justify-between
+        bg-indigo-50 border border-indigo-200 text-indigo-800
+        dark:bg-indigo-900/80 dark:border-indigo-700 dark:text-indigo-100">
+        <span>Connecté en tant que <strong className="font-semibold text-indigo-900 dark:text-white">{session?.user?.email}</strong></span>
+        <Link href="/mon-compte" className="text-indigo-700 dark:text-white hover:underline text-xs font-semibold">Mon compte</Link>
       </div>
 
-      {/* Barre de progression */}
-      <div className="flex items-center gap-2 mb-8">
-        {ETAPES.map((nom, i) => (
-          <div key={i} className="flex items-center gap-2 flex-1">
-            <div className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${
-              i < etape ? 'bg-indigo-600 text-white' :
-              i === etape ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
-              'bg-slate-200 text-slate-500'
-            }`}>{i < etape ? '✓' : i + 1}</div>
-            <span className={`text-xs font-medium hidden sm:block ${i === etape ? 'text-indigo-700' : 'text-slate-400'}`}>{nom}</span>
-            {i < ETAPES.length - 1 && <div className={`flex-1 h-0.5 mx-1 ${i < etape ? 'bg-indigo-400' : 'bg-slate-200'}`} />}
-          </div>
-        ))}
+      {/* Stepper parfaitement aligné */}
+      <div className="relative flex items-center justify-between mb-8 w-full mx-auto px-2">
+        {/* Étape 1 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape > 0 ? 'bg-indigo-600 text-white' :
+            etape === 0 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            'bg-slate-200 text-slate-500'
+          }`}>{etape > 0 ? '✓' : 1}</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 0 ? 'text-indigo-700' : 'text-slate-400'}`}>{ETAPES[0]}</span>
+        </div>
+        {/* Trait entre 1 et 2 */}
+        <div className="flex-1 h-0.5 bg-slate-200" />
+        {/* Étape 2 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape > 1 ? 'bg-indigo-600 text-white' :
+            etape === 1 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            'bg-slate-200 text-slate-500'
+          }`}>{etape > 1 ? '✓' : 2}</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 1 ? 'text-indigo-700' : 'text-slate-400'}`}>{ETAPES[1]}</span>
+        </div>
+        {/* Trait entre 2 et 3 */}
+        <div className="flex-1 h-0.5 bg-slate-200" />
+        {/* Étape 3 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape === 2 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            'bg-slate-200 text-slate-500'
+          }`}>{3}</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 2 ? 'text-indigo-700' : 'text-slate-400'}`}>{ETAPES[2]}</span>
+        </div>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
@@ -271,18 +297,20 @@ export default function DevenirExpertPage() {
               <div className="grid grid-cols-2 gap-2">
                 {CATEGORIES.map((cat) => (
                   <label key={cat.value}
-                    className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer text-sm transition-colors ${
-                      form.categories.includes(cat.value)
-                        ? 'border-indigo-500 bg-indigo-50 text-indigo-800'
-                        : 'border-slate-200 text-slate-700 hover:border-slate-300'
-                    }`}>
+                    className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer text-sm transition-colors duration-150
+                      ${form.categories.includes(cat.value)
+                        ? 'border-indigo-600 bg-indigo-50 text-indigo-800 dark:bg-indigo-800/80 dark:text-white dark:border-indigo-400 shadow-md'
+                        : 'border-slate-200 text-slate-700 dark:border-slate-600 dark:text-slate-300 hover:border-slate-300'}
+                    `}>
                     <input type="checkbox" className="hidden"
                       checked={form.categories.includes(cat.value)}
                       onChange={() => toggleCategorie(cat.value)} />
-                    <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
-                      form.categories.includes(cat.value) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'
-                    }`}>
-                      {form.categories.includes(cat.value) && <span className="text-white text-xs">✓</span>}
+                    <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors duration-150
+                      ${form.categories.includes(cat.value)
+                        ? 'bg-indigo-600 border-indigo-600 dark:bg-indigo-400'
+                        : 'border-slate-300 bg-white dark:bg-slate-800'}
+                    `}>
+                      {form.categories.includes(cat.value) && <span className="text-white dark:text-indigo-900 text-xs">✓</span>}
                     </span>
                     {cat.label}
                   </label>
@@ -301,17 +329,19 @@ export default function DevenirExpertPage() {
               <label className="text-xs font-medium text-slate-600 block mb-2">Type de compte *</label>
               <div className="flex gap-3">
                 {[['individual', 'Particulier'], ['company', 'Société']].map(([val, label]) => (
-                  <label key={val} className={`flex-1 flex items-center gap-2 p-3 rounded-xl border cursor-pointer text-sm ${
-                    form.entity_type === val ? 'border-indigo-500 bg-indigo-50 text-indigo-800' : 'border-slate-200 text-slate-700'
+                  <label key={val} className={`flex-1 flex items-center gap-2 p-3 rounded-xl border cursor-pointer text-sm transition-colors duration-150
+                    ${form.entity_type === val
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-800 dark:bg-indigo-800/80 dark:text-white dark:border-indigo-400 shadow-md'
+                      : 'border-slate-200 text-slate-700 dark:border-slate-600 dark:text-slate-300'}
                   }`}>
                     <input type="radio" name="entity_type" value={val}
                       checked={form.entity_type === val as any}
                       onChange={() => setChamp('entity_type', val)}
                       className="hidden" />
-                    <span className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                      form.entity_type === val ? 'border-indigo-600' : 'border-slate-300'
-                    }`}>
-                      {form.entity_type === val && <span className="w-2 h-2 rounded-full bg-indigo-600 block" />}
+                    <span className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-150
+                      ${form.entity_type === val ? 'border-indigo-600 bg-indigo-600 dark:bg-indigo-400' : 'border-slate-300 bg-white dark:bg-slate-800'}
+                    `}>
+                      {form.entity_type === val && <span className="w-2 h-2 rounded-full bg-white dark:bg-indigo-900 block" />}
                     </span>
                     {label}
                   </label>
@@ -378,9 +408,10 @@ export default function DevenirExpertPage() {
             <input ref={fileRef} type="file" accept=".pdf,.jpg,.jpeg,.png,.webp"
               onChange={uploadFichier} className="hidden" />
 
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-              <p className="font-medium mb-1">Documents acceptés</p>
-              <ul className="list-disc list-inside space-y-0.5 text-xs text-amber-700">
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800
+              dark:bg-slate-900/80 dark:border-slate-700 dark:text-slate-100">
+              <p className="font-medium mb-1 dark:text-indigo-200">Documents acceptés</p>
+              <ul className="list-disc list-inside space-y-0.5 text-xs text-amber-700 dark:text-indigo-300 dark:[&>li]:marker:text-indigo-500">
                 <li>Diplôme ou certificat professionnel</li>
                 <li>Numéro BCE belge vérifiable</li>
                 <li>Carte professionnelle (ordre des architectes, barreau, etc.)</li>
@@ -399,10 +430,15 @@ export default function DevenirExpertPage() {
           ) : <div />}
 
           {etape < ETAPES.length - 1 ? (
-            <Button onClick={validerEtape}>Continuer →</Button>
+            <Button
+              onClick={validerEtape}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:text-white"
+            >
+              Continuer →
+            </Button>
           ) : (
             <Button onClick={soumettre} disabled={envoi || !documentUrl}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8">
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:text-white">
               {envoi ? 'Envoi...' : 'Soumettre ma candidature'}
             </Button>
           )}

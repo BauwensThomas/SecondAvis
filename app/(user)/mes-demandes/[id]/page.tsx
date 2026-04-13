@@ -380,7 +380,7 @@ export default function DemandeDetailPage() {
                     size="sm"
                     disabled={noteChoisie === 0 || ratingEnvoi}
                     onClick={onSoumettrNote}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
                   >
                     {ratingEnvoi ? 'Envoi...' : 'Envoyer ma note'}
                   </Button>

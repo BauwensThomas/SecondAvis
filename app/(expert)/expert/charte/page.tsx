@@ -181,16 +181,16 @@ function ChartePage() {
         </section>
 
         {/* Article 6 - Conséquences */}
-        <section className="bg-red-50 border border-red-100 rounded-lg p-4">
-          <p className="font-semibold text-red-800 mb-2">Article 6 - Sanctions en cas de violation</p>
+        <section className="bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-900 rounded-lg p-4">
+          <p className="font-semibold text-red-800 mb-2">Article 6 - Sanctions en cas de violation ou de suppression volontaire</p>
           <p className="text-red-700 text-xs mb-3 leading-relaxed">
             Toute violation de la présente charte, constatée par Avisbox à la suite d'un signalement ou
             d'une vérification interne, entraîne les sanctions suivantes, applicables immédiatement et sans
-            préavis :
+            préavis. <span className="font-semibold">En cas de suppression volontaire de mon compte expert, je perds également le droit à tout paiement en attente non encore viré.</span>
           </p>
           <ul className="text-sm text-red-700 space-y-1.5 list-disc list-outside ml-4">
             <li>Suspension immédiate et définitive du compte expert sans possibilité de recours.</li>
-            <li>Perte de la totalité des paiements en attente non encore virés au moment de la suspension.</li>
+            <li>Perte de la totalité des paiements en attente non encore virés au moment de la suspension ou de la suppression volontaire du compte.</li>
             <li>Conservation permanente de tous les éléments probatoires (réponse, signalement, IP, date) dans nos systèmes à des fins de preuve juridique.</li>
             <li>En cas de préjudice avéré causé à un utilisateur, signalement possible aux autorités compétentes et/ou engagement de poursuites civiles.</li>
           </ul>

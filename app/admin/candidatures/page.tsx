@@ -83,7 +83,11 @@ export default function AdminCandidaturesPage() {
       ) : (
         <div className="space-y-3">
           {candidatures.map((c: any) => (
-            <div key={c.id} className="bg-white border border-slate-200 rounded-xl px-5 py-4 space-y-3">
+            <div
+              key={c.id}
+              className={`bg-white rounded-xl px-5 py-4 space-y-3 
+                ${c.status === 'pending' ? 'border-2 border-yellow-400 shadow-[0_0_0_2px_rgba(251,191,36,0.15)]' : 'border border-slate-200'}`}
+            >
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">

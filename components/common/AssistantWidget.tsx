@@ -10,11 +10,11 @@ const FAQ_CATEGORIES = [
     questions: [
       {
         q: 'Comment ca marche ?',
-        r: 'Vous décrivez votre situation, vous payez 9 euros, et un expert vérifié vous répond sous 24h. Si personne ne répond dans le délai, vous êtes automatiquement remboursé.',
+        r: 'Vous décrivez votre situation, effectuez un paiement sécurisé, puis un expert vérifié vous répond sous 24h. Si aucune réponse n\'est apportée dans ce délai, vous êtes automatiquement remboursé.',
       },
       {
         q: 'Combien ca coute ?',
-        r: 'Chaque demande coute 9 euros, quel que soit le sujet. Ce prix inclut la réponse complète d\'un expert vérifié.',
+        r: 'Chaque demande est proposée à un tarif fixe, quel que soit le sujet. Ce tarif inclut une réponse complète d\'un expert vérifié.',
       },
       {
         q: 'En combien de temps je recois ma réponse ?',
@@ -35,7 +35,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: 'Quand suis-je remboursé ?',
-        r: 'Si aucun expert ne répond sous 24h, le remboursement est automatique. En cas de signalement validé, le remboursement intervient dans les 5 jours.',
+        r: 'Si aucun expert ne répond dans le délai prévu, vous êtes automatiquement remboursé. En cas de signalement validé, un remboursement est également effectué.',
       },
     ],
   },
@@ -76,20 +76,20 @@ export default function AssistantWidget() {
     <>
       {/* Chatbox */}
       {ouvert && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 max-h-[70vh] bg-white border border-slate-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="fixed bottom-24 right-6 z-50 w-80 max-h-[70vh] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
 
           {/* En-tête */}
-          <div className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
+          <div className="bg-slate-700 border-b border-slate-700 px-4 py-3 flex items-center justify-between shrink-0">
             <div>
-              <p className="font-semibold text-sm">Besoin d'aide ?</p>
-              <p className="text-xs text-indigo-200">Trouvez votre réponse ci-dessous</p>
+              <p className="font-semibold text-sm text-white">Besoin d'aide ?</p>
+              <p className="text-xs text-slate-200">Trouvez votre réponse ci-dessous</p>
             </div>
             <button
               onClick={() => { setOuvert(false); setReponseActive(null) }}
-              className="text-white/70 hover:text-white text-lg leading-none"
+              className="text-slate-200 hover:text-white text-lg leading-none"
               aria-label="Fermer l'assistant"
             >
-              x
+              ×
             </button>
           </div>
 
@@ -101,11 +101,11 @@ export default function AssistantWidget() {
               <div className="space-y-3">
                 <button
                   onClick={() => setReponseActive(null)}
-                  className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                  className="text-xs text-indigo-600 dark:text-green-400 hover:text-indigo-700 dark:hover:text-green-300 flex items-center gap-1"
                 >
                   ← Retour aux questions
                 </button>
-                <div className="bg-indigo-50 rounded-xl p-3 text-sm text-slate-700 leading-relaxed">
+                <div className="bg-indigo-50 dark:bg-green-900/30 rounded-xl p-3 text-sm text-slate-700 dark:text-green-200 leading-relaxed">
                   {reponseActive}
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function AssistantWidget() {
                       <button
                         key={faq.q}
                         onClick={() => setReponseActive(faq.r)}
-                        className="w-full text-left px-3 py-2 text-sm text-slate-700 bg-slate-50 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition-colors"
+                        className="w-full text-left px-3 py-2 text-sm text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 hover:bg-indigo-50 dark:hover:bg-green-900/30 hover:text-indigo-700 dark:hover:text-green-200 rounded-lg transition-colors"
                       >
                         {faq.q}
                       </button>
@@ -133,12 +133,12 @@ export default function AssistantWidget() {
           </div>
 
           {/* Pied de page */}
-          <div className="border-t border-slate-100 px-4 py-2 text-center shrink-0">
+          <div className="border-t border-slate-100 dark:border-slate-700 px-4 py-2 text-center shrink-0">
             <p className="text-xs text-slate-400">
               Autre question ? Ecrivez-nous à{' '}
               <a
                 href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_CONTACT ?? 'contact@avisbox.be'}`}
-                className="text-indigo-600 hover:underline"
+                className="text-indigo-600 dark:text-green-400 hover:underline"
               >
                 contact@avisbox.be
               </a>
@@ -150,7 +150,7 @@ export default function AssistantWidget() {
       {/* Bouton flottant - utilise le logo robot du projet */}
       <button
         onClick={() => { setOuvert(!ouvert); setReponseActive(null) }}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 overflow-hidden bg-white border border-slate-200"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-600 focus:ring-offset-2 overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
         aria-label={ouvert ? "Fermer l'assistant" : "Ouvrir l'assistant"}
       >
         <Image

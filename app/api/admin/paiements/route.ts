@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     const email  = (searchParams.get('email')  ?? '').trim()
     const type   = searchParams.get('type')   ?? 'all'  // 'all' | 'paiement' | 'remboursement' | 'virement'
     const status = searchParams.get('status') ?? 'all'  // 'all' | 'paid' | 'pending' | 'refunded'
+    const role   = searchParams.get('role')   ?? 'all'  // 'all' | 'client' | 'expert'
 
     const supabaseAdmin = createAdminClient()
 
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
     const mouvements: any[] = []
 
     // ---- Paiements clients (requests confirmées) ----
-    if (type === 'all' || type === 'paiement') {
+    if ((type === 'all' || type === 'paiement') && (role === 'all' || role === 'client')) {
       let q = supabaseAdmin
         .from('requests')
         .select('id, title, amount_cents, created_at, status, stripe_payment_intent_id, users(id, first_name, last_name, email)')
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ---- Remboursements (automatiques = expiration, manuels = admin) ----
-    if (type === 'all' || type === 'remboursement') {
+    if ((type === 'all' || type === 'remboursement') && (role === 'all' || role === 'client')) {
       let q = supabaseAdmin
         .from('requests')
         .select('id, title, amount_cents, created_at, status, stripe_payment_intent_id, refund_reason, users(id, first_name, last_name, email)')
@@ -122,29 +123,83 @@ export async function GET(request: NextRequest) {
     }
 
     // ---- Virements experts ----
-    if (type === 'all' || type === 'virement') {
-      let q = supabaseAdmin
-        .from('payouts')
-        .select('id, amount_cents, created_at, status, stripe_transfer_id, experts(id, display_name, email)')
-        .order('created_at', { ascending: false })
+    if ((type === 'all' || type === 'virement') && (role === 'all' || role === 'expert')) {
+      // Cas spécial : status=eligible → on retourne les virements à payer (answers prêtes à payer, pas encore de payout)
+      // Cas spécial : status=all → on retourne payouts + virements à payer (eligible)
+      const wantEligible = status === 'eligible' || status === 'all';
+      const wantPayouts = status !== 'eligible';
 
-      if (expertIds.length > 0) q = q.in('expert_id', expertIds)
+      // 1. Virements existants (payouts)
+      if (wantPayouts) {
+        let q = supabaseAdmin
+          .from('payouts')
+          .select('id, amount_cents, created_at, status, stripe_transfer_id, experts(id, display_name, email, stripe_account_id)')
+          .order('created_at', { ascending: false })
 
-      const { data } = email && expertIds.length === 0 ? { data: [] } : await q
-      for (const p of data ?? []) {
-        const e = p.experts as any
-        mouvements.push({
-          id:          `payout_${p.id}`,
-          type:        'virement',
-          label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
-          montant_cents: p.amount_cents,
-          statut:      p.status === 'paid' ? 'payé' : 'en attente',
-          date:        p.created_at,
-          stripe_ref:  p.stripe_transfer_id ?? null,
-          user_email:  e?.email ?? '',
-          user_nom:    e?.display_name ?? '',
-          expert_id:   e?.id ?? null,
-        })
+        if (expertIds.length > 0) q = q.in('expert_id', expertIds)
+
+        const { data } = email && expertIds.length === 0 ? { data: [] } : await q
+        for (const p of data ?? []) {
+          const e = p.experts as any
+          mouvements.push({
+            id:          `payout_${p.id}`,
+            type:        'virement',
+            label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
+            montant_cents: p.amount_cents,
+            statut:      p.status === 'paid' ? 'payé' : 'en attente',
+            date:        p.created_at,
+            stripe_ref:  p.stripe_transfer_id ?? null,
+            user_email:  e?.email ?? '',
+            user_nom:    e?.display_name ?? '',
+            expert_id:   e?.id ?? null,
+            expert_stripe_connected: !!e?.stripe_account_id,
+          })
+        }
+      }
+
+      // 2. Virements à payer (eligible, pas encore payout)
+      if (wantEligible) {
+        const { data: pendingAnswers, error } = await supabaseAdmin
+          .from('answers')
+          .select(`id, request_id, expert_id, delivered_at, payment_eligible_at, is_paid, is_contested, contest_resolved, contest_decision, experts(id, display_name, email, stripe_account_id)`)
+          .eq('is_paid', false)
+          .eq('is_contested', false)
+          .eq('contest_resolved', false)
+          .is('contest_decision', null)
+          .lte('payment_eligible_at', new Date().toISOString())
+        if (error) throw error
+
+        // On filtre pour ne garder que celles qui n'ont pas de ligne dans payouts
+        const answerIds = pendingAnswers.map((a: any) => a.id)
+        let payouts: any[] = []
+        if (answerIds.length > 0) {
+          const { data: payoutsData, error: payoutsError } = await supabaseAdmin
+            .from('payouts')
+            .select('answer_id')
+            .in('answer_id', answerIds)
+          if (payoutsError) throw payoutsError
+          payouts = payoutsData
+        }
+        const payoutsAnswerIds = new Set(payouts.map((p: any) => p.answer_id))
+        const results = pendingAnswers.filter((a: any) => !payoutsAnswerIds.has(a.id))
+
+        for (const a of results) {
+          const e = a.experts as any
+          mouvements.push({
+            id:          `eligible_${a.id}`,
+            type:        'virement',
+            label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
+            montant_cents: 200, // ou la valeur réelle si tu veux
+            statut:      'à payer',
+            date:        a.delivered_at,
+            stripe_ref:  null,
+            user_email:  e?.email ?? '',
+            user_nom:    e?.display_name ?? '',
+            expert_id:   e?.id ?? null,
+            payment_eligible_at: a.payment_eligible_at,
+            expert_stripe_connected: !!e?.stripe_account_id,
+          })
+        }
       }
     }
 
@@ -153,6 +208,7 @@ export async function GET(request: NextRequest) {
     if (status === 'paid')    resultats = resultats.filter((m) => m.statut === 'payé')
     if (status === 'pending') resultats = resultats.filter((m) => m.statut === 'en attente')
     if (status === 'refunded')resultats = resultats.filter((m) => m.statut === 'remboursé')
+    if (status === 'eligible')resultats = resultats.filter((m) => m.statut === 'à payer')
 
     return NextResponse.json({ mouvements: resultats })
 

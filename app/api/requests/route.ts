@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe'
+import { CATEGORY_PRICES } from '@/lib/config'
 import { z } from 'zod'
 
 const createRequestSchema = z.object({
@@ -31,7 +32,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const data = createRequestSchema.parse(body)
 
-    const priceCents = Number(process.env.NEXT_PUBLIC_REQUEST_PRICE_CENTS) || 900
+    // Récupère le prix selon la catégorie (défini dans .env)
+    const priceCents = CATEGORY_PRICES[data.category] || 900
     const supabaseAdmin = createAdminClient()
 
     // Vérifie qu'il y a au moins 2 experts actifs et vérifiés dans cette catégorie

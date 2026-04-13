@@ -128,6 +128,57 @@ Phase 6 - Comptabilite independants (lancer au mois 12)
 # SECTION 4 - REGLES METIER IMPORTANTES
 # ============================================================
 
+# ============================================================
+# REGLES DE NOTIFICATION ADMIN (BULLES, SURBRILLANCE, AVIS)
+# ============================================================
+
+Regle A - Bulles de notification et surbrillance dans l'admin :
+  - Les bulles jaunes et la surbrillance ne s'affichent que pour les éléments réellement actionnables.
+  - Experts :
+      - La bulle jaune sur "Experts" s'affiche uniquement s'il existe au moins un expert non vérifié (is_verified = false) ou suspendu (is_active = false), mais pas supprimé.
+      - Les experts non vérifiés ou suspendus sont surlignés en jaune dans la liste.
+      - Les experts supprimés (soft delete ou anonymisés RGPD) ne sont jamais comptés ni affichés.
+  - Demandes (requests) :
+      - La bulle jaune sur "Demandes" s'affiche uniquement s'il existe au moins une demande en statut 'pending' (en attente de réponse), non remboursée (status != 'refunded').
+      - Les demandes remboursées automatiquement (expiration) ou manuellement ne sont jamais comptées comme "en attente".
+      - Les demandes en statut 'contested', 'refunded', ou 'closed' ne déclenchent aucune bulle.
+      - Les demandes "pending" sont surlignées en jaune dans la liste admin.
+  - Avis clients (ratings) :
+      - La bulle sur "Avis en attente" s'affiche uniquement s'il existe au moins un avis non traité ET non fermé (voir ci-dessous).
+      - Les avis liés à un utilisateur ou expert anonymisé/supprimé (RGPD) sont automatiquement fermés (champ closed = true) et ne sont plus jamais affichés ni comptés.
+      - Le compteur d'avis en attente dans l'UI admin doit toujours refléter la liste réellement affichée (après filtrage), pas un total brut du backend.
+
+Regle B - Harmonisation des compteurs frontend/backend :
+  - Tous les compteurs de bulles et de listes admin doivent être calculés après filtrage des éléments supprimés/anonymisés/fermés.
+  - Le backend (API /api/admin/stats, /api/admin/avis, etc.) ne retourne que les éléments réellement actionnables.
+  - Le frontend (pages admin) doit compter le nombre d'éléments affichés après filtrage pour afficher les bulles/counters.
+
+Regle C - RGPD et avis clients :
+  - Lorsqu'un utilisateur ou un expert est anonymisé (droit à l'oubli), tous ses avis clients (ratings) non encore traités sont automatiquement fermés (champ closed = true).
+  - Les avis fermés ne sont plus jamais affichés ni pris en compte dans les statistiques ou notifications.
+  - Cette logique est appliquée dans la route /api/admin/gdpr/[id]/execute et dans tous les filtres backend.
+
+Résumé technique :
+  - Un avis client (rating) est considéré comme "en attente" uniquement si :
+      - Il n'est pas fermé (closed = false)
+      - L'utilisateur et l'expert associés ne sont pas anonymisés/supprimés
+  - Un expert est considéré comme "à surveiller" (bulle jaune) uniquement si :
+      - is_verified = false OU is_active = false
+      - Il n'est pas supprimé/anonymisé
+  - Une demande est "en attente" uniquement si :
+      - status = 'pending'
+      - status != 'refunded' ET != 'contested' ET != 'closed'
+
+Voir les fichiers suivants pour l'implémentation technique :
+  - app/admin/experts/page.tsx (logique bulle/surbrillance experts)
+  - app/api/admin/stats/route.ts (compteurs harmonisés)
+  - app/admin/demandes/page.tsx (surbrillance demandes)
+  - app/api/admin/avis/route.ts (filtrage avis)
+  - app/admin/avis/page.tsx (compteur basé sur la liste filtrée)
+  - app/api/admin/gdpr/[id]/execute/route.ts (fermeture avis RGPD)
+
+Cette section doit être mise à jour à chaque évolution de la logique de notification ou de gestion RGPD.
+
 Regle 1 - Delai de reponse :
   En semaine (lundi au jeudi) : expiration = created_at + 24 heures exactement.
   Le vendredi : expiration = lundi suivant a la meme heure que l heure de creation + 24h.
@@ -1023,11 +1074,13 @@ CREATE TABLE suspension_logs (
 #   manual        → "Fausses informations detectees, client confirme"
 
 --- TABLE payouts ---
-# Historique des virements faits aux experts
 
+# Historique des virements faits aux experts
+# Ajout : answer_id UUID (2026-04-12)
 CREATE TABLE payouts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   expert_id UUID REFERENCES experts(id),
+  answer_id UUID REFERENCES answers(id), -- réponse concernée (ajouté 2026-04-12)
   amount_cents INT NOT NULL,
   stripe_transfer_id TEXT,
   status TEXT DEFAULT 'pending',       -- 'pending' | 'paid'
@@ -2830,6 +2883,13 @@ Semaine 10 : ADMIN
   [x] Suppression compte expert depuis /admin/experts/[id] : bouton + raison obligatoire + email ExpertDeleted
   [x] Route DELETE /api/admin/experts/[id] : email avant suppression + cascade FK + audit_log
   [x] Email ExpertDeleted.tsx cree (emails/ExpertDeleted.tsx)
+  [x] Suppression demande depuis /admin/demandes : bouton + modale + raison obligatoire + email client
+  [x] Route DELETE /api/admin/demandes/[id] : remboursement optionnel + email client + audit_log
+      Logique remboursement : admin choisit case par case
+        - Client de mauvaise foi (contenu abusif, fraude) → pas de remboursement
+        - Client de bonne foi (demande mal formulee, hors categorie) → remboursement
+      La demande passe en 'refunded' si remboursee, 'closed' sinon
+      La raison est stockee dans refund_reason avec le prefixe [SUPPRESSION ADMIN]
   [ ] Test : simuler tout le cycle complet (inscription → demande → reponse → signalement → arbitrage)
 
 Semaine 11 : SECURITE

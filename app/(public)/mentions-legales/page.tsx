@@ -28,7 +28,10 @@ export default function MentionsLegalesPage() {
             <p><span className="text-slate-500">Adresse :</span> {companyAddress}</p>
             <p>
               <span className="text-slate-500">Email :</span>{' '}
-              <a href={`mailto:${emailContact}`} className="text-indigo-600 hover:underline">
+              <a
+                href={`mailto:${emailContact}`}
+                className="text-indigo-600 dark:text-green-400 hover:text-indigo-800 dark:hover:text-green-200 transition-colors"
+              >
                 {emailContact}
               </a>
             </p>
@@ -42,12 +45,12 @@ export default function MentionsLegalesPage() {
           <div className="space-y-1">
             <p><span className="text-slate-500">Société :</span> Vercel Inc.</p>
             <p><span className="text-slate-500">Adresse :</span> 340 Pine Street, Suite 900, San Francisco, CA 94104, États-Unis</p>
-            <p>
-              <span className="text-slate-500">Site web :</span>{' '}
-              <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
-                vercel.com
-              </a>
-            </p>
+          </div>
+
+          <div className="mt-4 space-y-1">
+            <p><span className="text-slate-500">Nom de domaine :</span> www.avisbox.be</p>
+            <p><span className="text-slate-500">Registrar :</span> LWS (Ligne Web Services)</p>
+            <p><span className="text-slate-500">Adresse :</span> 10 Rue de Penthièvre, 75008 Paris, France</p>
           </div>
         </section>
 
@@ -64,7 +67,7 @@ export default function MentionsLegalesPage() {
           <p>
             {appName} est une plateforme d'entraide. Les avis fournis par les professionnels inscrits
             sont des opinions basées sur les informations communiquées. Ils ne constituent pas des
-            consultations professionnelles formelles engageant la responsabilité de {appName} ou des
+            consultations professionnelles formelles engageant la responsabilité d'{appName} ou des
             professionnels. {appName} décline toute responsabilité quant aux décisions prises sur la
             base de ces avis.
           </p>

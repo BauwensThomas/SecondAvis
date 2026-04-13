@@ -167,7 +167,7 @@ export default function MonComptePage() {
             </p>
           )}
 
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
             Sauvegarder
           </Button>
         </form>
@@ -231,7 +231,7 @@ export default function MonComptePage() {
             </p>
           )}
 
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
             Changer mon mot de passe
           </Button>
         </form>
@@ -269,8 +269,13 @@ function SupprimerCompteSection() {
     <section className="border-2 border-red-400 rounded-xl p-6 mt-8">
       <h2 className="text-lg font-semibold text-red-700 mb-1">Supprimer mon compte</h2>
       <p className="text-sm text-slate-600 mb-4">
-        Cette action est irréversible. Vos données personnelles seront anonymisées.
-        Vos demandes et transactions sont conservées sous forme anonyme (obligation légale).
+        Cette action est irréversible. Vos données personnelles seront anonymisées.<br />
+        Vos demandes et transactions sont conservées sous forme anonyme (obligation légale).<br />
+        <span className="block mt-2 text-slate-700 font-medium">
+          • Si une demande payée est encore en attente, le remboursement sera effectué automatiquement même après la suppression de votre compte.<br />
+          • Si un expert répond après la suppression, vous ne pourrez plus accéder à la réponse, mais l'expert sera payé normalement (sans note étoile).<br />
+          • Les paiements et avis déjà traités ne sont pas remboursés.
+        </span>
       </p>
 
       {etape === 'idle' && (
@@ -283,7 +288,7 @@ function SupprimerCompteSection() {
       )}
 
       {etape === 'confirmer' && (
-        <div className="bg-red-50 border border-red-300 rounded-xl p-5 space-y-3">
+        <div className="bg-red-50 dark:bg-red-900/30 border border-red-300 rounded-xl p-5 space-y-3">
           <p className="text-sm font-semibold text-red-800">
             Êtes-vous certain de vouloir supprimer votre compte ?
           </p>

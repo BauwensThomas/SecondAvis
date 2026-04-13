@@ -42,6 +42,12 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
       stripe_customer_id:  null,
     }).eq('id', userId)
 
+    // Clôture tous les avis en attente liés à ce client (ratings sans score, non clos)
+    await supabaseAdmin.from('ratings').update({ closed: true })
+      .eq('user_id', userId)
+      .is('score', null)
+      .eq('closed', false)
+
     // Anonymise le profil expert si cet utilisateur en avait un
     const { data: expertRow } = await supabaseAdmin
       .from('experts')
@@ -67,6 +73,12 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         is_active:        false,
         is_verified:      false,
       }).eq('user_id', userId)
+
+      // Clôture tous les avis en attente liés à cet expert (ratings sans score, non clos)
+      await supabaseAdmin.from('ratings').update({ closed: true })
+        .eq('expert_id', expertRow.id)
+        .is('score', null)
+        .eq('closed', false)
     }
 
     // Récupère l'auth user id via l'email original pour supprimer le compte Auth

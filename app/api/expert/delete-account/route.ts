@@ -24,6 +24,16 @@ export async function POST() {
       return NextResponse.json({ error: 'Profil expert introuvable.' }, { status: 404 })
     }
 
+
+    // Log de suppression volontaire dans suspension_logs
+    await supabaseAdmin.from('suspension_logs').insert({
+      expert_id: expert.id,
+      action: 'suspended',
+      type: 'self_delete',
+      reason: "Suppression volontaire par l'expert depuis son espace",
+      created_by: 'expert',
+    })
+
     // Anonymise les données personnelles de l'expert
     await supabaseAdmin
       .from('experts')
@@ -48,21 +58,9 @@ export async function POST() {
       })
       .eq('id', expert.id)
 
-    // Anonymise aussi le compte users lié
-    await supabaseAdmin
-      .from('users')
-      .update({
-        email:      `effaced_${user.id}@deleted.Avisbox.be`,
-        first_name: 'Compte',
-        last_name:  'supprimé',
-        phone:      null,
-        stripe_customer_id: null,
-        registration_ip: null,
-      })
-      .eq('id', user.id)
 
-    // Supprime le compte dans Supabase Auth
-    await supabaseAdmin.auth.admin.deleteUser(user.id)
+    // Ne touche pas au compte users ni à Supabase Auth :
+    // L'utilisateur pourra toujours se connecter comme client.
 
     return NextResponse.json({ success: true })
 

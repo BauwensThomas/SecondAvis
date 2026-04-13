@@ -123,7 +123,7 @@ function ExpertDashboardPage() {
                 </span>
               </div>
               <p className="text-sm text-slate-500 line-clamp-2">{demande.description}</p>
-              <p className="text-xs text-blue-600 mt-3 font-medium">Voir et répondre →</p>
+              <p className="text-xs text-indigo-700 dark:text-indigo-400 mt-3 font-medium hover:underline hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer">Voir et répondre →</p>
             </Link>
           )
         })}

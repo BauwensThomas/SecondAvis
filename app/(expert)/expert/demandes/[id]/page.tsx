@@ -156,31 +156,48 @@ function ExpertDemandePage() {
   return (
     <main className="page-container space-y-6">
 
-      <Link href="/expert/dashboard" className="text-sm text-slate-500 hover:text-slate-800">
-        ← Retour au tableau de bord
-      </Link>
-
-      {/* Timer expiration demande client */}
-      <div className={`border rounded-xl p-4 ${urgent ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'}`}>
-        <p className={`text-sm font-semibold ${urgent ? 'text-red-700' : 'text-yellow-700'}`}>
-          Temps restant avant expiration de la demande : {restant}
-        </p>
-        <p className={`text-xs mt-1 ${urgent ? 'text-red-600' : 'text-yellow-600'}`}>
-          Si personne ne répond avant l'expiration, le client est remboursé automatiquement.
-        </p>
+      <div className="mb-2">
+        <Link
+          href="/expert/dashboard"
+          className="block w-fit bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-700 dark:hover:text-indigo-400 font-medium transition-colors"
+        >
+          ← Retour au tableau de bord
+        </Link>
       </div>
 
-      {/* Timer verrou - temps restant pour que cet expert réponde */}
+      {/* Timer expiration demande client - harmonisé et texte plus foncé */}
+      <div
+        className={`rounded-xl px-4 py-3 text-sm mb-6 flex flex-col gap-1
+          ${urgent
+            ? 'bg-red-50 border border-red-200 text-red-800 dark:bg-red-900/60 dark:border-red-700 dark:text-red-200'
+            : 'bg-yellow-50 border border-yellow-200 text-yellow-800 dark:bg-yellow-900/80 dark:border-yellow-700 dark:text-yellow-100'}
+        `}
+      >
+        <span className="font-semibold">
+          Temps restant avant expiration de la demande : {restant}
+        </span>
+        <span className="text-xs font-semibold">
+          Si personne ne répond avant l'expiration, le client est remboursé automatiquement.
+        </span>
+      </div>
+
+      {/* Timer verrou - harmonisé avec la carte "Connecté en tant que... Mon compte" */}
       {(() => {
         const minutes = Math.floor(tempsVerrou / 60)
         const secondes = tempsVerrou % 60
         const verrouUrgent = tempsVerrou < 120
         return (
-          <div className={`border rounded-xl p-4 flex items-center justify-between ${verrouUrgent ? 'bg-red-50 border-red-200' : 'bg-blue-50 border-blue-200'}`}>
-            <p className={`text-sm font-semibold ${verrouUrgent ? 'text-red-700' : 'text-blue-700'}`}>
+          <div
+            className={`rounded-xl px-4 py-3 text-sm mb-6 flex items-center justify-between
+              ${verrouUrgent
+                ? 'bg-red-50 border border-red-200 text-red-800 dark:bg-red-900/60 dark:border-red-700 dark:text-red-200'
+                : 'bg-indigo-50 border border-indigo-200 text-indigo-800 dark:bg-indigo-900/80 dark:border-indigo-700 dark:text-indigo-100'}
+            `}
+          >
+            <span className="font-semibold">
               Cette demande vous est réservée pendant
-            </p>
-            <span className={`text-lg font-bold tabular-nums ${verrouUrgent ? 'text-red-700' : 'text-blue-700'}`}>
+            </span>
+            <span className="text-lg font-bold tabular-nums">
               {minutes}:{secondes.toString().padStart(2, '0')}
             </span>
           </div>
@@ -274,7 +291,9 @@ function ExpertDemandePage() {
         <Button
           type="submit"
           disabled={soumission}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5"
+          className="w-full rounded-xl px-4 py-3 text-sm mt-2 font-semibold
+            bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100 hover:text-indigo-900 focus:ring-2 focus:ring-indigo-300 shadow-none
+            dark:bg-indigo-900/80 dark:text-indigo-100 dark:border-indigo-700 dark:hover:bg-indigo-800 dark:hover:text-white"
         >
           {soumission ? 'Envoi en cours...' : 'Envoyer ma réponse'}
         </Button>

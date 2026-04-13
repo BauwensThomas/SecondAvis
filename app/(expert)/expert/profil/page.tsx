@@ -140,10 +140,10 @@ function ExpertProfilPage() {
   if (role === 'admin' && !hasExpertAccount) {
     return (
       <main className="page-container">
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-          <p className="font-semibold text-blue-900 mb-1">Espace expert</p>
-          <p className="text-blue-700 text-sm">Votre compte administrateur n'a pas de profil expert associé.</p>
-          <p className="text-blue-600 text-sm mt-1">Gérez les experts depuis <a href="/admin/experts" className="underline font-medium">l'espace admin</a>.</p>
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 text-center">
+          <p className="font-semibold text-indigo-900 mb-1">Espace expert</p>
+          <p className="text-indigo-700 text-sm">Votre compte administrateur n'a pas de profil expert associé.</p>
+          <p className="text-indigo-600 text-sm mt-1">Gérez les experts depuis <a href="/admin/experts" className="underline font-medium">l'espace admin</a>.</p>
         </div>
       </main>
     )
@@ -163,8 +163,8 @@ function ExpertProfilPage() {
   return (
     <main className="page-container space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Mon profil expert</h1>
-        <Link href="/mon-compte" className="text-sm text-blue-600 hover:underline">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Mon profil expert</h1>
+        <Link href="/mon-compte" className="text-sm text-indigo-700 dark:text-indigo-400 hover:underline">
           Prénom, nom, téléphone et mot de passe →
         </Link>
       </div>
@@ -197,7 +197,7 @@ function ExpertProfilPage() {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Pseudo affiché</label>
             <input {...form.register('display_name')} placeholder="Ex : Marc C."
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             {form.formState.errors.display_name && (
               <p className="text-red-500 text-xs mt-1">{form.formState.errors.display_name.message}</p>
             )}
@@ -209,7 +209,7 @@ function ExpertProfilPage() {
             </label>
             <textarea {...form.register('bio')} rows={4}
               placeholder="Ex : Mécanicien depuis 18 ans, spécialisé véhicules diesel et diagnostic électronique."
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" />
             {form.formState.errors.bio && (
               <p className="text-red-500 text-xs mt-1">{form.formState.errors.bio.message}</p>
             )}
@@ -219,7 +219,7 @@ function ExpertProfilPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Années d'expérience</label>
               <input {...form.register('years_experience', { valueAsNumber: true })} type="number" min={0} placeholder="Ex : 18"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               {form.formState.errors.years_experience && (
                 <p className="text-red-500 text-xs mt-1">{form.formState.errors.years_experience.message}</p>
               )}
@@ -227,7 +227,7 @@ function ExpertProfilPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Ville affichée</label>
               <input {...form.register('city')} placeholder="Ex : Liège"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               {form.formState.errors.city && (
                 <p className="text-red-500 text-xs mt-1">{form.formState.errors.city.message}</p>
               )}
@@ -240,14 +240,14 @@ function ExpertProfilPage() {
                 Disponibilités <span className="text-slate-400">(optionnel)</span>
               </label>
               <input {...form.register('availabilities')} placeholder="Ex : Lun-Ven 18h-22h"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Site web ou LinkedIn <span className="text-slate-400">(optionnel)</span>
               </label>
               <input {...form.register('website_url')} placeholder="https://..."
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
           </div>
 
@@ -256,12 +256,12 @@ function ExpertProfilPage() {
             <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium text-slate-700">Téléphone</label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" {...form.register('phone_public')} className="w-4 h-4 text-blue-600 rounded" />
+                <input type="checkbox" {...form.register('phone_public')} className="w-4 h-4 text-indigo-600 rounded" />
                 <span className="text-xs text-slate-500">Visible sur mon profil public</span>
               </label>
             </div>
             <input {...form.register('phone')} type="tel" placeholder="+32 470 00 00 00"
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             {form.formState.errors.phone && (
               <p className="text-red-500 text-xs mt-1">{form.formState.errors.phone.message}</p>
             )}
@@ -283,7 +283,7 @@ function ExpertProfilPage() {
                         : current.filter((v) => v !== l.value)
                       ) as ('fr' | 'nl' | 'en')[])
                     }}
-                    className="w-4 h-4 text-blue-600 rounded"
+                    className="w-4 h-4 text-indigo-600 rounded"
                   />
                   <span className="text-sm text-slate-700">{l.label}</span>
                 </label>
@@ -307,7 +307,7 @@ function ExpertProfilPage() {
             {CATEGORIES_OPTIONS.map((cat) => (
               <label key={cat.value} className={`flex items-center gap-3 border rounded-lg px-4 py-3 cursor-pointer transition-colors ${
                 categoriesSelectionnees.includes(cat.value)
-                  ? 'border-blue-400 bg-blue-50'
+                  ? 'border-indigo-400 bg-indigo-50'
                   : 'border-slate-200 hover:border-slate-400'
               }`}>
                 <input
@@ -320,7 +320,7 @@ function ExpertProfilPage() {
                       : current.filter((v) => v !== cat.value)
                     )
                   }}
-                  className="w-4 h-4 text-blue-600 rounded"
+                  className="w-4 h-4 text-indigo-600 rounded"
                 />
                 <span className="text-sm text-slate-800">{cat.label}</span>
               </label>
@@ -339,7 +339,7 @@ function ExpertProfilPage() {
               <p className="text-xs text-slate-400 mt-0.5">Nécessaire pour les documents comptables.</p>
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" {...form.register('address_public')} className="w-4 h-4 text-blue-600 rounded" />
+              <input type="checkbox" {...form.register('address_public')} className="w-4 h-4 text-indigo-600 rounded" />
               <span className="text-xs text-slate-500">Visible sur mon profil public</span>
             </label>
           </div>
@@ -347,7 +347,7 @@ function ExpertProfilPage() {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Rue et numéro</label>
             <input {...form.register('address_street')} placeholder="Ex : Rue de la Loi 12"
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             {form.formState.errors.address_street && (
               <p className="text-red-500 text-xs mt-1">{form.formState.errors.address_street.message}</p>
             )}
@@ -357,7 +357,7 @@ function ExpertProfilPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Code postal</label>
               <input {...form.register('address_zip')} placeholder="Ex : 4000"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               {form.formState.errors.address_zip && (
                 <p className="text-red-500 text-xs mt-1">{form.formState.errors.address_zip.message}</p>
               )}
@@ -429,16 +429,16 @@ function ExpertProfilPage() {
           <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg p-3">{erreur}</p>
         )}
 
-        <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+        <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
           Sauvegarder mon profil
         </Button>
       </form>
 
       {/* Lien vers la charte */}
       <div className="border-t border-slate-100 pt-6 mt-6">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-300">
           Vous souhaitez relire la charte de bonne conduite que vous avez signée ?{' '}
-          <a href="/expert/charte" className="text-indigo-600 hover:underline">
+          <a href="/expert/charte" className="text-indigo-700 dark:text-indigo-400 hover:underline">
             Consulter la charte
           </a>
         </p>
@@ -476,10 +476,16 @@ function SupprimerCompteExpertSection() {
   return (
     <section className="border-2 border-red-400 rounded-xl p-6 mt-8">
       <h2 className="text-lg font-semibold text-red-700 mb-1">Supprimer mon compte</h2>
+
+
       <p className="text-sm text-slate-600 mb-4">
-        Cette action est irréversible. Vos données personnelles seront anonymisées.
-        Vos réponses et transactions sont conservées sous forme anonyme (obligation légale).
-        Les paiements en attente non encore virés seront annulés.
+        Cette action est <span className="font-semibold text-red-700">irréversible</span>. Toutes vos données d'expert seront anonymisées.<br />
+        Vos réponses et transactions sont conservées sous forme anonyme (obligation légale).<br />
+        <span className="block mt-2 text-slate-700 font-medium">
+          • <span className="font-semibold">La suppression du compte expert n'efface pas votre compte client</span> : vous pourrez toujours poser des questions en tant que client.<br />
+          • <span className="font-semibold">Tous vos gains en attente non encore virés seront définitivement annulés</span> au moment de la suppression.<br />
+          • <span className="font-semibold">Aucun gain non viré ne sera remboursé</span> après suppression, conformément à la charte.<br />
+        </span>
       </p>
 
       {etape === 'idle' && (
@@ -492,7 +498,7 @@ function SupprimerCompteExpertSection() {
       )}
 
       {etape === 'confirmer' && (
-        <div className="bg-red-50 border border-red-300 rounded-xl p-5 space-y-3">
+        <div className="bg-red-50 dark:bg-red-900/30 border border-red-300 rounded-xl p-5 space-y-3">
           <p className="text-sm font-semibold text-red-800">
             Êtes-vous certain de vouloir supprimer votre compte expert ?
           </p>

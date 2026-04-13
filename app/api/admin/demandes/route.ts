@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     let query = supabaseAdmin
       .from('requests')
       .select('id, category, title, status, amount_cents, created_at, expires_at, users(first_name, last_name, email)')
+      .eq('payment_confirmed', true)
       .order('created_at', { ascending: false })
 
     if (status !== 'all') query = query.eq('status', status)

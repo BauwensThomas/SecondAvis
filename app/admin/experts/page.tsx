@@ -30,11 +30,79 @@ interface Expert {
 
 // Page admin - liste des experts avec recherche et filtres
 export default function AdminExpertsPage() {
-  const [experts, setExperts]   = useState<Expert[]>([])
-  const [loading, setLoading]   = useState(true)
-  const [q, setQ]               = useState('')
-  const [status, setStatus]     = useState('all')
-  const [category, setCategory] = useState('')
+
+    // State experts et dépendants (doivent être déclarés AVANT tout useEffect qui les utilise)
+    const [experts, setExperts]   = useState<Expert[]>([])
+    const [loading, setLoading]   = useState(true)
+    const [q, setQ]               = useState('')
+    const [status, setStatus]     = useState('all')
+    const [category, setCategory] = useState('')
+    const [nbNouveaux, setNbNouveaux] = useState(0)
+
+    // Met à jour dynamiquement le compteur à chaque changement
+    useEffect(() => {
+      if (typeof window === 'undefined') return
+      const vus = JSON.parse(localStorage.getItem('experts_vus') || '[]')
+      const nouveaux = experts.filter((e) => {
+        // Exclure tous les comptes supprimés
+        if (e.suspension_type === 'self_delete') return false
+        // Cas 1 : nouvel expert à valider (non vérifié, non supprimé)
+        if (!vus.includes(e.id) && e.is_verified === false) return true
+        // Cas 2 : suspendu (manuel/auto)
+        if (!vus.includes(e.id) && ['manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type)) return true
+        return false
+      })
+      setNbNouveaux(nouveaux.length)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('nbNouveauxExperts', String(nouveaux.length))
+        window.dispatchEvent(new Event('storage'))
+      }
+    }, [experts])
+
+
+  // Pour détecter les nouveautés (suppressions/suspensions récentes)
+  // Gestion des nouveautés : stockage local pour masquer la bulle/cadre après action
+  function isRecentSuppressionOrSuspension(e: any) {
+    // On ignore totalement les comptes supprimés
+    if (e.suspension_type === 'self_delete') return false
+    if (typeof window !== 'undefined') {
+      const vus = JSON.parse(localStorage.getItem('experts_vus') || '[]')
+      if (vus.includes(e.id)) return false
+    }
+    // Cas 1 : nouvel expert à valider (non vérifié, non supprimé)
+    if (e.is_verified === false) return true
+    // Cas 2 : suspendu (manuel/auto)
+    if (['manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type)) return true
+    return false
+  }
+
+  function marquerVu(id: string) {
+    if (typeof window !== 'undefined') {
+      const vus = JSON.parse(localStorage.getItem('experts_vus') || '[]')
+      if (!vus.includes(id)) {
+        vus.push(id)
+        localStorage.setItem('experts_vus', JSON.stringify(vus))
+      }
+      // Forcer le refresh du compteur et recalculer nbNouveaux
+      setExperts((prev) => {
+        // recalcul dynamique
+        const vus2 = JSON.parse(localStorage.getItem('experts_vus') || '[]')
+        const n = prev.filter((e) => {
+          if (!e.suspended_at) return false
+          const t = new Date(e.suspended_at)
+          const now = new Date()
+          const diffH = (now.getTime() - t.getTime()) / (1000 * 60 * 60)
+          return (
+            ['self_delete', 'manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type)
+            && diffH < 48
+            && !vus2.includes(e.id)
+          )
+        }).length
+        setNbNouveaux(n)
+        return [...prev]
+      })
+    }
+  }
 
   const charger = useCallback(() => {
     setLoading(true)
@@ -45,24 +113,42 @@ export default function AdminExpertsPage() {
       .catch(() => setLoading(false))
   }, [q, status, category])
 
+
   useEffect(() => {
     const t = setTimeout(charger, 300)
     return () => clearTimeout(t)
   }, [charger])
 
   function badgeStatut(e: Expert) {
-    if (!e.is_verified) return <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">Non vérifié</span>
-    if (!e.is_active && e.is_blocked) return <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">Suspendu (manuel)</span>
-    if (!e.is_active) return <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">Suspendu (auto)</span>
+    if (e.suspension_type === 'self_delete') {
+      return <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">Supprimé</span>
+    }
+    if (!e.is_verified) {
+      return <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">Non vérifié</span>
+    }
+    if (!e.is_active && e.is_blocked) {
+      return <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">Suspendu (manuel)</span>
+    }
+    if (!e.is_active) {
+      return <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">Suspendu (auto)</span>
+    }
     return <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Actif</span>
   }
 
   return (
-    <div className="p-8 space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Experts</h1>
+    <div className="p-8 space-y-6" key={nbNouveaux}>
+
+      <div className="flex items-center gap-3">
+        <h1 className="text-2xl font-bold text-slate-900">Experts</h1>
+        {nbNouveaux > 0 && (
+          <span className="bg-yellow-400 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+            {nbNouveaux} nouveau{nbNouveaux > 1 ? 'x' : ''}
+          </span>
+        )}
+      </div>
 
       {/* Filtres */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 items-center">
         <input
           type="text" value={q} onChange={(e) => setQ(e.target.value)}
           placeholder="Rechercher par nom, email, ville, téléphone..."
@@ -74,12 +160,19 @@ export default function AdminExpertsPage() {
           <option value="active">Actifs</option>
           <option value="suspended">Suspendus</option>
           <option value="pending">Non vérifiés</option>
+          <option value="deleted">Supprimés</option>
         </select>
         <select value={category} onChange={(e) => setCategory(e.target.value)}
           className="border border-slate-300 rounded-lg px-3 py-2 text-sm">
           <option value="">Toutes les catégories</option>
           {Object.entries(CATEGORY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
         </select>
+        <button
+          className="ml-2 px-3 py-2 rounded-lg border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 text-xs font-medium"
+          onClick={charger}
+        >
+          Actualiser
+        </button>
       </div>
 
       <p className="text-sm text-slate-500">{experts.length} résultat{experts.length > 1 ? 's' : ''}</p>
@@ -94,12 +187,27 @@ export default function AdminExpertsPage() {
       ) : (
         <div className="space-y-3">
           {experts.map((e) => (
-            <div key={e.id} className="bg-white border border-slate-200 rounded-xl px-5 py-4 flex items-center justify-between gap-4">
+            <div
+              key={e.id}
+              className={`bg-white rounded-xl px-5 py-4 flex items-center justify-between gap-4 
+                ${isRecentSuppressionOrSuspension(e) ? 'border-2 border-yellow-400 shadow-[0_0_0_2px_rgba(251,191,36,0.15)]' : 'border border-slate-200'}`}
+            >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                   <p className="font-semibold text-slate-900 text-sm">{e.display_name}</p>
                   <span className="text-slate-400 text-xs">({e.first_name} {e.last_name})</span>
                   {badgeStatut(e)}
+                  {isRecentSuppressionOrSuspension(e) && (
+                    <>
+                      <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full font-medium">Nouveau</span>
+                      <button
+                        className="ml-2 text-xs border border-yellow-300 bg-yellow-50 text-yellow-800 px-2 py-0.5 rounded font-medium hover:bg-yellow-100"
+                        onClick={() => marquerVu(e.id)}
+                      >
+                        Marquer comme vu
+                      </button>
+                    </>
+                  )}
                 </div>
                 <p className="text-xs text-slate-500">{e.email} · {e.city}</p>
                 {e.suspension_reason && (

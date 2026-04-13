@@ -13,8 +13,8 @@ export default function CommentCaMarchePage() {
 
       <h1 className="text-3xl font-bold text-slate-900 mb-3">Comment ça marche ?</h1>
       <p className="text-slate-500 text-base mb-12">
-        Un avis professionnel vérifié en moins de 24h, pour 9 euros.
-        Remboursé automatiquement si personne ne répond.
+        Un avis professionnel vérifié en moins de 24h.
+        Remboursé automatiquement si aucun expert ne répond.
       </p>
 
       {/* Étapes */}
@@ -30,14 +30,14 @@ export default function CommentCaMarchePage() {
             {
               n: '2',
               titre: 'Payez en toute sécurité',
-              desc: 'Le paiement de 9 euros est traité de manière sécurisée. Votre argent est réservé, mais ne sera encaissé qu\'après réception d\'une réponse.',
+              desc: 'Le paiement est traité de manière sécurisée. Votre argent est réservé, mais ne sera encaissé qu\'après réception d\'une réponse.',
               detail: 'Remboursement automatique si aucun expert ne répond dans les 24 heures.',
             },
             {
               n: '3',
               titre: 'Un expert vérifié vous répond',
               desc: 'Un professionnel vérifié dans votre domaine analyse votre situation et vous apporte un avis clair et honnête, généralement sous quelques heures.',
-              detail: 'Tous nos experts ont fourni un justificatif de leur expertise.',
+              detail: 'Tous nos experts ont fourni un justificatif de leur expertise ou expérience professionnelle avant d\'être validés sur la plateforme.',
             },
             {
               n: '4',
@@ -64,20 +64,20 @@ export default function CommentCaMarchePage() {
       <section className="mb-14">
         <h2 className="text-xl font-semibold text-slate-900 mb-6">Nos garanties</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-green-50 border border-green-100 rounded-xl p-5 text-center">
-            <p className="text-2xl mb-2">✓</p>
-            <p className="font-semibold text-slate-800 text-sm">Remboursé si pas de réponse</p>
-            <p className="text-xs text-slate-500 mt-1">Automatiquement, sous 5 jours</p>
+          <div className="bg-green-100 dark:bg-[#134e3a] border border-green-200 dark:border-green-700 rounded-xl p-5 text-center">
+            <p className="text-2xl mb-2 text-green-700 dark:text-green-200">✓</p>
+            <p className="font-semibold text-slate-800 dark:text-white text-sm">Remboursé si pas de réponse</p>
+            <p className="text-xs text-slate-500 dark:text-green-100 mt-1">Automatiquement et sans action de votre part</p>
           </div>
-          <div className="bg-green-50 border border-green-100 rounded-xl p-5 text-center">
-            <p className="text-2xl mb-2">✓</p>
-            <p className="font-semibold text-slate-800 text-sm">Experts vérifiés</p>
-            <p className="text-xs text-slate-500 mt-1">Justificatif professionnel exigé</p>
+          <div className="bg-green-100 dark:bg-[#134e3a] border border-green-200 dark:border-green-700 rounded-xl p-5 text-center">
+            <p className="text-2xl mb-2 text-green-700 dark:text-green-200">✓</p>
+            <p className="font-semibold text-slate-800 dark:text-white text-sm">Experts vérifiés</p>
+            <p className="text-xs text-slate-500 dark:text-green-100 mt-1">Justificatif professionnel ou expérience professionnelle exigé</p>
           </div>
-          <div className="bg-green-50 border border-green-100 rounded-xl p-5 text-center">
-            <p className="text-2xl mb-2">✓</p>
-            <p className="font-semibold text-slate-800 text-sm">Paiement sécurisé</p>
-            <p className="text-xs text-slate-500 mt-1">Données bancaires protégées</p>
+          <div className="bg-green-100 dark:bg-[#134e3a] border border-green-200 dark:border-green-700 rounded-xl p-5 text-center">
+            <p className="text-2xl mb-2 text-green-700 dark:text-green-200">✓</p>
+            <p className="font-semibold text-slate-800 dark:text-white text-sm">Paiement sécurisé</p>
+            <p className="text-xs text-slate-500 dark:text-green-100 mt-1">Données bancaires protégées</p>
           </div>
         </div>
       </section>
@@ -88,8 +88,8 @@ export default function CommentCaMarchePage() {
         <div className="space-y-5">
           {[
             {
-              q: 'Que se passe-t-il si personne ne répond ?',
-              r: 'Si aucun expert ne répond dans les 24 heures (ou le lundi suivant si votre demande est soumise le vendredi), vous êtes automatiquement remboursé de 9 euros. Aucune démarche de votre part n\'est nécessaire.',
+              q: 'Que se passe-t-il si aucun expert ne répond ?',
+              r: 'Si aucun expert ne répond dans les 24 heures (ou le lundi suivant si votre demande est soumise le vendredi), vous êtes automatiquement remboursé. Aucune démarche de votre part n\'est nécessaire.',
             },
             {
               q: 'Est-ce une vraie consultation professionnelle ?',
@@ -97,7 +97,7 @@ export default function CommentCaMarchePage() {
             },
             {
               q: 'Comment sont vérifiés les experts ?',
-              r: 'Chaque expert doit fournir un justificatif de son expertise (diplôme, numéro BCE, carte professionnelle...). Notre équipe vérifie chaque dossier manuellement avant d\'activer le compte.',
+              r: 'Chaque expert doit fournir un justificatif de son expertise (diplôme, numéro BCE, carte professionnelle...) et signer la charte de l\'expert avant d\'être activé sur la plateforme. Notre équipe vérifie chaque dossier manuellement avant d\'activer le compte.',
             },
             {
               q: 'La réponse reçue ne me convient pas. Que faire ?',
@@ -105,7 +105,7 @@ export default function CommentCaMarchePage() {
             },
             {
               q: 'Puis-je contacter l\'expert directement ?',
-              r: 'Oui. Après avoir reçu une réponse, vous pouvez consulter le profil public de l\'expert. Si celui-ci a laissé ses coordonnées, vous pouvez le contacter directement pour aller plus loin.',
+              r: 'Oui. Après avoir reçu une réponse, vous pouvez consulter le profil public de l\'expert. Si celui-ci a laissé ses coordonnées, vous pouvez le contacter directement.',
             },
             {
               q: 'Mes informations sont-elles confidentielles ?',
@@ -126,7 +126,7 @@ export default function CommentCaMarchePage() {
           href="/nouvelle-demande"
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-8 py-3 rounded-xl transition-colors"
         >
-          Poser ma question - 9 euros
+          Poser ma question
         </Link>
         <p className="text-xs text-slate-400 mt-3">
           Remboursé automatiquement si aucun expert ne répond dans les 24h

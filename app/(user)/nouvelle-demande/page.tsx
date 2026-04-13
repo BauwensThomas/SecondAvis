@@ -41,6 +41,16 @@ const CATEGORIES = [
   { value: 'comptabilite', label: 'Comptabilité',          description: 'Déclaration INASTI, TVA indépendant, cotisations sociales...' },
 ]
 
+// Récupère les prix dynamiques depuis les variables d'environnement
+const CATEGORY_PRICES: Record<string, number> = {
+  mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 900,
+  immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 900,
+  travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 900,
+  assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 900,
+  travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 900,
+  comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 900,
+}
+
 const MIN_EXPERTS_PAR_CATEGORIE = 2
 
 const DESCRIPTION_PLACEHOLDER: Record<string, string> = {
@@ -54,10 +64,19 @@ const DESCRIPTION_PLACEHOLDER: Record<string, string> = {
 
 // ---- Composant formulaire de paiement Stripe ----
 
-function FormulaireStripe({ requestId }: { requestId: string }) {
+function FormulaireStripe({ requestId, category }: { requestId: string, category: string }) {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
+  // Récupère les prix dynamiques depuis les variables d'environnement
+  const CATEGORY_PRICES: Record<string, number> = {
+    mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 900,
+    immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 900,
+    travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 900,
+    assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 900,
+    travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 900,
+    comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 900,
+  }
   const [loading, setLoading] = useState(false)
   const [erreur, setErreur] = useState('')
   const [tempsRestant, setTempsRestant] = useState(5 * 60) // 5 minutes en secondes
@@ -144,9 +163,11 @@ function FormulaireStripe({ requestId }: { requestId: string }) {
       <Button
         onClick={handlePay}
         disabled={loading}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base py-6"
+        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-base py-6"
       >
-        {loading ? 'Paiement en cours...' : 'Payer 9,00 € et envoyer ma question'}
+        {loading
+          ? 'Paiement en cours...'
+          : `Payer ${(CATEGORY_PRICES[category] / 100).toFixed(2).replace('.', ',')} € et envoyer ma question`}
       </Button>
       <p className="text-xs text-center text-slate-400">
         Paiement sécurisé par Stripe. Remboursé automatiquement si aucun expert ne répond sous 24h.
@@ -260,25 +281,38 @@ export default function NouvelleDemandePage() {
   return (
     <main className="page-container">
 
-      {/* Barre de progression */}
-      <div className="flex items-center gap-2 mb-10">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-2 flex-1">
-            <div
-              className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                i <= etape
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-100 text-slate-400'
-              }`}
-            >
-              {i}
-            </div>
-            <span className={`text-sm hidden sm:block ${i <= etape ? 'text-slate-800' : 'text-slate-400'}`}>
-              {i === 1 ? 'Catégorie' : i === 2 ? 'Description' : 'Paiement'}
-            </span>
-            {i < 3 && <div className={`h-px flex-1 ${i < etape ? 'bg-blue-600' : 'bg-slate-200'}`} />}
-          </div>
-        ))}
+      {/* Stepper parfaitement aligné (identique à devenir-expert) */}
+      <div className="relative flex items-center justify-between mb-10 w-full px-2">
+        {/* Étape 1 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape === 1 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            etape > 1 ? 'bg-indigo-600 text-white' :
+            'bg-slate-200 text-slate-500'
+          }`}>1</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 1 ? 'text-indigo-700' : 'text-slate-400'}`}>Catégorie</span>
+        </div>
+        {/* Trait entre 1 et 2 */}
+        <div className="flex-1 h-0.5 bg-slate-200" />
+        {/* Étape 2 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape === 2 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            etape > 2 ? 'bg-indigo-600 text-white' :
+            'bg-slate-200 text-slate-500'
+          }`}>2</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 2 ? 'text-indigo-700' : 'text-slate-400'}`}>Description</span>
+        </div>
+        {/* Trait entre 2 et 3 */}
+        <div className="flex-1 h-0.5 bg-slate-200" />
+        {/* Étape 3 */}
+        <div className="flex flex-col items-center min-w-[80px]">
+          <div className={`w-8 h-8 rounded-full text-base font-bold flex items-center justify-center ${
+            etape === 3 ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
+            'bg-slate-200 text-slate-500'
+          }`}>3</div>
+          <span className={`text-xs font-medium mt-2 ${etape === 3 ? 'text-indigo-700' : 'text-slate-400'}`}>Paiement</span>
+        </div>
       </div>
 
       {/* ---- Étape 1 : Choisir une catégorie ---- */}
@@ -323,7 +357,9 @@ export default function NouvelleDemandePage() {
                       )}
                     </div>
                     {accessible ? (
-                      <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">9 €</span>
+                      <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">
+                        {(CATEGORY_PRICES[cat.value] / 100).toFixed(2).replace('.', ',')} €
+                      </span>
                     ) : (
                       <span className="text-slate-400 text-xs shrink-0 ml-4">Bientôt</span>
                     )}
@@ -342,7 +378,7 @@ export default function NouvelleDemandePage() {
             <h1 className="text-2xl font-bold text-slate-900 mb-1">Décrivez votre situation</h1>
             <p className="text-slate-500 text-sm mb-6">
               Plus vous donnez de détails, plus la réponse de l'expert sera précise.{' '}
-              <a href="/comment-poser-ma-question" className="text-blue-600 underline" target="_blank">
+              <a href="/comment-poser-ma-question" className="text-indigo-700 dark:text-green-400 font-semibold hover:text-indigo-900 dark:hover:text-green-300 focus:outline-none" target="_blank">
                 Voir nos conseils
               </a>
             </p>
@@ -434,7 +470,7 @@ export default function NouvelleDemandePage() {
             </p>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex flex-row gap-4 items-center justify-start mt-6">
             <Button
               type="button"
               variant="outline"
@@ -445,7 +481,7 @@ export default function NouvelleDemandePage() {
             <Button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg min-w-[220px] flex items-center justify-center text-base font-semibold"
             >
               {loading ? 'Préparation...' : 'Continuer vers le paiement'}
             </Button>
@@ -458,14 +494,14 @@ export default function NouvelleDemandePage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Paiement</h1>
           <p className="text-slate-500 text-sm mb-6">
-            9,00 € - Remboursé automatiquement si aucun expert ne répond sous 24h.
+            {(CATEGORY_PRICES[categorieSelectionnee] / 100).toFixed(2).replace('.', ',')} € - Remboursé automatiquement si aucun expert ne répond sous 24h.
           </p>
 
           <Elements
             stripe={stripePromise}
             options={{ clientSecret, locale: 'fr' }}
           >
-            <FormulaireStripe requestId={requestId} />
+            <FormulaireStripe requestId={requestId} category={categorieSelectionnee} />
           </Elements>
         </div>
       )}

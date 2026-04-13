@@ -24,10 +24,23 @@ export async function GET(request: NextRequest) {
       .select('id, display_name, first_name, last_name, email, phone, city, categories, average_rating, total_answers, total_signals, is_verified, is_active, is_blocked, suspension_reason, suspension_type, suspended_at, created_at')
       .order('created_at', { ascending: false })
 
-    // Filtre par statut
-    if (status === 'active')    query = query.eq('is_active', true).eq('is_verified', true)
-    if (status === 'suspended') query = query.eq('is_active', false)
-    if (status === 'pending')   query = query.eq('is_verified', false)
+
+    // Filtre par statut (corrigé)
+    if (status === 'active') {
+      query = query.eq('is_active', true).eq('is_verified', true)
+    }
+    if (status === 'suspended') {
+      // Suspendus manuellement ou auto, mais pas supprimés
+      query = query.eq('is_active', false).not('suspension_type', 'eq', 'self_delete')
+    }
+    if (status === 'pending') {
+      // Non vérifiés, pas supprimés
+      query = query.eq('is_verified', false).not('suspension_type', 'eq', 'self_delete')
+    }
+    if (status === 'deleted') {
+      // Supprimés volontairement
+      query = query.eq('suspension_type', 'self_delete')
+    }
 
     // Filtre par catégorie
     if (category) query = query.contains('categories', [category])

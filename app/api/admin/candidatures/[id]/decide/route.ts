@@ -3,6 +3,7 @@ import { isAdmin } from '@/lib/config'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { resend } from '@/lib/resend'
 import WelcomeExpert from '@/emails/WelcomeExpert'
+import { render } from '@react-email/render'
 import React from 'react'
 
 // POST /api/admin/candidatures/[id]/decide - approuver ou refuser une candidature expert
@@ -97,12 +98,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         from:    process.env.EMAIL_FROM!,
         to:      candidature.email,
         subject: 'Bienvenue chez Avisbox ! Votre compte expert est activé',
-        react:   React.createElement(WelcomeExpert, {
-          prenom:  candidature.first_name,
-          message: message
-            ? `${message}\n\nCliquez ici pour accéder à votre espace expert : ${loginUrl}`
-            : `Cliquez ici pour accéder à votre espace expert : ${loginUrl}`,
-        }),
+        html:    render(
+          React.createElement(WelcomeExpert, {
+            prenom: candidature.first_name,
+            message: message
+              ? `${message}\n\nCliquez ici pour accéder à votre espace expert : ${loginUrl}`
+              : `Cliquez ici pour accéder à votre espace expert : ${loginUrl}`,
+          })
+        ),
       })
 
     } else {

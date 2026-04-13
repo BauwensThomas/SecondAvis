@@ -32,7 +32,7 @@ export default function SignaturePad({ onChange }: SignaturePadProps) {
     padRef.current = new SignaturePadLib(canvas, {
       minWidth: 1,
       maxWidth: 3,
-      penColor: '#1e293b',
+      penColor: '#22c55e', // vert Tailwind 500
     })
 
     padRef.current.addEventListener('afterUpdateStroke', () => {

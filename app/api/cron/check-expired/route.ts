@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
       await supabaseAdmin
         .from('payouts')
-        .insert({ expert_id: answer.expert_id, amount_cents: expertPaymentCents, status: 'paid' })
+        .insert({ expert_id: answer.expert_id, amount_cents: expertPaymentCents, status: 'paid', answer_id: answer.id })
 
       // Notifie l'expert que son paiement a été effectué
       const montant = (expertPaymentCents / 100).toFixed(2).replace('.', ',') + ' €'

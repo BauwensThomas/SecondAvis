@@ -79,9 +79,9 @@ export default function AdminAvisPage() {
           <p className="text-xs text-slate-500 mb-1">Avis reçus</p>
           <p className="text-3xl font-bold text-green-600">{stats.recus}</p>
         </div>
-        <div className={`border rounded-xl p-5 text-center ${stats.en_attente > 0 ? 'bg-orange-50 border-orange-200' : 'bg-slate-50 border-slate-200'}`}>
+        <div className={`border rounded-xl p-5 text-center ${onglet === 'unrated' && avis.length > 0 ? 'bg-orange-50 border-orange-200' : 'bg-slate-50 border-slate-200'}`}>
           <p className="text-xs text-slate-500 mb-1">Avis en attente</p>
-          <p className={`text-3xl font-bold ${stats.en_attente > 0 ? 'text-orange-600' : 'text-slate-600'}`}>{stats.en_attente}</p>
+          <p className={`text-3xl font-bold ${onglet === 'unrated' && avis.length > 0 ? 'text-orange-600' : 'text-slate-600'}`}>{onglet === 'unrated' ? avis.length : 0}</p>
         </div>
       </div>
 
@@ -94,17 +94,18 @@ export default function AdminAvisPage() {
         />
       </div>
       <div className="flex gap-1 border-b border-slate-200">
-        {([
-          { key: 'unrated', label: `En attente (${stats.en_attente})` },
-          { key: 'rated',   label: `Reçus (${stats.recus})` },
-        ] as const).map((o) => (
-          <button key={o.key} onClick={() => setOnglet(o.key)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
-              onglet === o.key ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'
-            }`}>
-            {o.label}
-          </button>
-        ))}
+        <button
+          onClick={() => setOnglet('unrated')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${onglet === 'unrated' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+        >
+          En attente ({onglet === 'unrated' ? avis.length : 0})
+        </button>
+        <button
+          onClick={() => setOnglet('rated')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${onglet === 'rated' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+        >
+          Reçus ({stats.recus})
+        </button>
       </div>
 
       {/* Liste */}

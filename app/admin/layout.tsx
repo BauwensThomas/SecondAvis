@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+// Pas de mode nuit pour l'admin
 
 interface Badges {
   signalements: number
@@ -15,9 +16,11 @@ interface Badges {
 }
 
 // Layout de l'espace admin - navigation latérale + contenu principal
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [badges, setBadges] = useState<Badges>({ signalements: 0, candidatures: 0, rgpd: 0, avis: 0, demandes: 0, experts_suspendus: 0, experts_non_verifies: 0 })
+  const [nbNouveauxExperts, setNbNouveauxExperts] = useState(0)
 
   // Charge les compteurs pour les bulles de notification
   useEffect(() => {
@@ -41,11 +44,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     chargerBadges()
   }, [pathname]) // Recharge à chaque changement de page
 
+  // Synchronise la bulle "nouveaux experts" avec le localStorage à chaque navigation
+  useEffect(() => {
+    function syncNouveauxExperts() {
+      if (typeof window !== 'undefined') {
+        const n = Number(localStorage.getItem('nbNouveauxExperts') || '0')
+        setNbNouveauxExperts(n)
+      }
+    }
+    syncNouveauxExperts()
+    window.addEventListener('storage', syncNouveauxExperts)
+    return () => window.removeEventListener('storage', syncNouveauxExperts)
+  }, [])
+
+  // Ajout : resynchronise à chaque navigation
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const n = Number(localStorage.getItem('nbNouveauxExperts') || '0')
+      setNbNouveauxExperts(n)
+    }
+  }, [pathname])
+
   const NAV_ITEMS = [
     { href: '/admin',               label: 'Tableau de bord', icon: '▦', badge: 0 },
     { href: '/admin/signalements',  label: 'Signalements',    icon: '⚑', badge: badges.signalements },
     { href: '/admin/candidatures',  label: 'Candidatures',    icon: '✎', badge: badges.candidatures },
-    { href: '/admin/experts',       label: 'Experts',         icon: '★', badge: 0, badgeOrange: badges.experts_suspendus, badgeRouge: badges.experts_non_verifies },
+    { href: '/admin/experts',       label: 'Experts',         icon: '★', badge: nbNouveauxExperts, badgeOrange: badges.experts_suspendus, badgeRouge: badges.experts_non_verifies },
     { href: '/admin/utilisateurs',  label: 'Utilisateurs',    icon: '♟', badge: 0 },
     { href: '/admin/demandes',      label: 'Demandes',        icon: '✉', badge: badges.demandes },
     { href: '/admin/avis',          label: 'Avis clients',    icon: '★', badge: badges.avis },

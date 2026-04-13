@@ -21,7 +21,10 @@ export default function PolitiqueConfidentialitePage() {
           <p>
             Le responsable du traitement des données personnelles collectées sur {appName} est
             l'exploitant de la plateforme, joignable à l'adresse :{' '}
-            <a href={`mailto:${emailContact}`} className="text-indigo-600 hover:underline">
+            <a
+              href={`mailto:${emailContact}`}
+              className="text-indigo-600 dark:text-green-400 hover:text-indigo-800 dark:hover:text-green-200 transition-colors"
+            >
               {emailContact}
             </a>
           </p>
@@ -104,16 +107,15 @@ export default function PolitiqueConfidentialitePage() {
             <li>Toutes les communications sont chiffrées (HTTPS)</li>
             <li>Les données sont chiffrées au repos sur nos serveurs d'hébergement</li>
             <li>Les mots de passe ne sont jamais stockés en clair</li>
-            <li>Les données de carte bancaire ne transitent jamais par nos serveurs - elles sont traitées directement par notre prestataire de paiement certifié</li>
+            <li>Les données de carte bancaire ne transitent jamais par nos serveurs. Elles sont traitées directement par notre prestataire de paiement certifié</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-slate-900 mb-3">8. Autorité de contrôle</h2>
           <p>
-            Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une plainte auprès
-            de l'Autorité de protection des données (APD) belge :{' '}
-            <strong>contact@apd-gba.be</strong> - rue de la Presse 35, 1000 Bruxelles.
+              Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une plainte auprès de l’Autorité de protection des données (APD) :{' '}
+              <strong>contact@apd-gba.be</strong> - Rue de la Presse 35, 1000 Bruxelles.
           </p>
         </section>
 

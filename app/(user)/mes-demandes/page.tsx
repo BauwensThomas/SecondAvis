@@ -68,7 +68,7 @@ export default function MesDemandesPage() {
     <main className="page-container">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-slate-900">Mes demandes</h1>
-        <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
+        <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
           <Link href="/nouvelle-demande">Nouvelle demande</Link>
         </Button>
       </div>
@@ -80,7 +80,7 @@ export default function MesDemandesPage() {
       {demandes.length === 0 && !erreur && (
         <div className="text-center py-20 text-slate-500">
           <p className="mb-4">Vous n'avez pas encore de demande.</p>
-          <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
             <Link href="/nouvelle-demande">Poser ma première question</Link>
           </Button>
         </div>
