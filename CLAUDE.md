@@ -2920,7 +2920,21 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
   [ ] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
       Raison : le projet Supabase actuel est un projet de test, a migrer vers un projet
       de production avec les bonnes configurations avant lancement public.
-      Etapes : export donnees, nouveau projet, import schema + donnees, mettre a jour .env
+      Nouveau compte Supabase : contact@avisbox.be
+      Etapes : 1. Creer un nouveau projet Supabase sous le compte contact@avisbox.be
+               2. Executer tout le schema SQL (Section 8 + Section 16)
+               3. Exporter les donnees de test si necessaire
+               4. Mettre a jour les variables .env (NEXT_PUBLIC_SUPABASE_URL, ANON_KEY, SERVICE_ROLE_KEY)
+               5. Mettre a jour les variables Vercel
+               6. Reconfigurer Supabase Site URL et Redirect URLs
+               7. Reconfigurer le SMTP Supabase via Resend
+  [ ] Migrer Stripe vers le compte de production (contact@avisbox.be)
+      Raison : le compte Stripe actuel est peut-etre lie a un email personnel, a transferer
+      vers le compte pro de la plateforme avant lancement public.
+      Etapes : 1. Creer ou transferer le compte Stripe sous contact@avisbox.be
+               2. Passer les cles en sk_live_ / pk_live_ pour la production
+               3. Reconfigurer le webhook Stripe avec la nouvelle URL Vercel
+               4. Mettre a jour STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
   [ ] Verifier que le cron job fonctionne sur Vercel en production
   [ ] Content Security Policy (CSP) strict - a faire apres mise en production
 
