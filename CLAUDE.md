@@ -2860,8 +2860,9 @@ Semaine 9 : PAGES LEGALES ET SEO
   [x] Charte expert : page /expert/charte + route API + signature avec IP
   [x] Suppression de compte client et expert (anonymisation RGPD)
   [x] Widget d assistance IA pour les visiteurs
-  [ ] Image Open Graph 1200x630px
-  [ ] Plausible Analytics (quand domaine disponible)
+  [x] Image Open Graph : generee dynamiquement via app/opengraph-image.tsx (Next.js ImageResponse)
+      Caracteres □ corriges, cercles verts en CSS, texte avec accents corriges
+  [ ] Plausible Analytics (quand domaine configure sur Vercel)
 
 Semaine 10 : ADMIN
   [x] Toutes les pages admin : /admin, /admin/experts, /admin/utilisateurs, /admin/signalements
