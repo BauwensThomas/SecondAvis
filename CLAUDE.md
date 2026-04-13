@@ -2908,20 +2908,36 @@ Semaine 11 : SECURITE
   [ ] Content Security Policy (CSP) strict - a faire apres mise en production
 
 Semaine 12 : DEPLOIEMENT ET MONITORING
-  [ ] Creer compte Vercel, connecter le repo GitHub
-  [ ] Configurer toutes les variables .env sur Vercel (dont SENTRY_AUTH_TOKEN)
+  [x] Creer compte Vercel, connecter le repo GitHub
+  [x] Configurer toutes les variables .env sur Vercel (dont SENTRY_AUTH_TOKEN)
+  [x] Deploiement Vercel fonctionnel sur avisbox.vercel.app
+  [x] Supabase Site URL mis a jour : https://avisbox.vercel.app
+  [x] Supabase Redirect URLs configures pour les confirmations email et reset password
+  [x] Supabase SMTP configure via Resend (smtp.resend.com:465) pour les emails transactionnels
+  [x] Domaine avisbox.be achete sur LWS et verifie dans Resend
   [ ] Passer STRIPE_SECRET_KEY en sk_live_ pour la production
-  [ ] Tester le deploiement complet en production
-  [ ] Verifier que le cron job fonctionne sur Vercel
-  [ ] Configurer le domaine (1 ligne dans .env)
+  [ ] Configurer le domaine personnalise sur Vercel (avisbox.be → avisbox.vercel.app)
+  [ ] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
+      Raison : le projet Supabase actuel est un projet de test, a migrer vers un projet
+      de production avec les bonnes configurations avant lancement public.
+      Etapes : export donnees, nouveau projet, import schema + donnees, mettre a jour .env
+  [ ] Verifier que le cron job fonctionne sur Vercel en production
+  [ ] Content Security Policy (CSP) strict - a faire apres mise en production
 
 En cours / Prevu :
-  [ ] Mode nuit (dark mode) : theme bleu fonce inspire de l image Open Graph
+  [x] Mode nuit (dark mode) : theme bleu fonce inspire de l image Open Graph
       Choix utilisateur : Jour / Nuit / Auto (selon theme OS)
-      Bouton en haut a droite dans le Header
-      Theme jour : bleu et blanc (actuel)
-      Theme nuit : bleu fonce (#0f172a) et bleu (#3b82f6) comme l OG image
+      Bouton en haut a droite dans le Header (apres les liens de navigation)
+      Theme jour : bleu et blanc
+      Theme nuit : bleu fonce via variables CSS oklch, overrides globaux dans globals.css
+      Composants : components/common/ThemeProvider.tsx + components/common/ThemeToggle.tsx
+      next-themes installe, suppressHydrationWarning sur html dans app/layout.tsx
+  [x] Image Open Graph : caracteres □ corriges (remplaces par des cercles verts en CSS)
+  [x] Sentry installe et configure (npm install @sentry/nextjs + wizard)
+      DSN : https://95af3d5a0a5bbef1f88dcb677f42e19d@o4511196715548672.ingest.de.sentry.io/4511196741238864
+      Organisation Sentry : avisbox
   [ ] Test cycle complet : inscription → demande → reponse → signalement → arbitrage
+  [ ] Plausible Analytics (quand domaine configure sur Vercel)
 
 
 
