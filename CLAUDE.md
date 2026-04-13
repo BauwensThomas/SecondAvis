@@ -2918,19 +2918,78 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
   [x] Supabase Redirect URLs configures pour les confirmations email et reset password
   [x] Supabase SMTP configure via Resend (smtp.resend.com:465) pour les emails transactionnels
   [x] Domaine avisbox.be achete sur LWS et verifie dans Resend
-  [ ] Passer STRIPE_SECRET_KEY en sk_live_ pour la production
   [ ] Configurer le domaine personnalise sur Vercel (avisbox.be → avisbox.vercel.app)
   [ ] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
       Raison : le projet Supabase actuel est un projet de test, a migrer vers un projet
       de production avec les bonnes configurations avant lancement public.
       Nouveau compte Supabase : contact@avisbox.be
-      Etapes : 1. Creer un nouveau projet Supabase sous le compte contact@avisbox.be
-               2. Executer tout le schema SQL (Section 8 + Section 16)
-               3. Exporter les donnees de test si necessaire
-               4. Mettre a jour les variables .env (NEXT_PUBLIC_SUPABASE_URL, ANON_KEY, SERVICE_ROLE_KEY)
-               5. Mettre a jour les variables Vercel
-               6. Reconfigurer Supabase Site URL et Redirect URLs
-               7. Reconfigurer le SMTP Supabase via Resend
+
+      ETAPE 1 - Creer le nouveau projet
+        Creer un compte Supabase avec contact@avisbox.be
+        Creer un nouveau projet (choisir region Europe West pour la Belgique)
+        Sauvegarder immediatement : URL du projet, anon key, service_role key
+
+      ETAPE 2 - Recreer les 13 tables
+        Executer tout le SQL de la Section 8 :
+          users, experts, requests, answers, ratings, suspension_logs, payouts,
+          expert_applications, expert_charters, gdpr_requests, consents,
+          admin_emails, audit_logs
+        Executer tout le SQL de la Section 16 :
+          colonnes additionnelles de requests (payment_confirmed, refund_reason, locked_by, locked_at)
+          table login_attempts + index
+          fonction PostgreSQL refund_expired_request()
+
+      ETAPE 3 - Recreer le Row Level Security (RLS) - CRITIQUE
+        Executer tout le bloc RLS de la Section 16 :
+          ALTER TABLE ENABLE ROW LEVEL SECURITY sur chaque table
+          Toutes les policies CREATE POLICY (users, experts, requests, answers,
+          ratings, payouts, gdpr_requests, expert_applications, expert_charters,
+          consents, suspension_logs, audit_logs, admin_emails, login_attempts)
+        Tester apres activation que les routes API fonctionnent toujours
+        IMPORTANT : sans RLS, n importe qui peut lire toutes les donnees avec la cle anon
+
+      ETAPE 4 - Recreer le bucket Storage
+        Storage → New bucket → nom : documents
+        Acces prive (pas public), taille max 10MB
+        Reconfigurer les policies du bucket pour autoriser les uploads des utilisateurs connectes
+
+      ETAPE 5 - Configurer l authentification
+        Authentication → Settings → activer Email confirmations
+        Authentication → Settings → activer Secure email change
+        Site URL : https://avisbox.vercel.app (ou https://avisbox.be apres domaine configure)
+        Redirect URLs : ajouter https://avisbox.vercel.app/**, https://avisbox.be/**
+        Mettre a jour les templates email (nom Avisbox, pas SecondAvis)
+
+      ETAPE 6 - Reconfigurer le SMTP via Resend
+        Authentication → Settings → SMTP
+        Host : smtp.resend.com  Port : 465  SSL : oui
+        Username : resend  Password : cle API Resend (re_...)
+        Sender email : contact@avisbox.be  Sender name : Avisbox
+        Tester en envoyant un email de confirmation
+
+      ETAPE 7 - Migrer les donnees existantes si necessaire
+        Exporter depuis l ancien projet : Table Editor → Export CSV par table
+        Reimporter dans le nouveau projet
+        ATTENTION : les UUIDs Auth changent lors d une migration
+          les foreign keys user_id dans toutes les tables doivent correspondre
+          aux nouveaux UUIDs du nouveau projet Auth
+
+      ETAPE 8 - Mettre a jour les cles
+        Dans .env.local :
+          NEXT_PUBLIC_SUPABASE_URL=https://[nouveau-projet].supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=[nouvelle anon key]
+          SUPABASE_SERVICE_ROLE_KEY=[nouvelle service_role key]
+        Dans Vercel → Settings → Environment Variables : memes 3 variables
+        Verifier que SUPABASE_SERVICE_ROLE_KEY n a JAMAIS le prefixe NEXT_PUBLIC_
+
+      ETAPE 9 - Tests complets apres migration
+        Inscription + confirmation email
+        Connexion + deconnexion
+        Upload d un fichier (bucket Storage)
+        Creation d une demande (table requests)
+        Acces espace admin
+        Emails recus via Resend SMTP
+        RLS : verifier qu un utilisateur non connecte ne peut pas lire les donnees
   [ ] Migrer Stripe vers le compte de production (contact@avisbox.be)
       Raison : le compte Stripe actuel est peut-etre lie a un email personnel, a transferer
       vers le compte pro de la plateforme avant lancement public.
@@ -2938,6 +2997,7 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
                2. Passer les cles en sk_live_ / pk_live_ pour la production
                3. Reconfigurer le webhook Stripe avec la nouvelle URL Vercel
                4. Mettre a jour STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
+    [ ] Passer STRIPE_SECRET_KEY en sk_live_ pour la production
   [ ] Verifier que le cron job fonctionne sur Vercel en production
 
 En cours / Prevu :
