@@ -24,6 +24,7 @@ interface Expert {
   is_blocked: boolean
   suspension_reason: string | null
   suspension_type: string | null
+  suspended_at: string | null
   charte_signee: boolean
   created_at: string
 }
@@ -49,7 +50,7 @@ export default function AdminExpertsPage() {
         // Cas 1 : nouvel expert à valider (non vérifié, non supprimé)
         if (!vus.includes(e.id) && e.is_verified === false) return true
         // Cas 2 : suspendu (manuel/auto)
-        if (!vus.includes(e.id) && ['manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type)) return true
+        if (!vus.includes(e.id) && ['manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type ?? '')) return true
         return false
       })
       setNbNouveaux(nouveaux.length)
@@ -93,7 +94,7 @@ export default function AdminExpertsPage() {
           const now = new Date()
           const diffH = (now.getTime() - t.getTime()) / (1000 * 60 * 60)
           return (
-            ['self_delete', 'manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type)
+            ['self_delete', 'manual', 'auto_rating', 'auto_contest'].includes(e.suspension_type ?? '')
             && diffH < 48
             && !vus2.includes(e.id)
           )

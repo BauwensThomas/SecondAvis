@@ -27,7 +27,7 @@ export default function ThemeToggle() {
   // Sauvegarde la position du scroll avant de changer le thème
   function handleSetTheme(next: string) {
     if (typeof window !== 'undefined') {
-      window.__themeScrollY = window.scrollY
+      (window as any).__themeScrollY = window.scrollY
     }
     setTheme(next)
   }

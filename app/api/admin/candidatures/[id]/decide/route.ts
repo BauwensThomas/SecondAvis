@@ -98,7 +98,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         from:    process.env.EMAIL_FROM!,
         to:      candidature.email,
         subject: 'Bienvenue chez Avisbox ! Votre compte expert est activé',
-        html:    render(
+        html:    await render(
           React.createElement(WelcomeExpert, {
             prenom: candidature.first_name,
             message: message
