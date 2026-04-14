@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe'
-import { CATEGORY_PRICES } from '@/lib/config'
+import { CATEGORY_PRICES, isAdmin } from '@/lib/config'
 import { z } from 'zod'
 
 const createRequestSchema = z.object({
@@ -36,19 +36,21 @@ export async function POST(request: NextRequest) {
     const priceCents = CATEGORY_PRICES[data.category] || 900
     const supabaseAdmin = createAdminClient()
 
-    // Vérifie qu'il y a au moins 2 experts actifs et vérifiés dans cette catégorie
-    const { count: nbExperts } = await supabaseAdmin
-      .from('experts')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_verified', true)
-      .eq('is_active', true)
-      .contains('categories', [data.category])
+    // Vérifie qu'il y a au moins 2 experts actifs - sauf pour l'admin (tests)
+    if (!isAdmin(user.email)) {
+      const { count: nbExperts } = await supabaseAdmin
+        .from('experts')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_verified', true)
+        .eq('is_active', true)
+        .contains('categories', [data.category])
 
-    if ((nbExperts ?? 0) < 2) {
-      return NextResponse.json(
-        { error: 'Cette catégorie n\'est pas encore disponible. Pas assez d\'experts actifs.' },
-        { status: 503 }
-      )
+      if ((nbExperts ?? 0) < 2) {
+        return NextResponse.json(
+          { error: 'Cette catégorie n\'est pas encore disponible. Pas assez d\'experts actifs.' },
+          { status: 503 }
+        )
+      }
     }
 
     // Récupère le stripe_customer_id du client pour lier le paiement à son profil Stripe
