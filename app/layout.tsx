@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
+import { Analytics } from "@vercel/analytics/next"
 import CookieBanner from "@/components/common/CookieBanner"
 import AssistantWidget from "@/components/common/AssistantWidget"
 import Header from "@/components/layout/Header"
@@ -52,6 +53,7 @@ export default function RootLayout({
           <Footer />
           <CookieBanner />
           <AssistantWidget />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

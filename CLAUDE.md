@@ -796,9 +796,8 @@ SENTRY_DSN=
 # Sentry envoie un email immediat quand une erreur se produit en production
 
 # --- ANALYTICS ---
-NEXT_PUBLIC_PLAUSIBLE_DOMAIN=
-# Laisser vide en local. Remplir avec ton domaine apres creation compte Plausible
-# Alternative gratuite et RGPD-compatible a Google Analytics
+# Analytics : Vercel Analytics (installe via @vercel/analytics, composant dans app/layout.tsx)
+# Pas de variable d environnement necessaire - fonctionne automatiquement sur Vercel
 
 # --- VERSIONS DOCUMENTS LEGAUX ---
 # Incrementer quand tu modifies une CGU ou politique de confidentialite
@@ -2123,7 +2122,7 @@ Bandeau cookies :
   Si refus : aucun cookie analytique n est charge
   Le choix est sauvegarde dans localStorage (pas de cookie, ironie)
   Composant : components/common/CookieBanner.tsx
-  Variable d etat dans .env : NEXT_PUBLIC_PLAUSIBLE_DOMAIN (vide = analytics desactives)
+  Analytics : Vercel Analytics via composant dans app/layout.tsx (sans cookies, sans consentement)
 
 
 --- OBLIGATOIRE 2 : VERIFICATION EMAIL ---
@@ -2349,21 +2348,19 @@ Image Open Graph (app/opengraph-image.png) :
 
 --- RECOMMANDE 12 : ANALYTICS ---
 
-Service recommande : Plausible Analytics
-  Pourquoi : 100% RGPD, pas de cookies, pas de consentement necessaire, gratuit 30 jours
-  Alternative : Google Analytics (necessite bandeau cookies)
-
-Installation :
-  npm install next-plausible
-
-Dans .env : NEXT_PUBLIC_PLAUSIBLE_DOMAIN=Avisbox.be
-  Si vide ou en local → analytics desactives automatiquement
+Service utilise : Vercel Analytics
+  Pourquoi : integre a Vercel, sans cookies, sans consentement necessaire, gratuit jusqu a 2500 evenements/mois
+  Installation : npm i @vercel/analytics
+  Composant ajoute dans app/layout.tsx : import { Analytics } from "@vercel/analytics/next"
+  Pas de variable d environnement necessaire
 
 Ce que ca mesure :
   - Nombre de visiteurs uniques par jour
   - Pages les plus visitees
-  - Taux de conversion (visiteurs → inscription → premiere demande)
+  - Pays, appareils, navigateurs
   - D ou viennent les visiteurs (Google, direct, reseaux sociaux)
+
+Dashboard : Vercel → ton projet → onglet Analytics
 
 
 --- RECOMMANDE 13 : PAGE "A PROPOS" ---
@@ -2862,7 +2859,7 @@ Semaine 9 : PAGES LEGALES ET SEO
   [x] Widget d assistance IA pour les visiteurs
   [x] Image Open Graph : generee dynamiquement via app/opengraph-image.tsx (Next.js ImageResponse)
       Caracteres □ corriges, cercles verts en CSS, texte avec accents corriges
-  [ ] Plausible Analytics (quand domaine configure sur Vercel)
+  [x] Vercel Analytics (installe via @vercel/analytics, composant dans app/layout.tsx)
 
 Semaine 10 : ADMIN
   [x] Toutes les pages admin : /admin, /admin/experts, /admin/utilisateurs, /admin/signalements
@@ -2918,7 +2915,10 @@ Semaine 12 : DEPLOIEMENT ET MONITORING
   [x] Supabase Redirect URLs configures pour les confirmations email et reset password
   [x] Supabase SMTP configure via Resend (smtp.resend.com:465) pour les emails transactionnels
   [x] Domaine avisbox.be achete sur LWS et verifie dans Resend
-  [ ] Configurer le domaine personnalise sur Vercel (avisbox.be → avisbox.vercel.app)
+  [x] Configurer le domaine personnalise sur Vercel (avisbox.be → avisbox.vercel.app)
+      DNS configure chez LWS, domaine actif sur https://www.avisbox.be
+      Supabase Site URL et Redirect URLs mis a jour (www.avisbox.be + avisbox.be + vercel)
+      NEXT_PUBLIC_APP_URL=https://www.avisbox.be sur Vercel
   [x] Migrer Supabase vers un nouveau projet propre (actuellement sur projet de test)
       Raison : le projet Supabase actuel est un projet de test, a migrer vers un projet
       de production avec les bonnes configurations avant lancement public.
@@ -3009,7 +3009,7 @@ En cours / Prevu :
       DSN : https://95af3d5a0a5bbef1f88dcb677f42e19d@o4511196715548672.ingest.de.sentry.io/4511196741238864
       Organisation Sentry : avisbox
   [ ] Test cycle complet : inscription → demande → reponse → signalement → arbitrage
-  [ ] Plausible Analytics (quand domaine configure sur Vercel)
+  [x] Vercel Analytics - installe via @vercel/analytics, composant dans app/layout.tsx
 
 
 
