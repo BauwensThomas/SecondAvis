@@ -2899,7 +2899,7 @@ Semaine 11 : SECURITE
   [x] Verification email obligatoire avant acces aux pages protegees (proxy.ts)
   [x] Protection CRON_SECRET sur le cron job
   [x] Validation fichiers uploades cote serveur (taille + type MIME)
-  [ ] Stripe webhook verifie avec STRIPE_WEBHOOK_SECRET
+  [x] Stripe webhook verifie avec STRIPE_WEBHOOK_SECRET
   [x] Protection double soumission expert (verrou DB locked_by / locked_at)
   [x] Headers HTTP de securite dans next.config.ts (X-Frame-Options, HSTS, CSP partiel...)
   [x] Row Level Security (RLS) active sur toutes les tables (voir Section 16 : RLS)

@@ -190,12 +190,18 @@ export default function NouvelleDemandePage() {
   const [fichiers, setFichiers] = useState<File[]>([])
   const [erreurFichier, setErreurFichier] = useState('')
   const [expertsParCategorie, setExpertsParCategorie] = useState<Record<string, number>>({})
+  const [estAdmin, setEstAdmin] = useState(false)
 
-  // Charge le nombre d'experts actifs par catégorie au chargement
+  // Charge le nombre d'experts actifs par catégorie et le rôle de l'utilisateur
   useEffect(() => {
     fetch('/api/stats/categories')
       .then((r) => r.json())
       .then((data) => setExpertsParCategorie(data.categories ?? {}))
+      .catch(() => {})
+
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((data) => setEstAdmin(data.role === 'admin'))
       .catch(() => {})
   }, [])
 
@@ -326,7 +332,7 @@ export default function NouvelleDemandePage() {
           <div className="space-y-3">
             {CATEGORIES.map((cat) => {
               const nbExperts = expertsParCategorie[cat.value] ?? 0
-              const accessible = nbExperts >= MIN_EXPERTS_PAR_CATEGORIE
+              const accessible = estAdmin || nbExperts >= MIN_EXPERTS_PAR_CATEGORIE
 
               return (
                 <button
