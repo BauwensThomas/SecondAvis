@@ -3,11 +3,7 @@ import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resend } from '@/lib/resend'
 import NewRequest from '@/emails/NewRequest'
-import { render } from '@react-email/render'
 import React from 'react'
-
-// Désactive le parsing automatique du body - Stripe a besoin du raw body pour vérifier la signature
-export const config = { api: { bodyParser: false } }
 
 const CATEGORY_LABELS: Record<string, string> = {
   mecanique: 'Mécanique', immo: 'Immobilier', travaux: 'Travaux',
