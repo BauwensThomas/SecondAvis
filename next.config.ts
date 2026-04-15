@@ -88,7 +88,7 @@ export default withSentryConfig(nextConfig, {
 
   org: "avisbox-kj",
 
-  project: "javascript-nextjs-xj",
+  project: "avisbox-nextjs",
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
