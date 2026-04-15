@@ -1,11 +1,14 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from "next";
 
+// En dev, Next.js Fast Refresh (webpack) a besoin de 'unsafe-eval' pour le hot reload
+// En production, on supprime 'unsafe-eval' pour respecter la securite maximale
+const isDev = process.env.NODE_ENV === 'development'
+
 // Politique de sécurité du contenu (CSP) - liste blanche des ressources autorisées
-// Modifié en un seul string pour éviter les espaces superflus
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' js.stripe.com *.sentry.io;
+  script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} js.stripe.com *.sentry.io va.vercel-scripts.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: *.supabase.co;
   font-src 'self' data:;

@@ -18,14 +18,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${appUrl}/mentions-legales`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
   ]
 
-  // Profils publics des experts vérifiés et actifs
+  // Profils publics des experts vérifiés et actifs + articles de blog publiés
   try {
     const supabase = createAdminClient()
-    const { data: experts } = await supabase
-      .from('experts')
-      .select('id, created_at')
-      .eq('is_verified', true)
-      .eq('is_active', true)
+
+    const [{ data: experts }, { data: posts }] = await Promise.all([
+      supabase.from('experts').select('id, created_at').eq('is_verified', true).eq('is_active', true),
+      supabase.from('posts').select('slug, created_at').eq('publie', true).order('created_at', { ascending: false }),
+    ])
 
     const expertPages: MetadataRoute.Sitemap = (experts ?? []).map((expert) => ({
       url: `${appUrl}/experts/${expert.id}`,
@@ -34,7 +34,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }))
 
-    return [...staticPages, ...expertPages]
+    const blogPages: MetadataRoute.Sitemap = [
+      { url: `${appUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+      ...(posts ?? []).map((post) => ({
+        url: `${appUrl}/blog/${post.slug}`,
+        lastModified: new Date(post.created_at),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      })),
+    ]
+
+    return [...staticPages, ...blogPages, ...expertPages]
   } catch {
     return staticPages
   }

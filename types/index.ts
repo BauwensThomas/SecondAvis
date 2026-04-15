@@ -178,3 +178,17 @@ export const REQUEST_STATUS_LABELS: Record<Request['status'], string> = {
   refunded: 'Rembourse',
   closed: 'Termine',
 }
+
+// ---- Article de blog ----
+
+export interface Post {
+  id: string
+  titre: string
+  contenu: string | null
+  slug: string
+  image_url: string | null
+  image_ia: boolean
+  extrait: string | null
+  publie: boolean
+  created_at: string
+}

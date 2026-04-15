@@ -75,6 +75,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/avis',          label: 'Avis clients',    icon: '★', badge: badges.avis },
     { href: '/admin/finances',      label: 'Finances',        icon: '€', badge: 0 },
     { href: '/admin/paiements',     label: 'Paiements',       icon: '↕', badge: 0 },
+    { href: '/admin/blog',           label: 'Blog',            icon: '✎', badge: 0 },
     { href: '/admin/marketing',     label: 'Marketing',       icon: '✉', badge: 0 },
     { href: '/admin/rgpd',          label: 'RGPD',            icon: '⚙', badge: badges.rgpd },
     { href: '/admin/audit',         label: 'Audit',           icon: '≡', badge: 0 },

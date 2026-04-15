@@ -66,11 +66,16 @@ export default function Header() {
             <div className="w-24 h-9 bg-slate-100 rounded-md animate-pulse" />
           )}
 
-          {/* Lien experts - visible par tous */}
+          {/* Liens publics - visibles par tous */}
           {!loading && (
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/experts">Nos experts</Link>
-            </Button>
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/blog">Blog</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/experts">Nos experts</Link>
+              </Button>
+            </>
           )}
 
           {/* Utilisateur non connecté */}
