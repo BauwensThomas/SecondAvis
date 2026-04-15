@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Analytics } from "@vercel/analytics/next"
+import Script from "next/script"
 import CookieBanner from "@/components/common/CookieBanner"
 import AssistantWidget from "@/components/common/AssistantWidget"
 import Header from "@/components/layout/Header"
@@ -55,6 +56,15 @@ export default function RootLayout({
           <AssistantWidget />
           <Analytics />
         </ThemeProvider>
+        {/* Script Google AdSense - chargé après l'interactivité pour ne pas bloquer le rendu */}
+        {process.env.NEXT_PUBLIC_ADSENSE_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   )

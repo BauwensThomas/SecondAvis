@@ -8,12 +8,12 @@ const isDev = process.env.NODE_ENV === 'development'
 // Politique de sécurité du contenu (CSP) - liste blanche des ressources autorisées
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} js.stripe.com *.sentry.io va.vercel-scripts.com;
+  script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} js.stripe.com *.sentry.io va.vercel-scripts.com pagead2.googlesyndication.com *.googlesyndication.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: *.supabase.co;
+  img-src 'self' data: blob: *.supabase.co *.googlesyndication.com *.doubleclick.net;
   font-src 'self' data:;
-  connect-src 'self' *.supabase.co wss://*.supabase.co api.stripe.com *.sentry.io *.ingest.de.sentry.io;
-  frame-src js.stripe.com *.stripe.com;
+  connect-src 'self' *.supabase.co wss://*.supabase.co api.stripe.com *.sentry.io *.ingest.de.sentry.io *.googlesyndication.com *.doubleclick.net;
+  frame-src js.stripe.com *.stripe.com googleads.g.doubleclick.net tpc.googlesyndication.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
