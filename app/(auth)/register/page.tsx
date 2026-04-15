@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
 // Schéma de validation du formulaire d'inscription
@@ -26,11 +26,43 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-// Page d'inscription - crée un compte client
-export default function RegisterPage() {
+// Page affichée quand les inscriptions sont fermées (beta)
+function PageBientotDisponible() {
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md text-center">
+        <Link href="/" className="text-2xl font-bold text-slate-900">
+          Avisbox
+        </Link>
+        <div className="mt-8 bg-white rounded-xl border border-slate-200 p-8 shadow-sm">
+          <div className="text-4xl mb-4">🔒</div>
+          <h1 className="text-xl font-semibold text-slate-800 mb-3">
+            Inscriptions bientôt disponibles
+          </h1>
+          <p className="text-slate-500 text-sm mb-6">
+            Avisbox est en cours de lancement. Les inscriptions ouvriront très prochainement.
+          </p>
+          <Link href="/" className="text-blue-600 hover:underline text-sm">
+            Retour à l'accueil
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Formulaire d'inscription - composant interne pour useSearchParams
+function FormulaireInscription() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [serverError, setServerError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  // Vérifie si les inscriptions sont ouvertes ou si le code beta est valide
+  const inscriptionsOuvertes = process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true'
+  const codeBeta = searchParams.get('beta')
+  const codeBetaValide = codeBeta === process.env.NEXT_PUBLIC_BETA_CODE
+  const accesAutorise = inscriptionsOuvertes || codeBetaValide
 
   const {
     register,
@@ -66,6 +98,11 @@ export default function RegisterPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Inscriptions fermées et pas de code beta valide
+  if (!accesAutorise) {
+    return <PageBientotDisponible />
   }
 
   return (
@@ -230,5 +267,14 @@ export default function RegisterPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+// Page d'inscription - enveloppée dans Suspense pour useSearchParams
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+      <FormulaireInscription />
+    </Suspense>
   )
 }
