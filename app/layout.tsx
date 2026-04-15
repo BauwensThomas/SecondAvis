@@ -34,6 +34,10 @@ export const metadata: Metadata = {
     locale: "fr_BE",
     type: "website",
   },
+  // Verification Google AdSense via balise meta
+  other: {
+    "google-adsense-account": process.env.NEXT_PUBLIC_ADSENSE_ID ?? "",
+  },
 }
 
 export default function RootLayout({
