@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import AdSense from '@/components/common/AdSense'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -20,7 +21,12 @@ export default async function BlogPage() {
   return (
     <main className="page-container py-12">
       <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Blog</h1>
-      <p className="text-slate-500 dark:text-slate-400 mb-10">Conseils pratiques et guides pour mieux comprendre vos droits.</p>
+      <p className="text-slate-500 dark:text-slate-400 mb-6">Conseils pratiques et guides pour mieux comprendre vos droits.</p>
+
+      {/* Publicité AdSense - sous le titre de la liste */}
+      <div className="mb-8">
+        <AdSense slot="1299322183" />
+      </div>
 
       {!posts || posts.length === 0 ? (
         <p className="text-slate-400 text-center py-20">Aucun article publié pour l'instant. Revenez bientôt.</p>

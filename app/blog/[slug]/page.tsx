@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import AdSense from '@/components/common/AdSense'
 
 // Génère les métadonnées SEO dynamiques depuis l'article
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -65,6 +66,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           className="prose dark:prose-invert prose-slate max-w-none"
           dangerouslySetInnerHTML={{ __html: post.contenu ?? '' }}
         />
+
+        {/* Publicité AdSense - après le contenu, avant le CTA */}
+        <div className="mt-10">
+          <AdSense slot="2564315708" />
+        </div>
 
         {/* Call-to-action en bas de chaque article */}
         <div className="mt-12 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800 rounded-xl p-6 text-center">
