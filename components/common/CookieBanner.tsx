@@ -35,8 +35,8 @@ export default function CookieBanner() {
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <p className="text-sm text-gray-600 flex-1">
           Nous utilisons des cookies essentiels au fonctionnement du site.
-          Avec votre accord, nous utilisons également des cookies d'analyse pour
-          améliorer notre service.{' '}
+          Avec votre accord, nous affichons également des publicités personnalisées via Google AdSense,
+          qui dépose ses propres cookies.{' '}
           <a
             href="/politique-confidentialite"
             className="underline text-gray-800 hover:text-black"

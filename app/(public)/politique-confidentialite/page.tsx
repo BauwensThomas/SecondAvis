@@ -73,7 +73,8 @@ export default function PolitiqueConfidentialitePage() {
             <li><strong>Prestataire d'envoi d'emails</strong> - adresse email transmise uniquement pour l'acheminement des messages</li>
             <li><strong>Hébergeur du site</strong> - logs techniques nécessaires au bon fonctionnement</li>
           </ul>
-          <p className="mt-3">Aucune donnée n'est vendue ni partagée avec des tiers à des fins commerciales ou publicitaires.</p>
+          <li><strong>Google AdSense</strong> - service publicitaire de Google LLC. Des cookies publicitaires sont déposés sur les pages blog uniquement, avec votre consentement. Google peut utiliser ces données pour personnaliser les annonces affichées. Pour en savoir plus : <a href="https://policies.google.com/privacy" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">politique de confidentialité de Google</a>.</li>
+          <p className="mt-3">Aucune donnée personnelle identifiante n'est vendue à des tiers.</p>
         </section>
 
         <section>
@@ -93,11 +94,27 @@ export default function PolitiqueConfidentialitePage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900 mb-3">6. Cookies</h2>
-          <p>
-            {appName} utilise uniquement des cookies strictement nécessaires au fonctionnement du service
-            (session de connexion). Aucun cookie publicitaire ou de suivi tiers n'est utilisé sans
-            votre consentement explicite.
+          <h2 className="text-lg font-semibold text-slate-900 mb-3">6. Cookies et publicités</h2>
+          <p className="mb-3">
+            {appName} utilise les types de cookies suivants :
+          </p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>
+              <strong>Cookies essentiels</strong> - nécessaires à la connexion et au fonctionnement du site. Ils ne peuvent pas être refusés.
+            </li>
+            <li>
+              <strong>Cookies publicitaires (Google AdSense)</strong> - présents uniquement sur les pages du blog.
+              Google AdSense dépose des cookies pour afficher des publicités personnalisées en fonction de vos centres d'intérêt.
+              Ces cookies sont déposés uniquement avec votre consentement (via le bandeau en bas de page).
+              En cas de refus, les publicités ne s'affichent pas.
+            </li>
+          </ul>
+          <p className="mt-3">
+            Google LLC, en tant que prestataire publicitaire, peut traiter vos données conformément à sa propre politique de confidentialité.
+            Vous pouvez gérer vos préférences publicitaires Google sur{' '}
+            <a href="https://adssettings.google.com" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              adssettings.google.com
+            </a>.
           </p>
         </section>
 
