@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface AdSenseProps {
   slot: string
@@ -13,19 +13,31 @@ declare global {
   }
 }
 
-// Composant publicitaire Google AdSense - affiche une unite publicitaire
+// Composant publicitaire Google AdSense - s'affiche uniquement si l'utilisateur a accepté les cookies
 export default function AdSense({ slot, format = 'auto' }: AdSenseProps) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_ID
+  const [consentAccepte, setConsentAccepte] = useState(false)
 
+  // Vérifie le consentement cookies au chargement
   useEffect(() => {
-    try {
-      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-    } catch {
-      // Silencieux si AdSense n'est pas encore charge
+    const choix = localStorage.getItem('cookie_consent')
+    if (choix === 'accepted') {
+      setConsentAccepte(true)
     }
   }, [])
 
-  if (!publisherId) return null
+  // Initialise l'annonce AdSense une fois le consentement confirmé
+  useEffect(() => {
+    if (!consentAccepte) return
+    try {
+      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+    } catch {
+      // Silencieux si AdSense n'est pas encore chargé
+    }
+  }, [consentAccepte])
+
+  // Pas de pub si pas de publisher ID ou si cookies refusés
+  if (!publisherId || !consentAccepte) return null
 
   return (
     <ins
