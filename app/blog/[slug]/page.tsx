@@ -49,17 +49,27 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {new Date(post.created_at).toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' })}
         </p>
 
-        {/* Image de couverture */}
-        {post.image_url && (
-          <div className="mb-8">
-            <img src={post.image_url} alt={post.titre} className="block rounded-2xl max-h-72" />
-            {post.image_ia && (
-              <p className="text-xs text-slate-400 mt-1.5 italic">
-                Image générée par intelligence artificielle - Les personnages représentés sont fictifs.
-              </p>
-            )}
+        {/* Image de couverture + publicité côte à côte sur desktop */}
+        <div className="flex flex-col md:flex-row gap-6 mb-8 items-start">
+
+          {/* Image de couverture */}
+          {post.image_url && (
+            <div className="md:w-2/3 shrink-0">
+              <img src={post.image_url} alt={post.titre} className="block rounded-2xl w-full max-h-72 object-cover" />
+              {post.image_ia && (
+                <p className="text-xs text-slate-400 mt-1.5 italic">
+                  Image générée par intelligence artificielle - Les personnages représentés sont fictifs.
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Publicité AdSense - à droite de l'image sur desktop */}
+          <div className={post.image_url ? 'md:w-1/3 w-full' : 'w-full'}>
+            <AdSense slot="2564315708" />
           </div>
-        )}
+
+        </div>
 
         {/* Contenu de l'article - rendu HTML avec styles Tailwind prose */}
         <article
@@ -67,7 +77,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           dangerouslySetInnerHTML={{ __html: post.contenu ?? '' }}
         />
 
-        {/* Publicité AdSense - après le contenu, avant le CTA */}
+        {/* Publicité AdSense - en bas de l'article, avant le CTA */}
         <div className="mt-10">
           <AdSense slot="2564315708" />
         </div>
