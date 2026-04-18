@@ -33,12 +33,78 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 const CATEGORIES = [
-  { value: 'mecanique',    label: 'Mécanique automobile', description: 'Devis trop cher, panne incomprise, diagnostic douteux...' },
-  { value: 'immo',         label: 'Immobilier',            description: 'Honoraires d\'agence, mandat de vente, état des lieux...' },
-  { value: 'travaux',      label: 'Travaux',               description: 'Plombier, électricien, devis gonflé, arnaque artisan...' },
-  { value: 'assurance',    label: 'Assurance',             description: 'Refus de remboursement, clause cachée, sinistre mal évalué...' },
-  { value: 'travail',      label: 'Droit du travail',      description: 'Licenciement, heures sup, clause de non-concurrence...' },
-  { value: 'comptabilite', label: 'Comptabilité',          description: 'Déclaration INASTI, TVA indépendant, cotisations sociales...' },
+  {
+    value: 'mecanique',
+    label: 'Mécanique automobile',
+    description: 'Devis trop cher, panne incomprise, diagnostic douteux...',
+    exemples: [
+      'Devis freins ou embrayage trop élevé',
+      'Diagnostic de panne incompris',
+      'Kilométrage falsifié au compteur',
+      'Courroie de distribution à 1 200 € — est-ce normal ?',
+      'Mon garagiste insiste pour changer une pièce non défectueuse',
+    ],
+  },
+  {
+    value: 'immo',
+    label: 'Immobilier',
+    description: 'Honoraires d\'agence, mandat de vente, état des lieux...',
+    exemples: [
+      'Honoraires d\'agence excessifs ou non justifiés',
+      'Mandat de vente avec clause abusive',
+      'Estimation biaisée par l\'agent immobilier',
+      'État des lieux contesté à la sortie',
+      'Clause douteuse dans un compromis de vente',
+    ],
+  },
+  {
+    value: 'travaux',
+    label: 'Travaux',
+    description: 'Plombier, électricien, devis gonflé, arnaque artisan...',
+    exemples: [
+      'Devis plombier ou électricien trop élevé',
+      'Artisan qui gonfle le prix en cours de chantier',
+      'Travaux mal réalisés et artisan introuvable',
+      'Devis de rénovation avec postes suspects',
+      'Prix des matériaux surfacturé',
+    ],
+  },
+  {
+    value: 'assurance',
+    label: 'Assurance',
+    description: 'Refus de remboursement, clause cachée, sinistre mal évalué...',
+    exemples: [
+      'Refus de remboursement injustifié après sinistre',
+      'Clause cachée invoquée par l\'assureur',
+      'Sinistre sous-évalué par l\'expert mandaté',
+      'Résiliation abusive de mon contrat',
+      'Garantie contractuelle non appliquée',
+    ],
+  },
+  {
+    value: 'travail',
+    label: 'Droit du travail',
+    description: 'Licenciement, heures sup, clause de non-concurrence...',
+    exemples: [
+      'Licenciement potentiellement abusif',
+      'Heures supplémentaires non payées',
+      'Clause de non-concurrence abusive',
+      'Rupture conventionnelle contestée',
+      'Préavis ou indemnités incorrects',
+    ],
+  },
+  {
+    value: 'comptabilite',
+    label: 'Comptabilité',
+    description: 'Déclaration INASTI, TVA indépendant, cotisations sociales...',
+    exemples: [
+      'Erreur dans ma déclaration INASTI',
+      'TVA indépendant mal appliquée',
+      'Cotisations sociales ONSS incorrectes',
+      'Facturation avec erreur comptable',
+      'Question sur l\'optimisation fiscale de base',
+    ],
+  },
 ]
 
 // Récupère les prix dynamiques depuis les variables d'environnement
@@ -191,6 +257,7 @@ export default function NouvelleDemandePage() {
   const [erreurFichier, setErreurFichier] = useState('')
   const [expertsParCategorie, setExpertsParCategorie] = useState<Record<string, number>>({})
   const [estAdmin, setEstAdmin] = useState(false)
+  const [categorieInfoModal, setCategorieInfoModal] = useState<string | null>(null)
 
   // Charge le nombre d'experts actifs par catégorie et le rôle de l'utilisateur
   useEffect(() => {
@@ -215,6 +282,17 @@ export default function NouvelleDemandePage() {
 
   const categorieSelectionnee = watch('category')
   const descriptionValue = watch('description')
+
+  // Pré-sélectionne la catégorie et passe directement à l'étape 2 si paramètre URL présent
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const cat = params.get('categorie')
+    const valides = ['mecanique', 'immo', 'travaux', 'assurance', 'travail', 'comptabilite']
+    if (cat && valides.includes(cat)) {
+      setValue('category', cat as FormData['category'])
+      setEtape(2)
+    }
+  }, [setValue])
 
   // Valide et ajoute les fichiers sélectionnés à la liste
   function handleFichiers(e: React.ChangeEvent<HTMLInputElement>) {
@@ -335,42 +413,56 @@ export default function NouvelleDemandePage() {
               const accessible = estAdmin || nbExperts >= MIN_EXPERTS_PAR_CATEGORIE
 
               return (
-                <button
-                  key={cat.value}
-                  type="button"
-                  disabled={!accessible}
-                  onClick={() => {
-                    if (!accessible) return
-                    setValue('category', cat.value as FormData['category'])
-                    setEtape(2)
-                  }}
-                  className={`w-full text-left border rounded-xl p-4 transition-all ${
-                    categorieSelectionnee === cat.value
-                      ? 'border-blue-500 bg-blue-50'
-                      : accessible
-                      ? 'border-slate-200 hover:border-slate-400 bg-white'
-                      : 'border-slate-100 bg-slate-50 opacity-50 cursor-not-allowed'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-slate-800">{cat.label}</p>
-                      <p className="text-sm text-slate-500">{cat.description}</p>
-                      {!accessible && (
-                        <p className="text-xs text-orange-500 mt-1">
-                          Pas encore disponible - pas assez d'experts dans cette catégorie
-                        </p>
+                <div key={cat.value} className="relative">
+                  <button
+                    type="button"
+                    disabled={!accessible}
+                    onClick={() => {
+                      if (!accessible) return
+                      setValue('category', cat.value as FormData['category'])
+                      setEtape(2)
+                    }}
+                    className={`w-full text-left border rounded-xl p-4 transition-all ${
+                      categorieSelectionnee === cat.value
+                        ? 'border-blue-500 bg-blue-50'
+                        : accessible
+                        ? 'border-slate-200 hover:border-slate-400 bg-white'
+                        : 'border-slate-100 bg-slate-50 opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between pr-8">
+                      <div>
+                        <p className="font-semibold text-slate-800">{cat.label}</p>
+                        <p className="text-sm text-slate-500">{cat.description}</p>
+                        {!accessible && (
+                          <p className="text-xs text-orange-500 mt-1">
+                            Pas encore disponible - pas assez d'experts dans cette catégorie
+                          </p>
+                        )}
+                      </div>
+                      {accessible ? (
+                        <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">
+                          {(CATEGORY_PRICES[cat.value] / 100).toFixed(2).replace('.', ',')} €
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-xs shrink-0 ml-4">Bientôt</span>
                       )}
                     </div>
-                    {accessible ? (
-                      <span className="text-blue-700 font-bold text-sm shrink-0 ml-4">
-                        {(CATEGORY_PRICES[cat.value] / 100).toFixed(2).replace('.', ',')} €
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 text-xs shrink-0 ml-4">Bientôt</span>
-                    )}
-                  </div>
-                </button>
+                  </button>
+
+                  {/* Bouton info - ouvre la modale sans sélectionner la catégorie */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setCategorieInfoModal(cat.value)
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border border-slate-300 bg-white text-slate-400 text-xs font-bold hover:border-indigo-400 hover:text-indigo-600 transition-colors flex items-center justify-center"
+                    title={`En savoir plus sur ${cat.label}`}
+                  >
+                    ?
+                  </button>
+                </div>
               )
             })}
           </div>
@@ -511,6 +603,67 @@ export default function NouvelleDemandePage() {
           </Elements>
         </div>
       )}
+
+      {/* Modale d'information sur une catégorie */}
+      {categorieInfoModal && (() => {
+        const cat = CATEGORIES.find((c) => c.value === categorieInfoModal)
+        if (!cat) return null
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+            onClick={() => setCategorieInfoModal(null)}
+          >
+            <div
+              className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl max-w-md w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">{cat.label}</h2>
+                <button
+                  type="button"
+                  onClick={() => setCategorieInfoModal(null)}
+                  className="text-slate-400 hover:text-slate-600 text-xl leading-none ml-4"
+                >
+                  &times;
+                </button>
+              </div>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                Exemples de situations que nos experts peuvent analyser :
+              </p>
+              <ul className="space-y-2">
+                {cat.exemples.map((ex, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                    <span className="text-indigo-500 mt-0.5 shrink-0">&#8250;</span>
+                    {ex}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`/${cat.value}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block text-center text-sm text-indigo-600 hover:underline"
+              >
+                En savoir plus sur cette catégorie &rarr;
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  const nbExperts = expertsParCategorie[cat.value] ?? 0
+                  const accessible = estAdmin || nbExperts >= MIN_EXPERTS_PAR_CATEGORIE
+                  if (!accessible) { setCategorieInfoModal(null); return }
+                  setValue('category', cat.value as FormData['category'])
+                  setCategorieInfoModal(null)
+                  setEtape(2)
+                }}
+                className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                Choisir cette catégorie
+              </button>
+            </div>
+          </div>
+        )
+      })()}
 
     </main>
   )

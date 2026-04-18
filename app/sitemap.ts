@@ -9,7 +9,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: appUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
     { url: `${appUrl}/experts`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    // Pages de landing par catégorie - priorité haute pour le SEO ciblé
+    { url: `${appUrl}/mecanique`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${appUrl}/immo`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${appUrl}/travaux`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${appUrl}/assurance`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${appUrl}/travail`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${appUrl}/comptabilite`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${appUrl}/comment-ca-marche`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${appUrl}/faq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${appUrl}/devenir-expert`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${appUrl}/comment-poser-ma-question`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${appUrl}/a-propos`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },

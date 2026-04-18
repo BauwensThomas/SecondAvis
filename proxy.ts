@@ -68,7 +68,8 @@ export async function proxy(request: NextRequest) {
   ) {
     if (!user) {
       const loginUrl = new URL('/login', request.url)
-      loginUrl.searchParams.set('redirect', pathname)
+      const fullPath = pathname + request.nextUrl.search
+      loginUrl.searchParams.set('redirect', fullPath)
       return NextResponse.redirect(loginUrl)
     }
     // Bloque l'accès si l'email n'est pas encore confirmé
