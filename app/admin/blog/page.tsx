@@ -7,8 +7,10 @@ import type { Post } from '@/types'
 
 // Page admin - liste de tous les articles du blog (publiés et brouillons)
 export default function AdminBlogPage() {
-  const [posts, setPosts] = useState<Post[]>([])
+  const [posts, setPosts]           = useState<Post[]>([])
   const [chargement, setChargement] = useState(true)
+  const [envoi, setEnvoi]           = useState<string | null>(null)
+  const [resultat, setResultat]     = useState<{ id: string; envoyes: number; erreurs: number } | null>(null)
 
   useEffect(() => {
     fetch('/api/admin/blog')
@@ -23,6 +25,27 @@ export default function AdminBlogPage() {
     setPosts((prev) => prev.filter((p) => p.id !== id))
   }
 
+  // Envoie la newsletter de l'article à tous les abonnés
+  async function envoyerNewsletter(post: Post) {
+    if (!confirm(`Envoyer la newsletter "${post.titre}" à tous les abonnés ?`)) return
+
+    setEnvoi(post.id)
+    setResultat(null)
+
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/newsletter`, { method: 'POST' })
+      const data = await res.json()
+
+      if (res.ok) {
+        setResultat({ id: post.id, envoyes: data.envoyes, erreurs: data.erreurs })
+      } else {
+        alert(data.error ?? 'Erreur lors de l\'envoi.')
+      }
+    } finally {
+      setEnvoi(null)
+    }
+  }
+
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
@@ -34,6 +57,19 @@ export default function AdminBlogPage() {
           <Link href="/admin/blog/nouveau">Nouvel article</Link>
         </Button>
       </div>
+
+      {/* Confirmation d'envoi newsletter */}
+      {resultat && (
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 flex items-center justify-between">
+          <p className="text-green-700 text-sm font-medium">
+            Newsletter envoyée : {resultat.envoyes} email{resultat.envoyes > 1 ? 's' : ''} envoyé{resultat.envoyes > 1 ? 's' : ''}
+            {resultat.erreurs > 0 && `, ${resultat.erreurs} erreur${resultat.erreurs > 1 ? 's' : ''}`}.
+          </p>
+          <button onClick={() => setResultat(null)} className="text-green-500 hover:text-green-700 text-xs ml-4">
+            Fermer
+          </button>
+        </div>
+      )}
 
       {chargement ? (
         <div className="text-slate-500">Chargement...</div>
@@ -75,9 +111,20 @@ export default function AdminBlogPage() {
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {post.publie && (
-                        <Button asChild variant="ghost" size="sm">
-                          <Link href={`/blog/${post.slug}`} target="_blank">Voir</Link>
-                        </Button>
+                        <>
+                          <Button asChild variant="ghost" size="sm">
+                            <Link href={`/blog/${post.slug}`} target="_blank">Voir</Link>
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+                            onClick={() => envoyerNewsletter(post)}
+                            disabled={envoi === post.id}
+                          >
+                            {envoi === post.id ? 'Envoi...' : 'Newsletter'}
+                          </Button>
+                        </>
                       )}
                       <Button asChild variant="outline" size="sm">
                         <Link href={`/admin/blog/${post.id}/modifier`}>Modifier</Link>

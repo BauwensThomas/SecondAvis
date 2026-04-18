@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AdSense from '@/components/common/AdSense'
+import NewsletterForm from '@/components/common/NewsletterForm'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -49,6 +50,11 @@ export default async function BlogPage() {
           ))}
         </div>
       )}
+
+      {/* Formulaire d'inscription à la newsletter - en bas de la liste */}
+      <div className="mt-12">
+        <NewsletterForm />
+      </div>
     </main>
   )
 }

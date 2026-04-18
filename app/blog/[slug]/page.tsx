@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AdSense from '@/components/common/AdSense'
+import NewsletterForm from '@/components/common/NewsletterForm'
 
 // Génère les métadonnées SEO dynamiques depuis l'article
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -109,6 +110,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             }
           })}}
         />
+
+        {/* Formulaire newsletter - entre la pub et le CTA */}
+        <div className="mt-10">
+          <NewsletterForm />
+        </div>
 
         {/* Call-to-action en bas de chaque article */}
         <div className="mt-12 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800 rounded-xl p-6 text-center">
