@@ -18,6 +18,9 @@ export default function Footer() {
             <Link href="/comment-ca-marche" className="text-xs text-slate-500 hover:text-slate-800 transition-colors">
               Comment ça marche
             </Link>
+            <Link href="/faq" className="text-xs text-slate-500 hover:text-slate-800 transition-colors">
+              FAQ
+            </Link>
             <Link href="/devenir-expert" className="text-xs text-slate-500 hover:text-slate-800 transition-colors">
               Devenir expert
             </Link>
