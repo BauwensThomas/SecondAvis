@@ -327,6 +327,57 @@ export default async function HomePage() {
         <p className="text-indigo-300 text-xs mt-4">Remboursé automatiquement si aucune réponse sous 24h</p>
       </section>
 
+      {/* ---- Schema JSON-LD FAQ pour Google (résultats enrichis) ---- */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Les experts sont-ils vraiment qualifiés ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. Chaque expert est validé manuellement par notre équipe avant d'être activé. Nous vérifions leur diplôme, numéro BCE ou carte professionnelle. Aucun expert ne répond sans avoir signé notre charte de bonne conduite."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Que se passe-t-il si je ne suis pas satisfait de la réponse ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Vous avez 48h pour signaler la réponse. Notre équipe examine le dossier et tranche. Si le signalement est validé, vous êtes remboursé intégralement. L'expert est suspendu pendant l'analyse."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Et si personne ne répond dans les 24h ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Vous êtes remboursé automatiquement, sans démarche de votre part. Le remboursement arrive sur votre compte dans les 5 jours ouvrables selon votre banque."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Est-ce que mes informations restent confidentielles ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. Votre demande n'est visible que par les experts de la catégorie concernée. Votre identité n'est jamais divulguée publiquement. Vos données sont chiffrées et hébergées en Europe."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "L'avis reçu engage-t-il la responsabilité de l'expert ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Non. Les avis fournis sont des opinions professionnelles basées sur les informations que vous communiquez. Ils ne constituent pas une consultation formelle. Avisbox est une plateforme d'entraide entre particuliers et professionnels."
+              }
+            }
+          ]
+        })}}
+      />
+
       {/* ---- Mention legale obligatoire ---- */}
       <section className="py-6 px-6 bg-slate-100 dark:bg-slate-950">
         <p className="text-center text-slate-400 text-xs max-w-2xl mx-auto">
