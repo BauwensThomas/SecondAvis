@@ -82,6 +82,34 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <AdSense slot="2564315708" />
         </div>
 
+        {/* Schema JSON-LD Article pour Google (résultats enrichis) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.titre,
+            "description": post.extrait ?? post.titre,
+            "image": post.image_url ?? undefined,
+            "datePublished": post.created_at,
+            "dateModified": post.created_at,
+            "author": {
+              "@type": "Organization",
+              "name": "Avisbox",
+              "url": process.env.NEXT_PUBLIC_APP_URL
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Avisbox",
+              "url": process.env.NEXT_PUBLIC_APP_URL
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`
+            }
+          })}}
+        />
+
         {/* Call-to-action en bas de chaque article */}
         <div className="mt-12 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800 rounded-xl p-6 text-center">
           <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg mb-1">Vous avez un doute sur un devis ou un diagnostic ?</p>
