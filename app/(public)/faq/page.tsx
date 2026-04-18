@@ -21,7 +21,7 @@ const sections = [
       },
       {
         q: 'Dans quels domaines puis-je poser une question ?',
-        r: 'Avisbox couvre actuellement la mécanique automobile. D\'autres catégories arrivent prochainement : immobilier, travaux, assurances, droit du travail et comptabilité pour indépendants.',
+        r: 'Avisbox couvre la mécanique automobile, l\'immobilier, les devis travaux, les assurances, le droit du travail et la comptabilité pour indépendants.',
       },
       {
         q: 'Combien de temps faut-il pour recevoir une réponse ?',
