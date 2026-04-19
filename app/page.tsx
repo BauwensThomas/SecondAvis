@@ -104,15 +104,15 @@ export default async function HomePage() {
             Experts vérifiés - Réponse en 24h - Remboursé si silence
           </span>
           <h1 className="text-4xl sm:text-5xl font-bold mb-5 leading-tight">
-            Un doute sur un devis ou un diagnostic ?<br />
-            <span className="text-indigo-400">Obtenez un avis professionnel.</span>
+            Votre devis est trop cher ou douteux ?<br />
+            <span className="text-indigo-400">Faites-le vérifier par un expert.</span>
           </h1>
           <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
             Un expert vérifié dans votre domaine analyse votre situation en moins de 24h pour seulement <strong className="text-white">à partir de {MIN_PRICE_EUROS}&nbsp;€</strong>.
             Si personne ne vous répond, vous êtes <strong className="text-white">remboursé automatiquement</strong>.
           </p>
           <Button asChild size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white text-lg px-10 py-6 shadow-lg shadow-indigo-900/40">
-            <Link href="/nouvelle-demande">Poser ma question à partir de {MIN_PRICE_EUROS}&nbsp;€</Link>
+            <Link href="/nouvelle-demande">Faire vérifier ma situation</Link>
           </Button>
           <p className="text-slate-500 text-xs mt-4">Paiement sécurisé par Stripe - Sans engagement</p>
         </div>
@@ -355,7 +355,7 @@ export default async function HomePage() {
           Ne payez pas avant de savoir si le prix est juste. Un expert vous apporte une réponse fiable en moins de 24 heures à partir de {MIN_PRICE_EUROS}&nbsp;€.
         </p>
         <Button asChild size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 text-lg px-10 py-6 font-semibold shadow-lg">
-          <Link href="/nouvelle-demande">Poser ma question</Link>
+          <Link href="/nouvelle-demande">Faire vérifier ma situation</Link>
         </Button>
         <p className="text-indigo-300 text-xs mt-4">Remboursé automatiquement si aucune réponse sous 24h</p>
       </section>

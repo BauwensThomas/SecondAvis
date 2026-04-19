@@ -126,7 +126,7 @@ export default function CommentCaMarchePage() {
           href="/nouvelle-demande"
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-8 py-3 rounded-xl transition-colors"
         >
-          Poser ma question
+          Faire vérifier ma situation
         </Link>
         <p className="text-xs text-slate-400 mt-3">
           Remboursé automatiquement si aucun expert ne répond dans les 24h

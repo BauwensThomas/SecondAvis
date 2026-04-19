@@ -170,7 +170,7 @@ export default async function LandingCategoriePage({ params }: { params: Promise
           href={`/nouvelle-demande?categorie=${cat.slug}`}
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors"
         >
-          Poser ma question - {prix} €
+          Faire vérifier ma situation
         </Link>
         <p className="text-slate-400 text-sm mt-3">
           Remboursé automatiquement si aucun expert ne répond sous 24h.
@@ -261,7 +261,7 @@ export default async function LandingCategoriePage({ params }: { params: Promise
           href={`/nouvelle-demande?categorie=${cat.slug}`}
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
         >
-          Poser ma question - {prix} €
+          Faire vérifier ma situation
         </Link>
       </div>
 

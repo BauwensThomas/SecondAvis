@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 
 // Bannière discrète en bas à gauche pour activer les notifications push
@@ -9,6 +10,7 @@ export default function PushSubscriber() {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isExpert, setIsExpert] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     if (
@@ -17,6 +19,9 @@ export default function PushSubscriber() {
       !('PushManager' in window) ||
       !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
     ) return
+
+    // Pas de bannière dans l'espace admin
+    if (pathname.startsWith('/admin')) return
 
     // N'affiche la bannière que si la permission n'a pas encore été tranchée
     if (Notification.permission !== 'default') return

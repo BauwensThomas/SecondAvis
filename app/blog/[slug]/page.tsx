@@ -121,10 +121,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         {/* Call-to-action en bas de chaque article */}
         <div className="mt-12 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800 rounded-xl p-6 text-center">
-          <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg mb-1">Vous avez un doute sur un devis ou un diagnostic ?</p>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Obtenez un avis d'expert vérifié en moins de 24h à partir de {((Number(process.env.NEXT_PUBLIC_REQUEST_PRICE_CENTS) || 1499) / 100).toFixed(2).replace('.', ',')} euros.</p>
+          <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg mb-1">Votre devis est trop cher ou douteux ?</p>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Faites-le vérifier par un expert indépendant en moins de 24h à partir de {((Number(process.env.NEXT_PUBLIC_REQUEST_PRICE_CENTS) || 1499) / 100).toFixed(2).replace('.', ',')} euros.</p>
           <Link href="/nouvelle-demande" className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
-            Poser ma question
+            Faire vérifier ma situation
           </Link>
         </div>
 

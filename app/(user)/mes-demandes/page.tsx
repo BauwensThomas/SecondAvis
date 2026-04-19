@@ -81,7 +81,7 @@ export default function MesDemandesPage() {
         <div className="text-center py-20 text-slate-500">
           <p className="mb-4">Vous n'avez pas encore de demande.</p>
           <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
-            <Link href="/nouvelle-demande">Poser ma première question</Link>
+            <Link href="/nouvelle-demande">Soumettre ma première situation</Link>
           </Button>
         </div>
       )}

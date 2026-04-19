@@ -50,8 +50,8 @@ export default function Header() {
 
         {/* Logo */}
         <Link href="/" className="shrink-0 flex items-center h-10" onClick={fermerMenu}>
-          <Image src="/avisbox-clair.png" alt="Avisbox" width={180} height={48} className="h-12 w-auto block dark:hidden" draggable={false} />
-          <Image src="/avisbox-fonce.png" alt="Avisbox" width={180} height={48} className="h-12 w-auto hidden dark:block" draggable={false} />
+          <Image src="/avisbox-clair.png" alt="Avisbox" width={180} height={48} style={{ height: '3rem', width: 'auto' }} className="block dark:hidden" draggable={false} />
+          <Image src="/avisbox-fonce.png" alt="Avisbox" width={180} height={48} style={{ height: '3rem', width: 'auto' }} className="hidden dark:block" draggable={false} />
         </Link>
 
         {/* Navigation desktop - cachée sur mobile */}

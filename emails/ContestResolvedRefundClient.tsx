@@ -34,7 +34,7 @@ export default function ContestResolvedRefundClient({ prenomClient, titreQuestio
             href={`${appUrl}/nouvelle-demande`}
             style={{ display: 'inline-block', marginTop: 24, backgroundColor: '#2563eb', color: '#ffffff', padding: '12px 24px', borderRadius: 8, textDecoration: 'none', fontWeight: 600 }}
           >
-            Poser une nouvelle question
+            Soumettre une nouvelle situation
           </Link>
           <Hr style={{ margin: '32px 0', borderColor: '#e2e8f0' }} />
           <Text style={{ color: '#94a3b8', fontSize: 12 }}>

@@ -20,7 +20,7 @@ const sections = [
         r: `Le tarif commence à partir de ${(Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) / 100).toFixed(2).replace('.', ',')} €. Le prix exact dépend de la catégorie choisie. Il est affiché clairement avant tout paiement.`,
       },
       {
-        q: 'Dans quels domaines puis-je poser une question ?',
+        q: 'Dans quels domaines puis-je faire vérifier ma situation ?',
         r: 'Avisbox couvre la mécanique automobile, l\'immobilier, les devis travaux, les assurances, le droit du travail et la comptabilité pour indépendants.',
       },
       {
@@ -134,9 +134,9 @@ export default function FaqPage() {
 
       {/* CTA */}
       <div className="text-center mt-14">
-        <p className="text-slate-600 dark:text-slate-300 font-medium mb-4">Prêt à poser votre question ?</p>
+        <p className="text-slate-600 dark:text-slate-300 font-medium mb-4">Prêt à faire vérifier votre situation ?</p>
         <Link href="/nouvelle-demande" className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors">
-          Poser ma question
+          Faire vérifier ma situation
         </Link>
       </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Comment bien poser ma question',
+  title: 'Comment bien décrire ma situation',
   description: 'Conseils pratiques pour rédiger une demande claire et obtenir la meilleure réponse possible de nos experts.',
 }
 
@@ -11,9 +11,9 @@ export default function CommentPoserMaQuestionPage() {
   return (
     <main className="page-container bg-white dark:bg-[#0f172a] min-h-screen transition-colors">
 
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">Comment bien poser ma question ?</h1>
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">Comment bien décrire ma situation ?</h1>
       <p className="text-slate-500 dark:text-slate-300 text-base mb-10">
-        Plus votre description est précise, meilleure sera la réponse de l'expert.
+        Plus votre description est précise, meilleure sera la vérification de l'expert.
         Voici nos conseils selon votre situation.
       </p>
 
@@ -173,7 +173,7 @@ export default function CommentPoserMaQuestionPage() {
             href="/nouvelle-demande"
             className="inline-block bg-indigo-600 hover:bg-indigo-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-xl transition-colors"
           >
-            Poser ma question
+            Faire vérifier ma situation
           </Link>
           <p className="text-xs text-slate-400 dark:text-slate-300 mt-3">Remboursé automatiquement si aucun expert ne répond dans les 24h</p>
         </div>

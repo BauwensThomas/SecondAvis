@@ -230,10 +230,10 @@ export default function ExpertPublicPage() {
 
       {/* ---- CTA ---- */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
-        <p className="text-sm text-slate-700 font-medium">Vous avez une question pour un expert ?</p>
+        <p className="text-sm text-slate-700 font-medium">Un devis douteux ou une situation à vérifier ?</p>
         <Link href="/nouvelle-demande"
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors">
-          Poser ma question
+          Soumettre ma situation
         </Link>
       </div>
     </main>
