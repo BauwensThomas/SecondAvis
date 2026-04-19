@@ -2,6 +2,67 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { createAdminClient } from "@/lib/supabase/server"
 
+const CATEGORY_LABELS: Record<string, string> = {
+  mecanique: 'Mécanique auto', immo: 'Immobilier', travaux: 'Travaux',
+  assurance: 'Assurance', travail: 'Droit du travail', comptabilite: 'Comptabilité',
+}
+
+const AVATAR_COLORS = [
+  'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
+  'bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300',
+  'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300',
+]
+
+// Témoignages de secours affichés tant qu'il n'y a pas assez de vrais avis
+const TEMOIGNAGES_FAKE = [
+  {
+    score: 5,
+    comment: "Le garage demandait 1\u00a0800\u00a0€ pour changer la boîte de vitesses. L'expert a confirmé que le coût était surévalué de 600\u00a0€. J'ai pu négocier un meilleur prix.",
+    prenom: 'Thomas', contexte: 'Liège', badge: '600\u00a0€ économisés', couleur: AVATAR_COLORS[0],
+  },
+  {
+    score: 5,
+    comment: "Réponse claire et détaillée en moins de 3 heures. L'expert a validé le diagnostic — je sais maintenant que je peux faire confiance à mon garagiste.",
+    prenom: 'Marie', contexte: 'Bruxelles', badge: 'Tranquillité d\'esprit', couleur: AVATAR_COLORS[1],
+  },
+  {
+    score: 5,
+    comment: `Pour seulement ${(Math.min(Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS||1499),Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS||1499))/100).toFixed(2).replace('.',',')} €, j'ai eu la tranquillité d'esprit sur une réparation de 900\u00a0€. C'est la meilleure dépense que j'ai faite ce mois-ci.`,
+    prenom: 'Laurent', contexte: 'Namur', badge: '900\u00a0€ vérifiés', couleur: AVATAR_COLORS[2],
+  },
+]
+
+// Récupère les 3 derniers vrais avis avec commentaire (score >= 4, non fermés)
+async function getTemoignages() {
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('ratings')
+      .select('score, comment, created_at, users(first_name), requests(category)')
+      .gte('score', 4)
+      .eq('closed', false)
+      .not('comment', 'is', null)
+      .neq('comment', '')
+      .order('created_at', { ascending: false })
+      .limit(3)
+
+    const reels = (data ?? []).map((r: any, i: number) => ({
+      score: r.score,
+      comment: r.comment,
+      prenom: r.users?.first_name ?? 'Utilisateur',
+      contexte: CATEGORY_LABELS[r.requests?.category] ?? 'Avisbox',
+      badge: null,
+      couleur: AVATAR_COLORS[i % 3],
+    }))
+
+    // Complète avec les faux jusqu'à avoir 3 témoignages
+    const fakeRestants = TEMOIGNAGES_FAKE.slice(reels.length)
+    return [...reels, ...fakeRestants].slice(0, 3)
+  } catch {
+    return TEMOIGNAGES_FAKE
+  }
+}
+
 // Récupère les statistiques publiques depuis la base de données (cache 1h)
 async function getStats() {
   try {
@@ -31,7 +92,7 @@ const MIN_PRICE_EUROS = (Math.min(
 
 // Page d'accueil publique de Avisbox
 export default async function HomePage() {
-  const stats = await getStats()
+  const [stats, temoignages] = await Promise.all([getStats(), getTemoignages()])
 
   return (
     <main className="flex flex-col min-h-screen">
@@ -217,55 +278,27 @@ export default async function HomePage() {
             Ils ont évité une mauvaise surprise
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map((i) => <span key={i} className="text-yellow-400 text-sm">&#9733;</span>)}
-              </div>
-              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
-                "Le garage demandait 1&nbsp;800&nbsp;€ pour changer la boîte de vitesses. L'expert a confirmé que le coût était surévalué de 600&nbsp;€. J'ai pu négocier un meilleur prix."
-              </p>
-              <div className="flex items-center gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
-                <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-xs font-bold text-indigo-700 dark:text-indigo-300">T</div>
-                <div>
-                  <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Thomas</p>
-                  <p className="text-xs text-slate-400">Liège - <span className="text-green-600 dark:text-green-400 font-medium">600&nbsp;€ économisés</span></p>
+            {temoignages.map((t, i) => (
+              <div key={i} className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
+                <div className="flex gap-1 mb-3">
+                  {[1,2,3,4,5].map((s) => (
+                    <span key={s} className={`text-sm ${s <= t.score ? 'text-yellow-400' : 'text-slate-200 dark:text-slate-700'}`}>&#9733;</span>
+                  ))}
+                </div>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">"{t.comment}"</p>
+                <div className="flex items-center gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${t.couleur}`}>
+                    {t.prenom[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-slate-700 dark:text-slate-200">{t.prenom}</p>
+                    <p className="text-xs text-slate-400">
+                      {t.contexte}{t.badge && <> - <span className="text-green-600 dark:text-green-400 font-medium">{t.badge}</span></>}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map((i) => <span key={i} className="text-yellow-400 text-sm">&#9733;</span>)}
-              </div>
-              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
-                "Réponse claire et détaillée en moins de 3 heures. L'expert a validé le diagnostic — je sais maintenant que je peux faire confiance à mon garagiste."
-              </p>
-              <div className="flex items-center gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
-                <div className="w-7 h-7 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center text-xs font-bold text-pink-700 dark:text-pink-300">M</div>
-                <div>
-                  <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Marie</p>
-                  <p className="text-xs text-slate-400">Bruxelles - <span className="text-green-600 dark:text-green-400 font-medium">Tranquillité d'esprit</span></p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
-              <div className="flex gap-1 mb-3">
-                {[1,2,3,4,5].map((i) => <span key={i} className="text-yellow-400 text-sm">&#9733;</span>)}
-              </div>
-              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
-                {"Pour seulement " + MIN_PRICE_EUROS + "\u00a0€, j'ai eu la tranquillité d'esprit sur une réparation de 900\u00a0€. C'est la meilleure dépense que j'ai faite ce mois-ci."}
-              </p>
-              <div className="flex items-center gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
-                <div className="w-7 h-7 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-xs font-bold text-green-700 dark:text-green-300">L</div>
-                <div>
-                  <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Laurent</p>
-                  <p className="text-xs text-slate-400">Namur - <span className="text-green-600 dark:text-green-400 font-medium">900&nbsp;€ vérifiés</span></p>
-                </div>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
