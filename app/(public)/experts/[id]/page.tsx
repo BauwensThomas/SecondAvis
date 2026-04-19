@@ -5,6 +5,12 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 
+interface Badge {
+  id: 'top_note' | 'rapide' | 'fiable'
+  label: string
+  couleur: 'yellow' | 'green' | 'blue'
+}
+
 interface Expert {
   id: string
   display_name: string
@@ -27,6 +33,7 @@ interface Expert {
   address_zip: string | null
   address_city: string | null
   address_public: boolean
+  badges?: Badge[]
 }
 
 interface Avis {
@@ -55,6 +62,7 @@ export default function ExpertPublicPage() {
   const { id } = useParams<{ id: string }>()
   const [expert, setExpert] = useState<Expert | null>(null)
   const [avis, setAvis]     = useState<Avis[]>([])
+  const [badges, setBadges] = useState<Badge[]>([])
   const [loading, setLoading] = useState(true)
   const [erreur, setErreur]   = useState('')
 
@@ -63,7 +71,7 @@ export default function ExpertPublicPage() {
       .then((r) => r.json())
       .then((data) => {
         if (data.error) setErreur(data.error)
-        else { setExpert(data.expert); setAvis(data.avis ?? []) }
+        else { setExpert(data.expert); setAvis(data.avis ?? []); setBadges(data.badges ?? []) }
         setLoading(false)
       })
       .catch(() => { setErreur('Impossible de charger ce profil.'); setLoading(false) })
@@ -121,6 +129,21 @@ export default function ExpertPublicPage() {
                 {' '}· {expert.total_answers} réponse{expert.total_answers !== 1 ? 's' : ''}
               </span>
             </div>
+
+            {/* Badges automatiques */}
+            {badges.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {badges.map((badge) => (
+                  <span key={badge.id} className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${
+                    badge.couleur === 'yellow' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
+                    badge.couleur === 'green'  ? 'bg-green-50 text-green-700 border-green-200' :
+                                                 'bg-blue-50 text-blue-700 border-blue-200'
+                  }`}>
+                    {badge.label}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

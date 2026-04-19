@@ -189,7 +189,7 @@ export async function GET(request: NextRequest) {
             id:          `eligible_${a.id}`,
             type:        'virement',
             label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
-            montant_cents: 200, // ou la valeur réelle si tu veux
+            montant_cents: Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 1000,
             statut:      'à payer',
             date:        a.delivered_at,
             stripe_ref:  null,

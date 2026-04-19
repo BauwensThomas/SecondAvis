@@ -109,12 +109,12 @@ const CATEGORIES = [
 
 // Récupère les prix dynamiques depuis les variables d'environnement
 const CATEGORY_PRICES: Record<string, number> = {
-  mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 900,
-  immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 900,
-  travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 900,
-  assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 900,
-  travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 900,
-  comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 900,
+  mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 1499,
+  immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 1499,
+  travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 1499,
+  assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 1499,
+  travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 1499,
+  comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 1499,
 }
 
 const MIN_EXPERTS_PAR_CATEGORIE = 2
@@ -136,12 +136,12 @@ function FormulaireStripe({ requestId, category }: { requestId: string, category
   const router = useRouter()
   // Récupère les prix dynamiques depuis les variables d'environnement
   const CATEGORY_PRICES: Record<string, number> = {
-    mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 900,
-    immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 900,
-    travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 900,
-    assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 900,
-    travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 900,
-    comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 900,
+    mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 1499,
+    immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 1499,
+    travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 1499,
+    assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 1499,
+    travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 1499,
+    comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 1499,
   }
   const [loading, setLoading] = useState(false)
   const [erreur, setErreur] = useState('')

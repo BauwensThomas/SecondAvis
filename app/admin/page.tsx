@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-// Link est utilisé dans les alertes candidatures/signalements
+
+const CATEGORIES_BLOG = [
+  { value: 'mecanique',    label: 'Mécanique auto' },
+  { value: 'immo',         label: 'Immobilier' },
+  { value: 'travaux',      label: 'Travaux' },
+  { value: 'assurance',    label: 'Assurance' },
+  { value: 'travail',      label: 'Droit du travail' },
+  { value: 'comptabilite', label: 'Comptabilité' },
+]
+
+const CADENCE_JOURS = 15
 
 interface Stats {
   total_demandes: number
@@ -19,15 +29,33 @@ interface Stats {
 
 // Dashboard principal admin - métriques en temps réel et alertes
 export default function AdminPage() {
-  const [stats, setStats]     = useState<Stats | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [stats, setStats]         = useState<Stats | null>(null)
+  const [loading, setLoading]     = useState(true)
+  const [blogPosts, setBlogPosts] = useState<{ categorie: string | null; created_at: string }[]>([])
 
   useEffect(() => {
     fetch('/api/admin/stats')
       .then((r) => r.json())
       .then((data) => { setStats(data); setLoading(false) })
       .catch(() => setLoading(false))
+
+    fetch('/api/admin/blog')
+      .then((r) => r.json())
+      .then((data) => setBlogPosts((data.posts ?? []).filter((p: any) => p.publie)))
   }, [])
+
+  // Calcule le nombre de jours restants avant la prochaine publication pour chaque catégorie
+  function joursRestants(categorie: string): number {
+    const articles = blogPosts
+      .filter((p) => p.categorie === categorie)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    if (articles.length === 0) return -CADENCE_JOURS
+
+    const dernierArticle = new Date(articles[0].created_at)
+    const joursDepuis = Math.floor((Date.now() - dernierArticle.getTime()) / (1000 * 60 * 60 * 24))
+    return CADENCE_JOURS - joursDepuis
+  }
 
   function euros(cents: number) {
     return (cents / 100).toFixed(2).replace('.', ',') + ' €'
@@ -117,6 +145,38 @@ export default function AdminPage() {
           ))}
         </div>
       )}
+
+      {/* Widget cadence blog par catégorie */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Cadence blog</h2>
+            <p className="text-xs text-slate-400 mt-0.5">1 article par catégorie tous les {CADENCE_JOURS} jours</p>
+          </div>
+          <Link href="/admin/blog/nouveau" className="text-xs text-indigo-600 hover:underline font-medium">+ Nouvel article</Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {CATEGORIES_BLOG.map((cat) => {
+            const jours = joursRestants(cat.value)
+            const enRetard = jours < 0
+            return (
+              <Link key={cat.value} href={`/admin/blog/nouveau`} className={`rounded-lg border px-4 py-3 flex flex-col gap-1 transition-colors hover:opacity-80 ${
+                enRetard
+                  ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800'
+                  : 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800'
+              }`}>
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{cat.label}</span>
+                <span className={`text-xl font-bold ${enRetard ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+                  {enRetard ? `${jours} jour${jours < -1 ? 's' : ''}` : `+${jours} jour${jours > 1 ? 's' : ''}`}
+                </span>
+                <span className="text-xs text-slate-400">
+                  {enRetard ? 'En retard' : 'Avant prochain'}
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
 
     </div>
   )

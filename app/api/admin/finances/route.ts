@@ -27,8 +27,8 @@ export async function GET() {
     const totalRevenu        = (paiements ?? []).reduce((a, r) => a + r.amount_cents, 0)
     const totalRembourse     = (remboursements ?? []).reduce((a, r) => a + r.amount_cents, 0)
     const totalVirements     = (virements ?? []).reduce((a, r) => a + r.amount_cents, 0)
-    // Stripe : 2,9% arrondi au centime supérieur + 0,25€ fixe par transaction
-    const fraisStripe        = Math.ceil(totalRevenu * 0.029) + (paiements?.length ?? 0) * 25
+    // Stripe : 1,5% (cartes européennes) arrondi au centime supérieur + 0,25€ fixe par transaction
+    const fraisStripe        = Math.ceil(totalRevenu * 0.015) + (paiements?.length ?? 0) * 25
     const margeNette         = totalRevenu - totalRembourse - totalVirements - fraisStripe
 
     // Agrégation par mois - du plus récent au plus ancien
@@ -55,9 +55,9 @@ export async function GET() {
     })
 
     const monthly_data = Object.entries(parMois).map(([mois, d]) => {
-      const nbTransactions = Math.round(d.revenus / 900)
-      // Stripe : 2,9% (ceil) + 0,25€ fixe par transaction
-      const fraisM = Math.ceil(d.revenus * 0.029) + nbTransactions * 25
+      const nbTransactions = Math.round(d.revenus / 1499)
+      // Stripe : 1,5% (cartes européennes, ceil) + 0,25€ fixe par transaction
+      const fraisM = Math.ceil(d.revenus * 0.015) + nbTransactions * 25
       return {
         mois,
         avis_vendus:          nbTransactions,

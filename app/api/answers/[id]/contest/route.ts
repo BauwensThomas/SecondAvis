@@ -5,6 +5,7 @@ import { resend, EMAIL_FROM } from '@/lib/resend'
 import { render } from '@react-email/components'
 import ContestCreatedClient from '@/emails/ContestCreatedClient'
 import ContestCreatedExpert from '@/emails/ContestCreatedExpert'
+import { logEmail } from '@/lib/log-email'
 
 const contestSchema = z.object({
   reason: z.enum(['vague', 'incorrecte', 'solicitation', 'abusif', 'autre'], {
@@ -145,7 +146,7 @@ export async function POST(
             to:      clientUser.email,
             subject: 'Votre signalement a été enregistré - Avisbox',
             html:    await render(ContestCreatedClient({ prenomClient: clientUser.first_name, titreQuestion: titre })),
-          })
+          }).then(() => logEmail({ recipient_type: 'client', recipient_id: req.user_id, recipient_email: clientUser.email, related_type: 'signalement', related_id: answer.request_id, subject: 'Votre signalement a été enregistré - Avisbox', body: `Signalement enregistré pour la demande : "${titre}". Raison : ${data.reason}` }))
         : Promise.resolve(),
 
       expertData?.email
@@ -154,7 +155,7 @@ export async function POST(
             to:      expertData.email,
             subject: 'Un signalement a été déposé sur votre réponse - Avisbox',
             html:    await render(ContestCreatedExpert({ prenomExpert: expertData.first_name, titreQuestion: titre })),
-          })
+          }).then(() => logEmail({ recipient_type: 'expert', recipient_id: answer.expert_id, recipient_email: expertData.email, related_type: 'signalement', related_id: answer.request_id, subject: 'Un signalement a été déposé sur votre réponse - Avisbox', body: `Signalement déposé sur votre réponse à la demande : "${titre}".` }))
         : Promise.resolve(),
 
       adminEmail

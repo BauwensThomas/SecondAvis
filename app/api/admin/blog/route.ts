@@ -7,9 +7,11 @@ const postSchema = z.object({
   titre:     z.string().min(3, 'Le titre doit faire au moins 3 caractères').max(200),
   contenu:   z.string().optional().default(''),
   slug:      z.string().min(3).regex(/^[a-z0-9-]+$/, 'Slug invalide (minuscules, chiffres, tirets)'),
-  image_url: z.string().nullable().optional(),
-  extrait:   z.string().max(160, 'L\'extrait ne peut pas dépasser 160 caractères').nullable().optional(),
-  publie:    z.boolean().optional().default(false),
+  image_url:  z.string().nullable().optional(),
+  image_ia:   z.boolean().optional().default(false),
+  extrait:    z.string().max(160, 'L\'extrait ne peut pas dépasser 160 caractères').nullable().optional(),
+  categorie:  z.enum(['mecanique', 'immo', 'travaux', 'assurance', 'travail', 'comptabilite']).nullable().optional(),
+  publie:     z.boolean().optional().default(false),
 })
 
 // GET /api/admin/blog - liste tous les articles (publiés et brouillons)
@@ -25,7 +27,7 @@ export async function GET() {
     const supabaseAdmin = createAdminClient()
     const { data: posts, error } = await supabaseAdmin
       .from('posts')
-      .select('id, titre, slug, publie, created_at, extrait')
+      .select('id, titre, slug, publie, created_at, extrait, categorie')
       .order('created_at', { ascending: false })
 
     if (error) {

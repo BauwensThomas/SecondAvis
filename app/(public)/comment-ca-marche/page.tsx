@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche',
-  description: 'Découvrez comment obtenir un avis professionnel en moins de 24h pour 9 euros sur Avisbox.',
+  description: 'Découvrez comment obtenir un avis professionnel en moins de 24h pour 14,99 euros sur Avisbox.',
 }
 
 // Page d'explication du service - processus en étapes et FAQ

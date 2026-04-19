@@ -4,6 +4,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
+interface Badge {
+  id: 'top_note' | 'rapide' | 'fiable'
+  label: string
+  couleur: 'yellow' | 'green' | 'blue'
+}
+
 interface Expert {
   id: string
   display_name: string
@@ -14,6 +20,7 @@ interface Expert {
   city: string
   average_rating: number
   total_answers: number
+  badges: Badge[]
 }
 
 const CATEGORIES_OPTIONS = [
@@ -124,6 +131,21 @@ export default function ExpertsPage() {
                   </span>
                 ))}
               </div>
+
+              {/* Badges */}
+              {expert.badges && expert.badges.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {expert.badges.map((badge) => (
+                    <span key={badge.id} className={`text-xs px-2 py-0.5 rounded-full font-medium border ${
+                      badge.couleur === 'yellow' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
+                      badge.couleur === 'green'  ? 'bg-green-50 text-green-700 border-green-200' :
+                                                   'bg-blue-50 text-blue-700 border-blue-200'
+                    }`}>
+                      {badge.label}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {/* Bio courte */}
               {expert.bio && (

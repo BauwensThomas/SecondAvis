@@ -38,7 +38,7 @@ export default async function HomePage() {
 
       {/* ---- Hero ---- */}
       <section className="bg-slate-900 dark:bg-[#181f3a] text-white py-20 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <span className="inline-block bg-indigo-600/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-6 border border-indigo-500/30">
             Experts vérifiés - Réponse en 24h - Remboursé si silence
           </span>

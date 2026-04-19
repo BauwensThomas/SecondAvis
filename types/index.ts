@@ -189,6 +189,7 @@ export interface Post {
   image_url: string | null
   image_ia: boolean
   extrait: string | null
+  categorie: 'mecanique' | 'immo' | 'travaux' | 'assurance' | 'travail' | 'comptabilite' | null
   publie: boolean
   created_at: string
 }

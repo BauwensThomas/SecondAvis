@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import AdSense from '@/components/common/AdSense'
 import NewsletterForm from '@/components/common/NewsletterForm'
@@ -36,7 +37,9 @@ export default async function BlogPage() {
           {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow">
               {post.image_url && (
-                <img src={post.image_url} alt={post.titre} className="w-full h-48 object-cover group-hover:opacity-90 transition-opacity" />
+                <div className="relative w-full h-48">
+                  <Image src={post.image_url} alt={post.titre} fill className="object-cover group-hover:opacity-90 transition-opacity" sizes="(max-width: 768px) 100vw, 33vw" />
+                </div>
               )}
               <div className="p-5">
                 <p className="text-xs text-slate-400 mb-2">

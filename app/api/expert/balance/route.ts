@@ -23,7 +23,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Profil expert introuvable.' }, { status: 404 })
     }
 
-    const expertPaymentCents = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 200
+    const expertPaymentCents = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 1000
 
     // Récupère toutes les réponses pour calculer les montants
     const { data: answers } = await supabaseAdmin

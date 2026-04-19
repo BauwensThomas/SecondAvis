@@ -8,6 +8,7 @@ import ContestResolvedValidateExpert from '@/emails/ContestResolvedValidateExper
 import ContestResolvedRefundClient from '@/emails/ContestResolvedRefundClient'
 import ContestResolvedRefundExpert from '@/emails/ContestResolvedRefundExpert'
 import React from 'react'
+import { logEmail } from '@/lib/log-email'
 
 // POST /api/admin/signalements/[id]/arbitrate - décision admin sur un signalement
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -60,17 +61,23 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const expertPrenom = answer.experts?.display_name ?? ''
       const titreQuestion = answer.requests?.title ?? ''
 
-      if (clientEmail) await resend.emails.send({
-        from: process.env.EMAIL_FROM!, to: clientEmail,
-        subject: 'Résultat de votre signalement - Avisbox',
-        react: React.createElement(ContestResolvedValidateClient, { prenomClient: clientPrenom, titreQuestion }),
-      })
+      if (clientEmail) {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM!, to: clientEmail,
+          subject: 'Résultat de votre signalement - Avisbox',
+          react: React.createElement(ContestResolvedValidateClient, { prenomClient: clientPrenom, titreQuestion }),
+        })
+        await logEmail({ recipient_type: 'client', recipient_email: clientEmail, related_type: 'signalement', related_id: id, subject: 'Résultat de votre signalement - Avisbox', body: `Signalement non retenu. Réponse de l'expert validée pour la demande : "${titreQuestion}".` })
+      }
 
-      if (expertEmail) await resend.emails.send({
-        from: process.env.EMAIL_FROM!, to: expertEmail,
-        subject: 'Votre réponse a été validée - Avisbox',
-        react: React.createElement(ContestResolvedValidateExpert, { prenomExpert: expertPrenom, titreQuestion, montant: '2,00 €' }),
-      })
+      if (expertEmail) {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM!, to: expertEmail,
+          subject: 'Votre réponse a été validée - Avisbox',
+          react: React.createElement(ContestResolvedValidateExpert, { prenomExpert: expertPrenom, titreQuestion, montant: '2,00 €' }),
+        })
+        await logEmail({ recipient_type: 'expert', recipient_id: answer.expert_id, recipient_email: expertEmail, related_type: 'signalement', related_id: id, subject: 'Votre réponse a été validée - Avisbox', body: `Réponse validée. Paiement de 2,00 € prévu dans 5 jours pour la demande : "${titreQuestion}".` })
+      }
 
     } else {
       // Le client avait raison - remboursement dans 5 jours
@@ -111,17 +118,23 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const expertPrenom  = answer.experts?.display_name ?? ''
       const titreQuestion = answer.requests?.title ?? ''
 
-      if (clientEmail) await resend.emails.send({
-        from: process.env.EMAIL_FROM!, to: clientEmail,
-        subject: 'Votre signalement a été retenu - Avisbox',
-        react: React.createElement(ContestResolvedRefundClient, { prenomClient: clientPrenom, titreQuestion, montant: '9,00 €' }),
-      })
+      if (clientEmail) {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM!, to: clientEmail,
+          subject: 'Votre signalement a été retenu - Avisbox',
+          react: React.createElement(ContestResolvedRefundClient, { prenomClient: clientPrenom, titreQuestion, montant: '9,00 €' }),
+        })
+        await logEmail({ recipient_type: 'client', recipient_email: clientEmail, related_type: 'signalement', related_id: id, subject: 'Votre signalement a été retenu - Avisbox', body: `Signalement retenu. Remboursement de 9,00 € en cours pour la demande : "${titreQuestion}".` })
+      }
 
-      if (expertEmail) await resend.emails.send({
-        from: process.env.EMAIL_FROM!, to: expertEmail,
-        subject: 'Résultat de votre signalement - Avisbox',
-        react: React.createElement(ContestResolvedRefundExpert, { prenomExpert: expertPrenom, titreQuestion }),
-      })
+      if (expertEmail) {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM!, to: expertEmail,
+          subject: 'Résultat de votre signalement - Avisbox',
+          react: React.createElement(ContestResolvedRefundExpert, { prenomExpert: expertPrenom, titreQuestion }),
+        })
+        await logEmail({ recipient_type: 'expert', recipient_id: answer.expert_id, recipient_email: expertEmail, related_type: 'signalement', related_id: id, subject: 'Résultat de votre signalement - Avisbox', body: `Signalement retenu - réponse refusée. Aucun paiement pour la demande : "${titreQuestion}".` })
+      }
     }
 
     // Trace la décision dans l'audit

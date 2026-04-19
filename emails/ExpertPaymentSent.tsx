@@ -8,7 +8,7 @@ interface ExpertPaymentSentProps {
   montant: string
 }
 
-// Email envoyé à l'expert quand son paiement de 2 € a été viré automatiquement
+// Email envoyé à l'expert quand son paiement de 10 € a été viré automatiquement
 export default function ExpertPaymentSent({ prenomExpert, titreQuestion, montant }: ExpertPaymentSentProps) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.Avisbox.be'
 

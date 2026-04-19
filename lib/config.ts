@@ -28,16 +28,16 @@ export function isAdmin(email: string | null | undefined): boolean {
 }
 
 // Prix dynamiques par catégorie (en centimes)
-export const REQUEST_PRICE_CENTS = Number(process.env.NEXT_PUBLIC_REQUEST_PRICE_CENTS!) || 900
+export const REQUEST_PRICE_CENTS = Number(process.env.NEXT_PUBLIC_REQUEST_PRICE_CENTS!) || 1499
 export const CATEGORY_PRICES: Record<string, number> = {
-  mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 900,
-  immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 900,
-  travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 900,
-  assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 900,
-  travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 900,
-  comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 900,
+  mecanique: Number(process.env.NEXT_PUBLIC_PRICE_MECANIQUE_CENTS) || 1499,
+  immo: Number(process.env.NEXT_PUBLIC_PRICE_IMMO_CENTS) || 1499,
+  travaux: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAUX_CENTS) || 1499,
+  assurance: Number(process.env.NEXT_PUBLIC_PRICE_ASSURANCE_CENTS) || 1499,
+  travail: Number(process.env.NEXT_PUBLIC_PRICE_TRAVAIL_CENTS) || 1499,
+  comptabilite: Number(process.env.NEXT_PUBLIC_PRICE_COMPTABILITE_CENTS) || 1499,
 }
-export const EXPERT_PAYMENT_CENTS = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS!) || 200
+export const EXPERT_PAYMENT_CENTS = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS!) || 1000
 export const MAX_FILE_SIZE_MB = Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_MB!) || 10
 export const ALLOWED_FILE_TYPES = process.env.NEXT_PUBLIC_ALLOWED_FILE_TYPES!
 

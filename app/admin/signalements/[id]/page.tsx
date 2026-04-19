@@ -303,8 +303,8 @@ export default function AdminSignalementDetailPage() {
             </Button>
           </div>
           <div className="text-xs text-slate-400 space-y-1">
-            <p>Valider → L'expert est payé (2 €) dans 5 jours · Son compte redevient actif</p>
-            <p>Rembourser → Le client récupère 9 € dans 5 jours · L'expert reste suspendu</p>
+            <p>Valider → L'expert est payé (10 €) dans 5 jours · Son compte redevient actif</p>
+            <p>Rembourser → Le client récupère 14,99 € dans 5 jours · L'expert reste suspendu</p>
           </div>
         </div>
       ) : (
@@ -336,7 +336,7 @@ export default function AdminSignalementDetailPage() {
           )}
           {answer.contest_decision === 'refund' && answer.admin_decision_at && (
             <p className="text-sm text-blue-700">
-              Remboursement de 9 € prévu le{' '}
+              Remboursement de 14,99 € prévu le{' '}
               {new Date(new Date(answer.admin_decision_at).getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleString('fr-BE', {
                 day: 'numeric', month: 'long', year: 'numeric',
                 hour: '2-digit', minute: '2-digit',

@@ -6,6 +6,7 @@ import ExpertSuspended from '@/emails/ExpertSuspended'
 import ExpertReactivated from '@/emails/ExpertReactivated'
 import ExpertDeleted from '@/emails/ExpertDeleted'
 import React from 'react'
+import { logEmail } from '@/lib/log-email'
 
 // GET /api/admin/experts/[id] - profil complet d'un expert avec tout son historique
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -110,6 +111,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         subject: 'Votre compte expert a été suspendu - Avisbox',
         react:   React.createElement(ExpertSuspended, { prenomExpert: expert.first_name, raison: body.suspension_reason }),
       })
+      await logEmail({ recipient_type: 'expert', recipient_id: id, recipient_email: expert.email, related_type: 'suspension', subject: 'Votre compte expert a été suspendu - Avisbox', body: `Compte suspendu. Raison : ${body.suspension_reason}` })
     }
 
     // Réactivation manuelle
@@ -134,6 +136,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         subject: 'Votre compte expert est à nouveau actif - Avisbox',
         react:   React.createElement(ExpertReactivated, { prenomExpert: expert.first_name }),
       })
+      await logEmail({ recipient_type: 'expert', recipient_id: id, recipient_email: expert.email, related_type: 'suspension', subject: 'Votre compte expert est à nouveau actif - Avisbox', body: 'Compte réactivé par l\'admin.' })
     }
 
     // Log d'audit - action précise selon le type de modification
@@ -197,6 +200,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       subject: 'Votre compte expert a été supprimé - Avisbox',
       react:   React.createElement(ExpertDeleted, { prenomExpert: expert.first_name, raison }),
     })
+    await logEmail({ recipient_type: 'expert', recipient_id: id, recipient_email: expert.email, related_type: 'suppression', subject: 'Votre compte expert a été supprimé - Avisbox', body: `Compte supprimé. Raison : ${raison}` })
 
     // Trace dans audit_logs avant suppression
     await supabaseAdmin.from('audit_logs').insert({

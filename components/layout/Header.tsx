@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import ThemeToggle from '@/components/common/ThemeToggle'
@@ -49,8 +50,8 @@ export default function Header() {
 
         {/* Logo */}
         <Link href="/" className="shrink-0 flex items-center h-10" onClick={fermerMenu}>
-          <img src="/avisbox-clair.png" alt="Avisbox" className="h-12 w-auto block dark:hidden" draggable={false} />
-          <img src="/avisbox-fonce.png" alt="Avisbox" className="h-12 w-auto hidden dark:block" draggable={false} />
+          <Image src="/avisbox-clair.png" alt="Avisbox" width={180} height={48} className="h-12 w-auto block dark:hidden" draggable={false} />
+          <Image src="/avisbox-fonce.png" alt="Avisbox" width={180} height={48} className="h-12 w-auto hidden dark:block" draggable={false} />
         </Link>
 
         {/* Navigation desktop - cachée sur mobile */}

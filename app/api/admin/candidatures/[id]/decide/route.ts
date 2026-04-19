@@ -5,6 +5,7 @@ import { resend } from '@/lib/resend'
 import WelcomeExpert from '@/emails/WelcomeExpert'
 import { render } from '@react-email/render'
 import React from 'react'
+import { logEmail } from '@/lib/log-email'
 
 // POST /api/admin/candidatures/[id]/decide - approuver ou refuser une candidature expert
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -107,6 +108,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           })
         ),
       })
+      await logEmail({ recipient_type: 'expert', recipient_email: candidature.email, related_type: 'candidature', related_id: id, subject: 'Bienvenue chez Avisbox ! Votre compte expert est activé', body: message ? `Candidature approuvée. Message : ${message}` : 'Candidature approuvée.' })
 
     } else {
       // Refus de la candidature
@@ -136,6 +138,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           message: message || 'Nous ne pouvons pas donner suite à votre candidature pour le moment. N\'hésitez pas à repostuler ultérieurement.',
         }),
       })
+      await logEmail({ recipient_type: 'expert', recipient_email: candidature.email, related_type: 'candidature', related_id: id, subject: 'Votre candidature Avisbox - Réponse', body: `Candidature refusée. Message : ${message || 'Aucun message.'}` })
     }
 
     return NextResponse.json({ success: true })

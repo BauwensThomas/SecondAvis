@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     default: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
     template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox"}`,
   },
-  description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 9 euros",
+  description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 14,99 euros",
   openGraph: {
     title: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
-    description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 9 euros",
+    description: process.env.NEXT_PUBLIC_APP_TAGLINE ?? "Obtenez un avis professionnel en moins de 24h pour 14,99 euros",
     url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
     siteName: process.env.NEXT_PUBLIC_APP_NAME ?? "Avisbox",
     locale: "fr_BE",

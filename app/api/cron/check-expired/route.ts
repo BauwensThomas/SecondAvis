@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     .lt('contest_window_ends', now)
     .lt('payment_eligible_at', now)
 
-  const expertPaymentCents = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 200
+  const expertPaymentCents = Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 1000
 
   for (const answer of eligibleAnswers ?? []) {
     try {

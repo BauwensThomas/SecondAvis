@@ -7,10 +7,11 @@ const updateSchema = z.object({
   titre:     z.string().min(3).max(200).optional(),
   contenu:   z.string().optional(),
   slug:      z.string().min(3).regex(/^[a-z0-9-]+$/).optional(),
-  image_url: z.string().nullable().optional(),
-  image_ia:  z.boolean().optional(),
-  extrait:   z.string().max(160).nullable().optional(),
-  publie:    z.boolean().optional(),
+  image_url:  z.string().nullable().optional(),
+  image_ia:   z.boolean().optional(),
+  extrait:    z.string().max(160).nullable().optional(),
+  categorie:  z.enum(['mecanique', 'immo', 'travaux', 'assurance', 'travail', 'comptabilite']).nullable().optional(),
+  publie:     z.boolean().optional(),
 })
 
 // Vérifie que l'utilisateur est admin - retourne null si non autorisé

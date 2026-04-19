@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const data = createRequestSchema.parse(body)
 
     // Récupère le prix selon la catégorie (défini dans .env)
-    const priceCents = CATEGORY_PRICES[data.category] || 900
+    const priceCents = CATEGORY_PRICES[data.category] || 1499
     const supabaseAdmin = createAdminClient()
 
     // Vérifie qu'il y a au moins 2 experts actifs - sauf pour l'admin (tests)

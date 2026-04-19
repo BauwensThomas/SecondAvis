@@ -3,6 +3,7 @@ import { isAdmin } from '@/lib/config'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { Resend } from 'resend'
 import Stripe from 'stripe'
+import { logEmail } from '@/lib/log-email'
 
 const resend = new Resend(process.env.RESEND_API_KEY!)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-01-27.acacia' as any })
@@ -126,6 +127,7 @@ export async function DELETE(
         from: process.env.EMAIL_FROM!,
         to:   clientEmail,
         subject: `Votre demande a été retirée - ${appName}`,
+
         html: `
           <p>Bonjour ${clientPrenom},</p>
           <p>Votre demande <strong>"${demande.title}"</strong> a été retirée de la plateforme ${appName} par notre équipe.</p>
@@ -142,6 +144,7 @@ export async function DELETE(
           </p>
         `,
       })
+      await logEmail({ recipient_type: 'client', recipient_email: clientEmail, related_type: 'demande', related_id: id, subject: `Votre demande a été retirée - ${appName}`, body: `Demande "${demande.title}" retirée. Raison : ${raison}. Remboursé : ${rembourseEffectue ? 'oui' : 'non'}.` })
     }
 
     return NextResponse.json({ success: true, rembourse: rembourseEffectue })

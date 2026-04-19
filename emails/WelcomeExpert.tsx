@@ -29,7 +29,7 @@ export default function WelcomeExpert({ prenom, message }: WelcomeExpertProps) {
             </Text>
           )}
           <Text style={{ color: '#475569', lineHeight: 1.6 }}>
-            Vous recevrez un email dès qu'une nouvelle demande arrive dans vos catégories. Vous avez 24h pour y répondre - chaque réponse validée vous rapporte 2 €.
+            Vous recevrez un email dès qu'une nouvelle demande arrive dans vos catégories. Vous avez 24h pour y répondre - chaque réponse validée vous rapporte 10 €.
           </Text>
           <Link
             href={`${appUrl}/expert/dashboard`}
