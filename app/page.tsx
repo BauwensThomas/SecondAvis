@@ -22,7 +22,7 @@ const TEMOIGNAGES_FAKE = [
   },
   {
     score: 5,
-    comment: "Réponse claire et détaillée en moins de 3 heures. L'expert a validé le diagnostic — je sais maintenant que je peux faire confiance à mon garagiste.",
+    comment: "Réponse claire et détaillée en moins de 3 heures. L'expert a validé le diagnostic - je sais maintenant que je peux faire confiance à mon garagiste.",
     prenom: 'Marie', contexte: 'Bruxelles', badge: 'Tranquillité d\'esprit', couleur: AVATAR_COLORS[1],
   },
   {
@@ -122,7 +122,7 @@ export default async function HomePage() {
       <section className="bg-indigo-600 text-white py-8 px-6">
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-2xl sm:text-3xl font-bold">{stats.totalAvis > 0 ? stats.totalAvis : '—'}</p>
+            <p className="text-2xl sm:text-3xl font-bold">{stats.totalAvis > 0 ? stats.totalAvis : '-'}</p>
             <p className="text-indigo-200 text-xs sm:text-sm mt-1">Avis rendus</p>
           </div>
           <div>

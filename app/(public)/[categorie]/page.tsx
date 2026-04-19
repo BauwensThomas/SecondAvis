@@ -17,8 +17,8 @@ const CATEGORIES: Record<string, {
     slug: 'mecanique',
     titre: 'Vérifiez votre devis de garage en Belgique',
     sousTitre: 'Un mécanicien vérifié analyse votre devis ou diagnostic en moins de 24h.',
-    descriptionSeo: 'Votre devis de garage vous semble trop cher ? Un mécanicien professionnel vérifié vous répond en moins de 24h. Panne incomprise, diagnostic douteux, kilométrage suspect — obtenez un avis indépendant.',
-    exemples: ['Devis freins ou embrayage trop élevé', 'Diagnostic de panne incompris', 'Kilométrage falsifié au compteur', 'Courroie de distribution à 1200€ — est-ce normal ?', 'Mon garagiste insiste pour changer une pièce non défectueuse'],
+    descriptionSeo: 'Votre devis de garage vous semble trop cher ? Un mécanicien professionnel vérifié vous répond en moins de 24h. Panne incomprise, diagnostic douteux, kilométrage suspect - obtenez un avis indépendant.',
+    exemples: ['Devis freins ou embrayage trop élevé', 'Diagnostic de panne incompris', 'Kilométrage falsifié au compteur', 'Courroie de distribution à 1200€ - est-ce normal ?', 'Mon garagiste insiste pour changer une pièce non défectueuse'],
     casTypes: [
       { question: 'Mon garage me demande 800€ pour une courroie de distribution, c\'est normal ?', detail: 'Un mécanicien vérifié analyse le devis, compare avec les prix du marché belge et vous dit si c\'est justifié.' },
       { question: 'Voyant moteur allumé, le garage dit que ça coûte 1500€ à réparer.', detail: 'Avant de payer, faites vérifier le diagnostic par un professionnel indépendant.' },
@@ -35,7 +35,7 @@ const CATEGORIES: Record<string, {
     slug: 'immo',
     titre: 'Vérifiez votre contrat immobilier avant de signer',
     sousTitre: 'Un professionnel immobilier vérifié analyse votre document en moins de 24h.',
-    descriptionSeo: 'Honoraires d\'agence trop élevés, clause abusive dans un compromis de vente, état des lieux contesté — un professionnel immobilier vérifié vous répond en moins de 24h en Belgique.',
+    descriptionSeo: 'Honoraires d\'agence trop élevés, clause abusive dans un compromis de vente, état des lieux contesté - un professionnel immobilier vérifié vous répond en moins de 24h en Belgique.',
     exemples: ['Honoraires d\'agence excessifs', 'Clause suspecte dans un compromis de vente', 'État des lieux contesté par le propriétaire', 'Estimation biaisée pour forcer la vente', 'Mandat de vente avec conditions abusives'],
     casTypes: [
       { question: 'L\'agence me demande 3% d\'honoraires sur la vente, est-ce légal en Belgique ?', detail: 'Un professionnel immobilier vérifie si les honoraires sont conformes aux pratiques du marché belge et à la réglementation.' },
@@ -71,7 +71,7 @@ const CATEGORIES: Record<string, {
     slug: 'assurance',
     titre: 'Votre assurance refuse de vous rembourser ?',
     sousTitre: 'Un expert en assurance vérifié analyse votre situation en moins de 24h.',
-    descriptionSeo: 'Refus de remboursement injustifié, clause cachée dans votre contrat, sinistre mal évalué — un expert en assurance vérifié vous aide à comprendre vos droits en Belgique.',
+    descriptionSeo: 'Refus de remboursement injustifié, clause cachée dans votre contrat, sinistre mal évalué - un expert en assurance vérifié vous aide à comprendre vos droits en Belgique.',
     exemples: ['Refus de remboursement après sinistre', 'Clause d\'exclusion cachée dans le contrat', 'Indemnisation largement insuffisante', 'Résiliation abusive de votre contrat', 'Franchise appliquée de façon incorrecte'],
     casTypes: [
       { question: 'Mon assurance auto refuse de rembourser mon accident en invoquant une exclusion. Est-ce légal ?', detail: 'Un expert analyse votre contrat et la clause invoquée, et vous dit si le refus est fondé ou contestable.' },
@@ -89,7 +89,7 @@ const CATEGORIES: Record<string, {
     slug: 'travail',
     titre: 'Vos droits au travail sont-ils respectés ?',
     sousTitre: 'Un juriste spécialisé en droit du travail vérifié vous répond en moins de 24h.',
-    descriptionSeo: 'Licenciement abusif, heures supplémentaires non payées, clause de non-concurrence abusive — un juriste en droit du travail vérifié analyse votre situation en Belgique.',
+    descriptionSeo: 'Licenciement abusif, heures supplémentaires non payées, clause de non-concurrence abusive - un juriste en droit du travail vérifié analyse votre situation en Belgique.',
     exemples: ['Licenciement dont vous contestez le motif', 'Heures supplémentaires non rémunérées', 'Clause de non-concurrence abusive', 'Rupture de période d\'essai contestable', 'Modification unilatérale de votre contrat'],
     casTypes: [
       { question: 'Mon employeur m\'a licencié pour faute grave, mais je conteste les faits.', detail: 'Un juriste analyse si le motif invoqué constitue bien une faute grave au sens de la loi belge et quels sont vos recours.' },
@@ -107,12 +107,12 @@ const CATEGORIES: Record<string, {
     slug: 'comptabilite',
     titre: 'Vos comptes d\'indépendant sont-ils en ordre ?',
     sousTitre: 'Un comptable vérifié analyse votre situation fiscale en moins de 24h.',
-    descriptionSeo: 'Déclaration INASTI incorrecte, TVA indépendant, cotisations sociales ONSS — un comptable vérifié répond à vos questions fiscales et comptables en Belgique en moins de 24h.',
+    descriptionSeo: 'Déclaration INASTI incorrecte, TVA indépendant, cotisations sociales ONSS - un comptable vérifié répond à vos questions fiscales et comptables en Belgique en moins de 24h.',
     exemples: ['Déclaration INASTI à vérifier', 'Questions sur la TVA en tant qu\'indépendant', 'Cotisations sociales ONSS incomprises', 'Erreur suspectée dans votre déclaration fiscale', 'Optimisation fiscale de base pour indépendant'],
     casTypes: [
       { question: 'Je suis indépendant complémentaire, dois-je payer des cotisations INASTI ?', detail: 'Un comptable vérifie votre situation et vous explique vos obligations exactes selon votre statut.' },
       { question: 'Mon comptable m\'a facturé des frais que je ne comprends pas. Sont-ils normaux ?', detail: 'Un expert analyse la facturation et vous dit si les honoraires correspondent aux prestations décrites.' },
-      { question: 'Je viens de lancer mon activité — dois-je m\'assujettir à la TVA ?', detail: 'Un comptable vérifie selon votre activité et votre chiffre d\'affaires estimé si l\'assujettissement est obligatoire ou optionnel.' },
+      { question: 'Je viens de lancer mon activité - dois-je m\'assujettir à la TVA ?', detail: 'Un comptable vérifie selon votre activité et votre chiffre d\'affaires estimé si l\'assujettissement est obligatoire ou optionnel.' },
     ],
     faq: [
       { q: 'L\'avis remplace-t-il mon comptable habituel ?', r: 'Non. C\'est un second avis indépendant pour vérifier ou comprendre une situation spécifique. Votre comptable reste votre interlocuteur principal.' },
@@ -170,7 +170,7 @@ export default async function LandingCategoriePage({ params }: { params: Promise
           href={`/nouvelle-demande?categorie=${cat.slug}`}
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors"
         >
-          Poser ma question — {prix} €
+          Poser ma question - {prix} €
         </Link>
         <p className="text-slate-400 text-sm mt-3">
           Remboursé automatiquement si aucun expert ne répond sous 24h.
@@ -261,7 +261,7 @@ export default async function LandingCategoriePage({ params }: { params: Promise
           href={`/nouvelle-demande?categorie=${cat.slug}`}
           className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
         >
-          Poser ma question — {prix} €
+          Poser ma question - {prix} €
         </Link>
       </div>
 

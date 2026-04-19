@@ -1,0 +1,22 @@
+{
+  "name": "Avisbox",
+  "short_name": "Avisbox",
+  "description": "Obtenez un avis professionnel en moins de 24h",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/avisbox-clair.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/avisbox-clair.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

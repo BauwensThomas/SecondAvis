@@ -9,6 +9,7 @@ import ContestResolvedRefundClient from '@/emails/ContestResolvedRefundClient'
 import ContestResolvedRefundExpert from '@/emails/ContestResolvedRefundExpert'
 import React from 'react'
 import { logEmail } from '@/lib/log-email'
+import { sendPushToUser } from '@/lib/push'
 
 // POST /api/admin/signalements/[id]/arbitrate - décision admin sur un signalement
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -78,6 +79,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         })
         await logEmail({ recipient_type: 'expert', recipient_id: answer.expert_id, recipient_email: expertEmail, related_type: 'signalement', related_id: id, subject: 'Votre réponse a été validée - Avisbox', body: `Réponse validée. Paiement de 2,00 € prévu dans 5 jours pour la demande : "${titreQuestion}".` })
       }
+      // Push au client : signalement non retenu
+      const clientUserId = (answer.requests as { user_id?: string } | null)?.user_id
+      if (clientUserId) {
+        await sendPushToUser(clientUserId, {
+          title: 'Résultat de votre signalement',
+          body:  `Votre signalement n'a pas été retenu pour "${titreQuestion}".`,
+          url:   `/mes-demandes/${answer.request_id}`,
+        })
+      }
 
     } else {
       // Le client avait raison - remboursement dans 5 jours
@@ -134,6 +144,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           react: React.createElement(ContestResolvedRefundExpert, { prenomExpert: expertPrenom, titreQuestion }),
         })
         await logEmail({ recipient_type: 'expert', recipient_id: answer.expert_id, recipient_email: expertEmail, related_type: 'signalement', related_id: id, subject: 'Résultat de votre signalement - Avisbox', body: `Signalement retenu - réponse refusée. Aucun paiement pour la demande : "${titreQuestion}".` })
+      }
+      // Push au client : remboursement accordé
+      const clientUserId = (answer.requests as { user_id?: string } | null)?.user_id
+      if (clientUserId) {
+        await sendPushToUser(clientUserId, {
+          title: 'Signalement retenu - remboursement en cours',
+          body:  `Votre signalement a été accepté pour "${titreQuestion}". Vous serez remboursé.`,
+          url:   '/mes-demandes',
+        })
       }
     }
 

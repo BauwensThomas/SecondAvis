@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
           mouvements.push({
             id:          `pay_${r.id}`,
             type:        'paiement',
-            label:       `Paiement client — ${r.title}`,
+            label:       `Paiement client - ${r.title}`,
             montant_cents: r.amount_cents,
             statut:      r.status === 'refunded' ? 'remboursé' : 'payé',
             date:        r.created_at,
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
           mouvements.push({
             id:          `pay_${r.id}`,
             type:        'paiement',
-            label:       `Paiement client — ${r.title}`,
+            label:       `Paiement client - ${r.title}`,
             montant_cents: r.amount_cents,
             statut:      r.status === 'refunded' ? 'remboursé' : 'payé',
             date:        r.created_at,
@@ -108,8 +108,8 @@ export async function GET(request: NextRequest) {
           id:          `refund_${r.id}`,
           type:        'remboursement',
           label:       (r as any).refund_reason
-            ? `Remboursement admin — ${r.title}`
-            : `Remboursement automatique — ${r.title}`,
+            ? `Remboursement admin - ${r.title}`
+            : `Remboursement automatique - ${r.title}`,
           montant_cents: r.amount_cents,
           statut:      'remboursé',
           date:        r.created_at,
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
           mouvements.push({
             id:          `payout_${p.id}`,
             type:        'virement',
-            label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
+            label:       `Virement expert - ${e?.display_name ?? 'Expert'}`,
             montant_cents: p.amount_cents,
             statut:      p.status === 'paid' ? 'payé' : 'en attente',
             date:        p.created_at,
@@ -188,7 +188,7 @@ export async function GET(request: NextRequest) {
           mouvements.push({
             id:          `eligible_${a.id}`,
             type:        'virement',
-            label:       `Virement expert — ${e?.display_name ?? 'Expert'}`,
+            label:       `Virement expert - ${e?.display_name ?? 'Expert'}`,
             montant_cents: Number(process.env.NEXT_PUBLIC_EXPERT_PAYMENT_CENTS) || 1000,
             statut:      'à payer',
             date:        a.delivered_at,

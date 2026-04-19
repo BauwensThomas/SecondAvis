@@ -106,9 +106,9 @@ export default function AdminPaiementsPage() {
                 {pendingPayouts.map((p) => (
                   <tr key={p.id} className="border-b last:border-0">
                     <td className="px-3 py-2">
-                      <Link href={`/admin/experts/${p.expert?.id}`} className="text-indigo-700 hover:underline font-medium">{p.expert?.display_name ?? '—'}</Link>
+                      <Link href={`/admin/experts/${p.expert?.id}`} className="text-indigo-700 hover:underline font-medium">{p.expert?.display_name ?? '-'}</Link>
                     </td>
-                    <td className="px-3 py-2 text-slate-600">{p.expert?.email ?? '—'}</td>
+                    <td className="px-3 py-2 text-slate-600">{p.expert?.email ?? '-'}</td>
                     <td className="px-3 py-2">
                       <Link href={`/admin/demandes/${p.request_id}`} className="text-indigo-500 hover:underline">Voir la demande</Link>
                     </td>
@@ -245,7 +245,7 @@ export default function AdminPaiementsPage() {
                       )}
                     </td>
                     <td className="px-5 py-3 text-xs text-slate-400 font-mono">
-                      {m.stripe_ref ? <span title={m.stripe_ref}>{String(m.stripe_ref).slice(0, 14)}…</span> : '—'}
+                      {m.stripe_ref ? <span title={m.stripe_ref}>{String(m.stripe_ref).slice(0, 14)}…</span> : '-'}
                     </td>
                   </tr>
                 )

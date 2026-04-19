@@ -12,8 +12,8 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: *.supabase.co *.googlesyndication.com *.doubleclick.net;
   font-src 'self' data:;
-  connect-src 'self' *.supabase.co wss://*.supabase.co api.stripe.com *.sentry.io *.ingest.de.sentry.io *.googlesyndication.com *.doubleclick.net;
-  frame-src js.stripe.com *.stripe.com googleads.g.doubleclick.net tpc.googlesyndication.com;
+  connect-src 'self' *.supabase.co wss://*.supabase.co api.stripe.com *.sentry.io *.ingest.de.sentry.io *.googlesyndication.com *.doubleclick.net ep1.adtrafficquality.google;
+  frame-src js.stripe.com *.stripe.com googleads.g.doubleclick.net tpc.googlesyndication.com pagead2.googlesyndication.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';

@@ -5,6 +5,7 @@ import { resend, EMAIL_FROM } from '@/lib/resend'
 import { render } from '@react-email/components'
 import AnswerReceived from '@/emails/AnswerReceived'
 import { logEmail } from '@/lib/log-email'
+import { sendPushToUser } from '@/lib/push'
 
 const answerSchema = z.object({
   content: z.string().min(50, 'La réponse doit faire au moins 50 caractères'),
@@ -99,10 +100,10 @@ export async function POST(
         .eq('id', expert.id),
     ])
 
-    // Récupère les infos du client pour lui envoyer l'email de notification
+    // Récupère les infos du client pour lui envoyer l'email et la notification push
     const { data: reqData } = await supabaseAdmin
       .from('requests')
-      .select('title, users(email, first_name)')
+      .select('title, user_id, users(email, first_name)')
       .eq('id', id)
       .single()
 
@@ -122,6 +123,14 @@ export async function POST(
           html,
         })
         await logEmail({ recipient_type: 'client', recipient_email: clientUser.email, related_type: 'reponse', related_id: id, subject: 'Un expert a répondu à votre question - Avisbox', body: `Réponse reçue de ${expert.display_name ?? 'un expert'} pour la demande : "${reqData.title}".` })
+      }
+      // Notification push au client
+      if (reqData.user_id) {
+        await sendPushToUser(reqData.user_id, {
+          title: 'Votre expert a répondu',
+          body:  `Réponse reçue pour : "${reqData.title}"`,
+          url:   `/mes-demandes/${id}`,
+        })
       }
     }
 

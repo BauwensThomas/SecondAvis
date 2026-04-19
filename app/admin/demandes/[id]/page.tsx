@@ -122,7 +122,7 @@ export default function AdminDemandeDetailPage() {
           </span>
           <span>Stripe PI : <code className="font-mono text-xs">{request.stripe_payment_intent_id ?? '-'}</code></span>
         </div>
-        {/* Raison du remboursement admin — visible uniquement si la demande a été remboursée manuellement */}
+        {/* Raison du remboursement admin - visible uniquement si la demande a été remboursée manuellement */}
         {request.status === 'refunded' && request.refund_reason && (
           <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
             <p className="text-xs text-blue-500 mb-0.5">Raison du remboursement</p>

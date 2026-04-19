@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
 import CookieBanner from "@/components/common/CookieBanner"
 import AssistantWidget from "@/components/common/AssistantWidget"
+import PushSubscriber from "@/components/common/PushSubscriber"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import ThemeProvider from "@/components/common/ThemeProvider"
@@ -34,6 +35,8 @@ export const metadata: Metadata = {
     locale: "fr_BE",
     type: "website",
   },
+  // Manifest PWA
+  manifest: "/manifest.json",
   // Verification Google AdSense via balise meta
   other: {
     "google-adsense-account": process.env.NEXT_PUBLIC_ADSENSE_ID ?? "",
@@ -58,6 +61,7 @@ export default function RootLayout({
           <Footer />
           <CookieBanner />
           <AssistantWidget />
+          <PushSubscriber />
           <Analytics />
         </ThemeProvider>
         {/* Script Google AdSense - chargé après l'interactivité pour ne pas bloquer le rendu */}

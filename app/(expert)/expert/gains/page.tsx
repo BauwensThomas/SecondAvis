@@ -5,6 +5,14 @@ import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import ExpertGuard, { useExpertContext } from '@/components/layout/ExpertGuard'
 
+// Retourne les années depuis 2026 jusqu'à l'année courante
+function getAnneesDispo(): number[] {
+  const annees: number[] = []
+  const anneeActuelle = new Date().getFullYear()
+  for (let a = anneeActuelle; a >= 2026; a--) annees.push(a)
+  return annees
+}
+
 interface Balance {
   total_earned: number
   total_pending: number
@@ -52,7 +60,9 @@ function GainsPage() {
   const [erreur, setErreur] = useState('')
   const [stripeConnected, setStripeConnected] = useState<boolean | null>(null)
   const [stripeLoading, setStripeLoading]     = useState(false)
+  const [anneeSelectionnee, setAnneeSelectionnee] = useState(new Date().getFullYear())
   const searchParams = useSearchParams()
+  const annees = getAnneesDispo()
 
   // Vérifie le statut du compte Stripe Connect
   useEffect(() => {
@@ -150,6 +160,33 @@ function GainsPage() {
         Chaque réponse validée vous rapporte {euros(balance.expert_payment_cents)}, versé automatiquement
         5 jours après la livraison si aucun signalement n'est déposé.
       </p>
+
+      {/* Récapitulatif fiscal annuel */}
+      <div className="bg-white border border-slate-200 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <p className="font-medium text-slate-800">Récapitulatif fiscal</p>
+          <p className="text-sm text-slate-400 mt-0.5">Téléchargez votre récapitulatif annuel pour votre déclaration fiscale.</p>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <select
+            value={anneeSelectionnee}
+            onChange={(e) => setAnneeSelectionnee(Number(e.target.value))}
+            className="text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          >
+            {annees.map((a) => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => window.open(`/api/expert/fiscal-summary?year=${anneeSelectionnee}`, '_blank')}
+          >
+            Télécharger PDF
+          </Button>
+        </div>
+      </div>
 
       {/* Compte bancaire Stripe */}
       {(() => {

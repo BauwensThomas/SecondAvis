@@ -5,6 +5,7 @@ import { resend, EMAIL_FROM } from '@/lib/resend'
 import { render } from '@react-email/components'
 import Refunded from '@/emails/Refunded'
 import ExpertPaymentSent from '@/emails/ExpertPaymentSent'
+import { sendPushToUser } from '@/lib/push'
 
 // POST - appelé toutes les heures par Vercel Cron
 // Gère 3 choses : demandes expirées, paiements experts, nettoyage des paiements non confirmés
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
 
   const { data: expired } = await supabaseAdmin
     .from('requests')
-    .select('id, title, stripe_payment_intent_id, amount_cents, users(email, first_name)')
+    .select('id, title, user_id, stripe_payment_intent_id, amount_cents, users(email, first_name)')
     .eq('status', 'pending')
     .eq('payment_confirmed', true)
     .lt('expires_at', new Date().toISOString())
@@ -46,12 +47,19 @@ export async function POST(request: NextRequest) {
         await stripe.refunds.create({ payment_intent: paymentIntent })
       }
 
-      // Notifie le client du remboursement
+      // Notifie le client du remboursement (email + push)
       const client = req.users as unknown as { email: string; first_name: string } | null
       if (client?.email) {
-        const montant = ((req.amount_cents ?? 900) / 100).toFixed(2).replace('.', ',') + ' €'
+        const montant = ((req.amount_cents ?? 1499) / 100).toFixed(2).replace('.', ',') + ' €'
         const html = await render(Refunded({ prenomClient: client.first_name, titreQuestion: req.title, montant }))
         await resend.emails.send({ from: EMAIL_FROM, to: client.email, subject: 'Votre remboursement est en cours - Avisbox', html })
+      }
+      if (req.user_id) {
+        await sendPushToUser(req.user_id, {
+          title: 'Demande remboursée',
+          body:  `Aucun expert disponible pour "${req.title}". Vous êtes remboursé.`,
+          url:   '/mes-demandes',
+        })
       }
 
       refunded_count++

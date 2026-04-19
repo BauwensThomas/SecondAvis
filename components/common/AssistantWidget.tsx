@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -75,7 +76,7 @@ export default function AssistantWidget() {
           {/* Messages */}
           <div ref={messagesRef} className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
                   msg.role === 'user'
                     ? 'bg-indigo-600 text-white rounded-br-sm'
@@ -83,6 +84,15 @@ export default function AssistantWidget() {
                 }`}>
                   {msg.content}
                 </div>
+                {/* Bouton CTA affiché sous chaque réponse assistant (sauf le message d'accueil) */}
+                {msg.role === 'assistant' && i > 0 && (
+                  <Link
+                    href="/nouvelle-demande"
+                    className="mt-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+                  >
+                    Obtenir un avis professionnel →
+                  </Link>
+                )}
               </div>
             ))}
             {enCours && (

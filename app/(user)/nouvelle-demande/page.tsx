@@ -41,7 +41,7 @@ const CATEGORIES = [
       'Devis freins ou embrayage trop élevé',
       'Diagnostic de panne incompris',
       'Kilométrage falsifié au compteur',
-      'Courroie de distribution à 1 200 € — est-ce normal ?',
+      'Courroie de distribution à 1 200 € - est-ce normal ?',
       'Mon garagiste insiste pour changer une pièce non défectueuse',
     ],
   },
