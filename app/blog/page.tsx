@@ -5,6 +5,8 @@ import type { Metadata } from 'next'
 import AdSense from '@/components/common/AdSense'
 import NewsletterForm from '@/components/common/NewsletterForm'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Conseils et guides pratiques pour éviter les arnaques et mieux comprendre vos droits.',
