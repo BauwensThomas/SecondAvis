@@ -3,6 +3,7 @@ import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resend } from '@/lib/resend'
 import NewRequest from '@/emails/NewRequest'
+import ReceiptClient from '@/emails/ReceiptClient'
 import React from 'react'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Récupère la demande liée à ce paiement
     const { data: demande } = await supabaseAdmin
       .from('requests')
-      .select('id, category, title, expires_at, user_id')
+      .select('id, category, title, expires_at, user_id, amount_cents, stripe_payment_intent_id')
       .eq('stripe_payment_intent_id', paymentIntent.id)
       .single()
 
@@ -52,6 +53,37 @@ export async function POST(request: NextRequest) {
       .update({ payment_confirmed: true })
       .eq('id', demande.id)
 
+    const categorieLabel = CATEGORY_LABELS[demande.category] ?? demande.category
+    const datePaiement = new Date().toLocaleString('fr-BE', {
+      day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
+    })
+    const montant = ((demande.amount_cents ?? 1499) / 100).toFixed(2).replace('.', ',') + ' €'
+    const receiptNumber = `SA-${new Date().getFullYear()}-${demande.id.slice(0, 8).toUpperCase()}`
+
+    // Récupère les infos du client pour lui envoyer son reçu
+    const { data: client } = await supabaseAdmin
+      .from('users')
+      .select('first_name, email')
+      .eq('id', demande.user_id)
+      .single()
+
+    if (client) {
+      await resend.emails.send({
+        from:    process.env.EMAIL_FROM!,
+        to:      client.email,
+        subject: `Votre reçu Avisbox - ${receiptNumber}`,
+        react:   React.createElement(ReceiptClient, {
+          prenomClient:    client.first_name,
+          receiptNumber,
+          titreQuestion:   demande.title,
+          categorie:       categorieLabel,
+          montant,
+          datePaiement,
+          stripePaymentId: demande.stripe_payment_intent_id ?? '',
+        }),
+      })
+    }
+
     // Récupère tous les experts actifs et vérifiés dans cette catégorie
     const { data: experts } = await supabaseAdmin
       .from('experts')
@@ -65,7 +97,6 @@ export async function POST(request: NextRequest) {
         day: 'numeric', month: 'long', year: 'numeric',
         hour: '2-digit', minute: '2-digit',
       })
-      const categorieLabel = CATEGORY_LABELS[demande.category] ?? demande.category
 
       // Envoie un email à chaque expert de la catégorie
       await Promise.all(experts.map((expert) =>

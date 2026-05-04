@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { createAdminClient } from "@/lib/supabase/server"
 
@@ -98,8 +99,17 @@ export default async function HomePage() {
     <main className="flex flex-col min-h-screen">
 
       {/* ---- Hero ---- */}
-      <section className="bg-slate-900 dark:bg-[#181f3a] text-white py-20 px-6 text-center">
-        <div className="max-w-4xl mx-auto">
+      <section className="bg-slate-900 dark:bg-[#181f3a] text-white py-20 relative overflow-hidden">
+
+        {/* Image gauche - collée au bord gauche, pleine hauteur */}
+        <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-[480px] overflow-hidden">
+          <Image src="/index2.jpg" alt="" fill className="object-cover scale-125" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent from-[55%] to-slate-900" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900" />
+        </div>
+
+        {/* Texte central */}
+        <div className="max-w-4xl mx-auto text-center px-6 relative z-10">
           <span className="inline-block bg-indigo-600/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-6 border border-indigo-500/30">
             Experts vérifiés - Réponse en 24h - Remboursé si silence
           </span>
@@ -116,25 +126,36 @@ export default async function HomePage() {
           </Button>
           <p className="text-slate-500 text-xs mt-4">Paiement sécurisé par Stripe - Sans engagement</p>
         </div>
+
+        {/* Image droite - collée au bord droit, pleine hauteur */}
+        <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-[480px]">
+          <Image src="/index1.jpg" alt="" fill className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[75%] to-slate-900" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900" />
+        </div>
+
       </section>
 
       {/* ---- Chiffres clés ---- */}
-      <section className="bg-indigo-600 text-white py-8 px-6">
-        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-2xl sm:text-3xl font-bold">{stats.totalAvis > 0 ? stats.totalAvis : '-'}</p>
-            <p className="text-indigo-200 text-xs sm:text-sm mt-1">Avis rendus</p>
+      {/* Chiffres clés - uniquement affichés si des vrais avis existent */}
+      {stats.totalAvis > 0 && (
+        <section className="bg-indigo-600 text-white py-8 px-6">
+          <div className="max-w-3xl mx-auto grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl sm:text-3xl font-bold">{stats.totalAvis}</p>
+              <p className="text-indigo-200 text-xs sm:text-sm mt-1">Avis rendus</p>
+            </div>
+            <div>
+              <p className="text-2xl sm:text-3xl font-bold">{stats.satisfaction}%</p>
+              <p className="text-indigo-200 text-xs sm:text-sm mt-1">De satisfaction</p>
+            </div>
+            <div>
+              <p className="text-2xl sm:text-3xl font-bold">24h</p>
+              <p className="text-indigo-200 text-xs sm:text-sm mt-1">Délai garanti</p>
+            </div>
           </div>
-          <div>
-            <p className="text-2xl sm:text-3xl font-bold">{stats.satisfaction}%</p>
-            <p className="text-indigo-200 text-xs sm:text-sm mt-1">De satisfaction</p>
-          </div>
-          <div>
-            <p className="text-2xl sm:text-3xl font-bold">24h</p>
-            <p className="text-indigo-200 text-xs sm:text-sm mt-1">Délai garanti</p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ---- Ancrage prix ---- */}
       <section className="py-14 px-6 bg-white dark:bg-slate-900">
